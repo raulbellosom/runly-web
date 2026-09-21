@@ -141,4 +141,10 @@ export interface SiteDictionary {
     valueDescription: string;
     valueCta: string;
   };
+  whyChoose: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    cards: { icon: string; color: string; title: string; description: string }[];
+  };
 }

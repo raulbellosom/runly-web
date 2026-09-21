@@ -287,4 +287,19 @@ export const es: SiteDictionary = {
       "Buscamos que la tecnología empresarial de alto nivel esté al alcance de más negocios en México y Latinoamérica. Olvídate de licencias prohibitivas de miles de dólares por usuario de los ERPs tradicionales.",
     valueCta: "Solicitar una propuesta personalizada",
   },
+  whyChoose: {
+    eyebrow: "Diferenciadores Clave",
+    title: "Tecnología empresarial que trabaja a tu favor.",
+    description: "Diseñado desde cero para erradicar la complejidad innecesaria y dar agilidad real a equipos en constante crecimiento.",
+    cards: [
+      { icon: "Boxes", color: "orange", title: "Modular y adaptable", description: "Paga e instala solo los módulos que tu operación necesita hoy." },
+      { icon: "HandCoins", color: "emerald", title: "Sin costos inflados", description: "Cero sobrecostos por funciones que tu equipo nunca va a abrir." },
+      { icon: "BuildingComplex", color: "blue", title: "Multiempresa nativo", description: "Administra diferentes empresas o sucursales con aislamiento estricto." },
+      { icon: "Headset", color: "purple", title: "Soporte directo por devs", description: "Atención en español de México directa de los creadores en Racoon Devs." },
+      { icon: "Sparkles", color: "pink", title: "IA práctica no decorativa", description: "MirAI automatiza lectura de comprobantes y consultas de stock reales." },
+      { icon: "CloudUpload", color: "amber", title: "Innovación continua", description: "Nuevas funciones y optimizaciones mensuales sin costes ocultos." },
+      { icon: "Smartphone", color: "cyan", title: "100% Cloud y Responsive", description: "Accede desde tu computadora, tablet o smartphone con alta fluidez." },
+      { icon: "ShieldCheck", color: "indigo", title: "Seguridad y Respaldo", description: "Backups automáticos diarios y cifrado de datos en reposo y tránsito." },
+    ],
+  },
 };

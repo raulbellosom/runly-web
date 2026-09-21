@@ -22,4 +22,11 @@ describe("dictionary icon names used by resolveIcon", () => {
       expect(iconMap[name], `unknown icon "${name}" in rm3 dictionary content`).toBeDefined();
     }
   });
+
+  it("every whyChoose card icon resolves to a real @lucide/astro export", () => {
+    const names = es.whyChoose.cards.map((c) => c.icon);
+    for (const name of names) {
+      expect(iconMap[name], `unknown icon "${name}" in whyChoose dictionary content`).toBeDefined();
+    }
+  });
 });

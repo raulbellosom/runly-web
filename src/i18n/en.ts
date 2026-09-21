@@ -287,4 +287,19 @@ export const en: SiteDictionary = {
       "We want high-end enterprise technology to be within reach for more businesses across Mexico and Latin America. Forget the thousand-dollar-per-user licenses of traditional ERPs.",
     valueCta: "Request a custom proposal",
   },
+  whyChoose: {
+    eyebrow: "Key Differentiators",
+    title: "Enterprise technology that works in your favor.",
+    description: "Built from the ground up to eliminate unnecessary complexity and give real agility to fast-growing teams.",
+    cards: [
+      { icon: "Boxes", color: "orange", title: "Modular and adaptable", description: "Pay for and install only the modules your operation needs today." },
+      { icon: "HandCoins", color: "emerald", title: "No inflated costs", description: "Zero overhead for features your team will never open." },
+      { icon: "BuildingComplex", color: "blue", title: "Native multi-company", description: "Manage different companies or branches with strict isolation." },
+      { icon: "Headset", color: "purple", title: "Direct support from developers", description: "Spanish and English support straight from the creators at Racoon Devs." },
+      { icon: "Sparkles", color: "pink", title: "Practical, not decorative AI", description: "MirAI automates receipt reading and real stock lookups." },
+      { icon: "CloudUpload", color: "amber", title: "Continuous innovation", description: "New features and optimizations every month at no hidden cost." },
+      { icon: "Smartphone", color: "cyan", title: "100% cloud and responsive", description: "Access from your computer, tablet, or smartphone with high fluency." },
+      { icon: "ShieldCheck", color: "indigo", title: "Security and backups", description: "Automatic daily backups and data encryption at rest and in transit." },
+    ],
+  },
 };
