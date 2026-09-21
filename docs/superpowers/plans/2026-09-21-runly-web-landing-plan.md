@@ -84,12 +84,14 @@ These are wired as clearly-named constants/env vars (Tasks 9, 25-28), never hard
 
 ## Phase 0 — Scaffold & configuration
 
-### Task 1: Scaffold the Astro project
+### Task 1: Scaffold the Astro project — DONE (commit `3559225`)
+
+**Deviation from the original plan (resolved):** the interactive `create-astro` CLI (`@clack/prompts`) requires a real TTY and hangs when run non-interactively in this environment, so Step 1 below was not run as literally written. The scaffold was hand-authored instead, per the task's own fallback clause, landing on Astro `^7.3.3` (current latest at scaffold time) rather than an assumed older major. This has downstream consequences already folded into Task 2 (Tailwind v4 CSS-first config instead of `tailwind.config.mjs`) and Task 4 (`@tailwindcss/vite` instead of `@astrojs/tailwind`) — read those tasks' own notes before starting them.
 
 **Files:**
 - Create: `package.json`, `astro.config.mjs`, `tsconfig.json`, `src/pages/index.astro` (placeholder), `public/favicon.svg` (placeholder)
 
-- [ ] **Step 1: Run the Astro CLI scaffold**
+- [x] **Step 1: Run the Astro CLI scaffold**
 
 Run:
 ```bash
@@ -97,17 +99,19 @@ pnpm create astro@latest . -- --template minimal --typescript strict --no-instal
 ```
 Expected: creates `astro.config.mjs`, `tsconfig.json`, `src/pages/index.astro`, `public/favicon.svg`, `package.json` in the current directory. It may ask to continue in a non-empty directory because `.git` and `docs/` already exist here confirm yes; `--no-git` was passed so it will not touch the existing git repo.
 
-- [ ] **Step 2: Install dependencies**
+**Actually done:** hand-authored equivalents of all five files (see deviation note above), since the real CLI could not run non-interactively here.
+
+- [x] **Step 2: Install dependencies**
 
 Run: `pnpm install`
 Expected: exits 0, creates `pnpm-lock.yaml` and `node_modules/`.
 
-- [ ] **Step 3: Verify dev server boots**
+- [x] **Step 3: Verify dev server boots**
 
 Run: `pnpm astro dev --port 4321 &` then `curl -s -o /dev/null -w "%{http_code}" http://localhost:4321` (stop the server after with `kill %1`).
-Expected: HTTP 200.
+Expected: HTTP 200. Verified (200, body contains the placeholder `<h1>Runly Web</h1>`); also independently re-verified via `pnpm astro build` during code review.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml astro.config.mjs tsconfig.json src public
