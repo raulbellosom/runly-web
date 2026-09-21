@@ -118,7 +118,7 @@ git add package.json pnpm-lock.yaml astro.config.mjs tsconfig.json src public
 git commit -m "chore: scaffold astro project"
 ```
 
-### Task 2: Add Tailwind CSS integration (v4, CSS-first config)
+### Task 2: Add Tailwind CSS integration (v4, CSS-first config) — DONE (commit `b9715e2`)
 
 **Note on Astro/Tailwind versions:** Task 1 ended up on Astro 7.3.3 (latest) instead of the Astro 5 assumed when this plan was originally drafted, because the interactive `create-astro` CLI could not run in this environment and the scaffold was hand-authored instead. Astro 5+ dropped the old `@astrojs/tailwind` integration in favor of Tailwind v4's own Vite plugin, and Tailwind v4 is CSS-first (no `tailwind.config.mjs` — design tokens live in an `@theme` block inside CSS). This task reflects that reality instead of the old `tailwind.config.mjs` approach.
 
@@ -126,12 +126,12 @@ git commit -m "chore: scaffold astro project"
 - Modify: `astro.config.mjs`
 - Create: `src/styles/global.css`
 
-- [ ] **Step 1: Add the Tailwind integration**
+- [x] **Step 1: Add the Tailwind integration**
 
 Run: `pnpm astro add tailwind -y`
 Expected: installs `tailwindcss` and `@tailwindcss/vite`, and adds the Vite plugin to `astro.config.mjs` (an import of `@tailwindcss/vite` plus `vite: { plugins: [tailwindcss()] }` in the `defineConfig` call). If the installer instead adds the older `@astrojs/tailwind` integration and creates a `tailwind.config.mjs` (i.e. you are actually on Tailwind v3 tooling), stop and report DONE_WITH_CONCERNS — the steps below assume Tailwind v4; a v3 setup needs the config moved into `tailwind.config.mjs` instead of the `@theme` block in Step 2, and the directives in Task 3 need to stay as `@tailwind base/components/utilities` instead of `@import "tailwindcss";`.
 
-- [ ] **Step 2: Write `src/styles/global.css` with the Runly design tokens in an `@theme` block**
+- [x] **Step 2: Write `src/styles/global.css` with the Runly design tokens in an `@theme` block**
 
 ```css
 /* src/styles/global.css */
@@ -157,12 +157,12 @@ Expected: installs `tailwindcss` and `@tailwindcss/vite`, and adds the Vite plug
 
 This is the CSS-first equivalent of the old `tailwind.config.mjs` `theme.extend` block: `--color-runly-navy` makes `bg-runly-navy`, `text-runly-navy`, `border-runly-navy`, etc. available automatically, and `--shadow-glow-orange` makes `shadow-glow-orange` available — no separate config file or `content` glob needed, Tailwind v4's Vite plugin scans the module graph automatically.
 
-- [ ] **Step 3: Verify Tailwind builds**
+- [x] **Step 3: Verify Tailwind builds**
 
 Run: `pnpm astro build`
 Expected: exits 0, `dist/` is generated with compiled CSS containing the `070d1e` custom color. At this point in the plan the project is still in the default static output mode (Task 4 switches to `output: "server"`, which moves the build to `dist/client/`), so check the flat path: `grep -ril "070d1e" dist/_astro/*.css | head -1` (or `dist/**/*.css` if Astro nests it further — run `find dist -name "*.css"` first if unsure) returns a match. Tailwind v4 lowercases hex colors in output.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add astro.config.mjs src/styles/global.css package.json pnpm-lock.yaml
