@@ -3692,17 +3692,17 @@ git commit -m "feat: assemble english homepage"
 
 ## Phase 5 — Contact form backend
 
-### Task 27: Contact form validation schema
+### Task 27: Contact form validation schema — DONE (commit `250b223`; zod v4 `.email()`→`z.email()` fix in `7fe17db`)
 
 **Files:**
 - Create: `src/lib/contact-schema.ts`
 - Test: `src/lib/__tests__/contact-schema.test.ts`
 
-- [ ] **Step 1: Install Zod and Nodemailer**
+- [x] **Step 1: Install Zod and Nodemailer**
 
 Run: `pnpm add zod nodemailer && pnpm add -D @types/nodemailer`
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 ```ts
 // src/lib/__tests__/contact-schema.test.ts
@@ -3756,12 +3756,12 @@ describe("contactSchema", () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `pnpm test`
 Expected: FAIL, cannot find module `../contact-schema`.
 
-- [ ] **Step 4: Write src/lib/contact-schema.ts**
+- [x] **Step 4: Write src/lib/contact-schema.ts**
 
 ```ts
 // src/lib/contact-schema.ts
@@ -3784,25 +3784,25 @@ export const contactSchema = z.object({
 export type ContactFormPayload = z.infer<typeof contactSchema>;
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `pnpm test`
 Expected: PASS (6 tests).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml src/lib/contact-schema.ts src/lib/__tests__/contact-schema.test.ts
 git commit -m "feat: add validated contact form schema with honeypot"
 ```
 
-### Task 28: In-memory IP rate limiter
+### Task 28: In-memory IP rate limiter — DONE (commit `f96eb4f`)
 
 **Files:**
 - Create: `src/lib/rate-limit.ts`
 - Test: `src/lib/__tests__/rate-limit.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 // src/lib/__tests__/rate-limit.test.ts
@@ -3843,12 +3843,12 @@ describe("createRateLimiter", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm test`
 Expected: FAIL, cannot find module `../rate-limit`.
 
-- [ ] **Step 3: Write src/lib/rate-limit.ts**
+- [x] **Step 3: Write src/lib/rate-limit.ts**
 
 ```ts
 // src/lib/rate-limit.ts
@@ -3886,25 +3886,25 @@ export function createRateLimiter(options: RateLimiterOptions) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm test`
 Expected: PASS (4 tests).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/rate-limit.ts src/lib/__tests__/rate-limit.test.ts
 git commit -m "feat: add in-memory per-IP rate limiter"
 ```
 
-### Task 29: Nodemailer transport wrapper
+### Task 29: Nodemailer transport wrapper — DONE (commit `df4d64d`)
 
 **Files:**
 - Create: `src/lib/mailer.ts`
 - Test: `src/lib/__tests__/mailer.test.ts`
 
-- [ ] **Step 1: Write the failing test (using a fake transporter, no real network I/O)**
+- [x] **Step 1: Write the failing test (using a fake transporter, no real network I/O)**
 
 ```ts
 // src/lib/__tests__/mailer.test.ts
@@ -3968,12 +3968,12 @@ describe("sendContactEmail", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm test`
 Expected: FAIL, cannot find module `../mailer`.
 
-- [ ] **Step 3: Write src/lib/mailer.ts**
+- [x] **Step 3: Write src/lib/mailer.ts**
 
 ```ts
 // src/lib/mailer.ts
@@ -4041,19 +4041,19 @@ export async function sendContactEmail(
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm test`
 Expected: PASS (3 tests).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/mailer.ts src/lib/__tests__/mailer.test.ts
 git commit -m "feat: add nodemailer contact email builder and sender"
 ```
 
-### Task 30: Contact API route
+### Task 30: Contact API route — DONE (commit `8427f89`; verified end-to-end with a real SMTP send through MailDev, message received with correct from/to/subject)
 
 The Astro route itself is a thin adapter (hard to unit test without a running server). The actual decision logic (validate, honeypot, timing check, rate limit, send) lives in a plain function so it can be unit tested directly; `pages/api/contact.ts` just wires it to `Astro.request`/`import.meta.env`.
 
@@ -4061,7 +4061,7 @@ The Astro route itself is a thin adapter (hard to unit test without a running se
 - Create: `src/lib/handle-contact-request.ts`, `src/pages/api/contact.ts`
 - Test: `src/lib/__tests__/handle-contact-request.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 // src/lib/__tests__/handle-contact-request.test.ts
@@ -4159,12 +4159,12 @@ describe("handleContactRequest", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm test`
 Expected: FAIL, cannot find module `../handle-contact-request`.
 
-- [ ] **Step 3: Write src/lib/handle-contact-request.ts**
+- [x] **Step 3: Write src/lib/handle-contact-request.ts**
 
 ```ts
 // src/lib/handle-contact-request.ts
@@ -4215,12 +4215,12 @@ export async function handleContactRequest({
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm test`
 Expected: PASS (6 tests).
 
-- [ ] **Step 5: Wire the Astro API route**
+- [x] **Step 5: Wire the Astro API route**
 
 ```ts
 // src/pages/api/contact.ts
@@ -4268,7 +4268,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 };
 ```
 
-- [ ] **Step 6: Manual smoke test against a local test SMTP server**
+- [x] **Step 6: Manual smoke test against a local test SMTP server**
 
 Run: `pnpm add -D maildev` then in one terminal `pnpm exec maildev` (web UI at `http://localhost:1080`, SMTP at `localhost:1025`), and in `.env` (local, not committed) set:
 ```
@@ -4283,7 +4283,7 @@ CONTACT_TO_EMAIL=sales@runly.mx
 Then `pnpm astro dev`, open `http://localhost:4321/#contacto`, submit the form, and confirm the message appears in the MailDev inbox at `http://localhost:1080`.
 Expected: email appears with the correct subject, reply-to, and body fields, and the page shows the success message. This confirms end to end that a real SMTP send (not a mock) round-trips correctly before this is considered done, per the design spec section 12.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml src/lib/handle-contact-request.ts src/lib/__tests__/handle-contact-request.test.ts src/pages/api/contact.ts
