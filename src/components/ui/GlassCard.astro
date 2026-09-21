@@ -1,0 +1,13 @@
+---
+// src/components/ui/GlassCard.astro
+interface Props {
+  class?: string;
+  dark?: boolean;
+}
+
+const { class: className = "", dark = false } = Astro.props;
+---
+
+<div class={`${dark ? "glass-card-dark" : "glass-card"} rounded-2xl ${className}`}>
+  <slot />
+</div>

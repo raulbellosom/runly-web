@@ -1,0 +1,19 @@
+---
+// src/components/ui/SectionHeading.astro
+interface Props {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  align?: "center" | "left";
+  dark?: boolean;
+}
+
+const { eyebrow, title, description, align = "center", dark = false } = Astro.props;
+const alignClass = align === "center" ? "text-center mx-auto" : "text-left";
+---
+
+<div class={`max-w-3xl mb-16 ${alignClass}`}>
+  <h2 class={`text-sm font-bold uppercase tracking-widest mb-2 ${dark ? "text-orange-400" : "text-orange-600"}`}>{eyebrow}</h2>
+  <p class={`text-3xl sm:text-4xl font-extrabold tracking-tight ${dark ? "text-white" : "text-slate-900"}`}>{title}</p>
+  {description && <p class={`mt-4 text-base sm:text-lg ${dark ? "text-slate-300" : "text-slate-600"}`}>{description}</p>}
+</div>
