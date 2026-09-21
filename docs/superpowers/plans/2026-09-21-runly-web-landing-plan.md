@@ -160,7 +160,7 @@ This is the CSS-first equivalent of the old `tailwind.config.mjs` `theme.extend`
 - [ ] **Step 3: Verify Tailwind builds**
 
 Run: `pnpm astro build`
-Expected: exits 0, `dist/` is generated with compiled CSS containing the `070d1e` custom color (check: `grep -ri "070d1e" dist/client/_astro/*.css | head -1` returns a match — Tailwind v4 lowercases hex colors in output).
+Expected: exits 0, `dist/` is generated with compiled CSS containing the `070d1e` custom color. At this point in the plan the project is still in the default static output mode (Task 4 switches to `output: "server"`, which moves the build to `dist/client/`), so check the flat path: `grep -ril "070d1e" dist/_astro/*.css | head -1` (or `dist/**/*.css` if Astro nests it further — run `find dist -name "*.css"` first if unsure) returns a match. Tailwind v4 lowercases hex colors in output.
 
 - [ ] **Step 4: Commit**
 
