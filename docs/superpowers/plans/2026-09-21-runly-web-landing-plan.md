@@ -2580,7 +2580,7 @@ git add src/i18n src/components/sections/MiraiSection.astro
 git commit -m "feat: add MirAI section with labeled illustrative demo"
 ```
 
-### Task 20: Multi-company collaboration section
+### Task 20: Multi-company collaboration section — DONE (commit `9157237`; uses `SectionHeading`, `mockAdminUser` corrected to `Raúl` with accent in es.ts)
 
 Source: `code.html` lines 878-994.
 
@@ -2588,7 +2588,7 @@ Source: `code.html` lines 878-994.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/MultiCompanySection.astro`
 
-- [ ] **Step 1: Add the `multiCompany` key to types.ts**
+- [x] **Step 1: Add the `multiCompany` key to types.ts**
 
 ```ts
   multiCompany: {
@@ -2613,7 +2613,7 @@ Source: `code.html` lines 878-994.
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   multiCompany: {
@@ -2658,7 +2658,7 @@ Source: `code.html` lines 878-994.
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   multiCompany: {
@@ -2703,12 +2703,12 @@ Source: `code.html` lines 878-994.
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write MultiCompanySection.astro**
+- [x] **Step 5: Write MultiCompanySection.astro**
 
 ```astro
 ---
@@ -2814,14 +2814,14 @@ const colorMap: Record<string, string> = {
 </section>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/MultiCompanySection.astro
 git commit -m "feat: add multi-company collaboration section"
 ```
 
-### Task 21: Custom implementation section
+### Task 21: Custom implementation section — DONE (commit `a275e51`)
 
 Source: `code.html` lines 995-1071.
 
@@ -2829,7 +2829,7 @@ Source: `code.html` lines 995-1071.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/ImplementationSection.astro`
 
-- [ ] **Step 1: Add the `implementation` key to types.ts**
+- [x] **Step 1: Add the `implementation` key to types.ts**
 
 ```ts
   implementation: {
@@ -2843,7 +2843,7 @@ Source: `code.html` lines 995-1071.
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   implementation: {
@@ -2864,7 +2864,7 @@ Source: `code.html` lines 995-1071.
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   implementation: {
@@ -2885,12 +2885,12 @@ Source: `code.html` lines 995-1071.
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write ImplementationSection.astro**
+- [x] **Step 5: Write ImplementationSection.astro**
 
 ```astro
 ---
@@ -2935,14 +2935,14 @@ const { implementation } = dict;
 </section>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/ImplementationSection.astro
 git commit -m "feat: add custom implementation section"
 ```
 
-### Task 22: Why choose RUNLY section (8-card grid)
+### Task 22: Why choose RUNLY section (8-card grid) — DONE (commit `ab4507c`; uses `resolveIcon`/`BuildingComplex`; icon tests consolidated into `src/lib/__tests__/icons.test.ts` in `668e222`)
 
 Source: `code.html` lines 1072-1145.
 
@@ -2950,7 +2950,7 @@ Source: `code.html` lines 1072-1145.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/WhyChooseSection.astro`
 
-- [ ] **Step 1: Add the `whyChoose` key to types.ts**
+- [x] **Step 1: Add the `whyChoose` key to types.ts**
 
 ```ts
   whyChoose: {
@@ -2961,7 +2961,7 @@ Source: `code.html` lines 1072-1145.
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   whyChoose: {
@@ -2981,7 +2981,7 @@ Source: `code.html` lines 1072-1145.
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   whyChoose: {
@@ -3001,12 +3001,12 @@ Source: `code.html` lines 1072-1145.
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write WhyChooseSection.astro**
+- [x] **Step 5: Write WhyChooseSection.astro**
 
 ```astro
 ---
@@ -3054,7 +3054,7 @@ const colorMap: Record<string, string> = {
 </section>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/WhyChooseSection.astro
