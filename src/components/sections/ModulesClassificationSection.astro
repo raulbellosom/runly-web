@@ -1,6 +1,7 @@
 ---
 // src/components/sections/ModulesClassificationSection.astro
 import { BadgeCheck, SlidersHorizontal, Users, Check } from "@lucide/astro";
+import SectionHeading from "../ui/SectionHeading.astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -13,11 +14,7 @@ const { classification } = dict;
 
 <section class="py-24 bg-slate-50 border-b border-slate-200">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-sm font-bold text-orange-600 uppercase tracking-widest mb-2">{classification.eyebrow}</h2>
-      <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{classification.title}</p>
-      <p class="mt-4 text-base sm:text-lg text-slate-600">{classification.description}</p>
-    </div>
+    <SectionHeading eyebrow={classification.eyebrow} title={classification.title} description={classification.description} />
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
       <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
         <div>

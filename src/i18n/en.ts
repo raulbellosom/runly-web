@@ -115,7 +115,7 @@ export const en: SiteDictionary = {
     leftNodes: [
       { icon: "Boxes", label: "Core Inventory", tag: "Micro-app" },
       { icon: "MessageCircle", label: "Real-time Chat", tag: "Websockets" },
-      { icon: "Building2", label: "Multi-Tenant Hub", tag: "Isolation" },
+      { icon: "BuildingComplex", label: "Multi-Tenant Hub", tag: "Isolation" },
     ],
     rightNodes: [
       { icon: "Sparkles", label: "MirAI Engine", tag: "LLM Context" },

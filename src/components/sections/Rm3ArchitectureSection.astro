@@ -1,7 +1,7 @@
 ---
 // src/components/sections/Rm3ArchitectureSection.astro
-import * as Icons from "@lucide/astro";
 import { Atom } from "@lucide/astro";
+import { resolveIcon } from "../../lib/icons";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -10,10 +10,6 @@ interface Props {
 
 const { dict } = Astro.props;
 const { rm3 } = dict;
-
-function nodeIcon(name: string) {
-  return (Icons as Record<string, any>)[name] ?? Icons.Boxes;
-}
 ---
 
 <section class="py-24 bg-runly-navy text-white relative overflow-hidden bg-grid-pattern-dark reveal-on-scroll" id="motor-rm3">
@@ -30,7 +26,7 @@ function nodeIcon(name: string) {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         <div class="space-y-4">
           {rm3.leftNodes.map((node) => {
-            const Icon = nodeIcon(node.icon);
+            const Icon = resolveIcon(node.icon);
             return (
               <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -52,7 +48,7 @@ function nodeIcon(name: string) {
         </div>
         <div class="space-y-4">
           {rm3.rightNodes.map((node) => {
-            const Icon = nodeIcon(node.icon);
+            const Icon = resolveIcon(node.icon);
             return (
               <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -69,7 +65,7 @@ function nodeIcon(name: string) {
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {rm3.pillars.map((pillar) => {
-        const Icon = nodeIcon(pillar.icon);
+        const Icon = resolveIcon(pillar.icon);
         return (
           <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
             <Icon class="w-6 h-6 text-orange-400 mb-3" />

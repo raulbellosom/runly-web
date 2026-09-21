@@ -1,7 +1,7 @@
 ---
 // src/components/sections/ModulesCatalogSection.astro
-import * as Icons from "@lucide/astro";
 import SectionHeading from "../ui/SectionHeading.astro";
+import { resolveIcon } from "../../lib/icons";
 import { modules, moduleCategories, roadmap } from "../../data/modules";
 import type { SiteDictionary } from "../../i18n/types";
 
@@ -32,7 +32,7 @@ const { modulesCatalog } = dict;
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="modulesGrid">
       {modules.map((mod) => {
-        const Icon = (Icons as Record<string, any>)[mod.icon] ?? Icons.Boxes;
+        const Icon = resolveIcon(mod.icon);
         return (
           <div class="module-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category={mod.category}>
             <div>
@@ -58,7 +58,7 @@ const { modulesCatalog } = dict;
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {roadmap.map((item) => {
-          const Icon = (Icons as Record<string, any>)[item.icon] ?? Icons.Boxes;
+          const Icon = resolveIcon(item.icon);
           return (
             <div class="p-4 rounded-xl bg-white border border-slate-200 text-center hover:border-orange-300 transition-colors">
               <Icon class="w-5 h-5 text-orange-500 mb-2 mx-auto" />

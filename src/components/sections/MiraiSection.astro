@@ -1,6 +1,6 @@
 ---
 // src/components/sections/MiraiSection.astro
-import { Sparkles, MessageCircle, FileText, Brain, ShieldCheck, CheckCircle2 } from "@lucide/astro";
+import { Sparkles, MessageCircle, FileText, Brain, ShieldCheck, CircleCheck } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -84,14 +84,14 @@ const colorMap: Record<string, string> = {
                   <div class="flex justify-between text-slate-300"><span>{mirai.demoLineCompanyB}</span></div>
                   <div class="border-t border-slate-700 pt-1 mt-1 flex justify-between text-white font-bold"><span>{mirai.demoTotalLabel}</span></div>
                 </div>
-                <p class="text-slate-300 text-xs"><CheckCircle2 class="w-3.5 h-3.5 text-emerald-400 inline mr-1" /> {mirai.demoConfirmation}</p>
+                <p class="text-slate-300 text-xs"><CircleCheck class="w-3.5 h-3.5 text-emerald-400 inline mr-1" /> {mirai.demoConfirmation}</p>
               </div>
             </div>
           </div>
           <div class="pt-3 border-t border-slate-800 flex flex-wrap gap-2 text-xs">
             <span class="text-slate-400 text-[11px] self-center">{mirai.demoPromptsLabel}</span>
-            <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" type="button">{mirai.demoPrompt1}</button>
-            <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" type="button">{mirai.demoPrompt2}</button>
+            <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" type="button" aria-disabled="true">{mirai.demoPrompt1}</button>
+            <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" type="button" aria-disabled="true">{mirai.demoPrompt2}</button>
           </div>
         </div>
       </div>
