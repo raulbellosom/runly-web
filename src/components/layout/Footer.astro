@@ -1,0 +1,62 @@
+---
+// src/components/layout/Footer.astro
+import type { FooterDictionary } from "../../i18n/types";
+import { COMPANY_NAME, COMPANY_URL } from "../../consts";
+
+interface Props {
+  locale: "es" | "en";
+  footer: FooterDictionary;
+}
+
+const { footer } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-runly-navy text-white pt-16 pb-12 border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+      <div class="lg:col-span-2 space-y-4">
+        <img alt="RUNLY" class="h-9 w-auto object-contain" src="/brand/runly-logo-dark.png" width="140" height="36" />
+        <p class="text-sm text-slate-400 max-w-sm">{footer.tagline}</p>
+        <div class="pt-2 text-xs text-slate-400">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+          <span>{footer.uptime}</span>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">{footer.platformHeading}</h4>
+        <ul class="space-y-2.5 text-xs text-slate-400">
+          <li><a class="hover:text-orange-400 transition-colors" href="#modulos">{footer.links.modulesCatalog}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="#motor-rm3">{footer.links.rm3Architecture}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="#mirai">{footer.links.mirai}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="#implementacion">{footer.links.customImplementation}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">{footer.ecosystemHeading}</h4>
+        <ul class="space-y-2.5 text-xs text-slate-400">
+          <li><a class="hover:text-orange-400 transition-colors" href="#modulos">{footer.links.officialModules}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="#modulos">{footer.links.customDevelopment}</a></li>
+          <li><span class="cursor-default">{footer.links.communityPartners}</span></li>
+          <li><span class="cursor-default">{footer.links.apiDocs}</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">{footer.legalHeading}</h4>
+        <ul class="space-y-2.5 text-xs text-slate-400">
+          <li><span class="cursor-default">{footer.links.privacyNotice}</span></li>
+          <li><span class="cursor-default">{footer.links.termsOfService}</span></li>
+          <li><span class="cursor-default">{footer.links.dataSecurity}</span></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="#contacto">{footer.links.supportContact}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <p>&copy; {year} {footer.copyright}</p>
+      <p class="flex items-center gap-1">
+        <span>{footer.builtBy}</span>
+        <a class="text-white hover:text-orange-400 font-semibold transition-colors" href={COMPANY_URL} rel="noopener noreferrer" target="_blank">{COMPANY_NAME}</a>
+      </p>
+    </div>
+  </div>
+</footer>
