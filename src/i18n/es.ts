@@ -271,4 +271,20 @@ export const es: SiteDictionary = {
       },
     ],
   },
+  implementation: {
+    badge: "Transparencia y honestidad comercial",
+    title: "No vendemos paquetes. Construimos la solución que necesitas.",
+    description:
+      "Cada empresa tiene necesidades diferentes. Por eso, en RUNLY ofrecemos implementaciones personalizadas que se ajustan a tu operación, tus objetivos y tu presupuesto.",
+    steps: [
+      { number: "01", title: "Cuéntanos sobre tu empresa", description: "Analizamos tus procesos actuales, dolores operativos y las herramientas que tu equipo ya utiliza en el día a día." },
+      { number: "02", title: "Diseñamos tu solución", description: "Seleccionamos los módulos precisos y definimos las adaptaciones a la medida requeridas, sin módulos innecesarios." },
+      { number: "03", title: "Implementamos RUNLY", description: "Configuramos tu instancia cloud, migramos catálogos base y capacitamos a tus líderes de área de forma práctica." },
+      { number: "04", title: "Evolucionamos contigo", description: "Acompañamiento continuo, soporte directo con desarrolladores e incorporación ágil de nuevos módulos cuando tu negocio crezca." },
+    ],
+    valueTitle: "Software empresarial accesible, sin pagar por lo que no necesitas.",
+    valueDescription:
+      "Buscamos que la tecnología empresarial de alto nivel esté al alcance de más negocios en México y Latinoamérica. Olvídate de licencias prohibitivas de miles de dólares por usuario de los ERPs tradicionales.",
+    valueCta: "Solicitar una propuesta personalizada",
+  },
 };

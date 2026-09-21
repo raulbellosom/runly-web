@@ -132,4 +132,13 @@ export interface SiteDictionary {
     mockRoleDirectionAccess: string;
     pillars: { icon: string; color: string; title: string; description: string }[];
   };
+  implementation: {
+    badge: string;
+    title: string;
+    description: string;
+    steps: { number: string; title: string; description: string }[];
+    valueTitle: string;
+    valueDescription: string;
+    valueCta: string;
+  };
 }

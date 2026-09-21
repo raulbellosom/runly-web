@@ -271,4 +271,20 @@ export const en: SiteDictionary = {
       },
     ],
   },
+  implementation: {
+    badge: "Transparency and business honesty",
+    title: "We do not sell packages. We build the solution you need.",
+    description:
+      "Every company has different needs. That is why RUNLY offers custom implementations that fit your operation, your goals, and your budget.",
+    steps: [
+      { number: "01", title: "Tell us about your company", description: "We analyze your current processes, operational pain points, and the tools your team already uses day to day." },
+      { number: "02", title: "We design your solution", description: "We select the exact modules and define the custom adaptations required, with no unnecessary modules." },
+      { number: "03", title: "We implement RUNLY", description: "We configure your cloud instance, migrate base catalogs, and train your area leads hands-on." },
+      { number: "04", title: "We evolve with you", description: "Ongoing support, direct access to developers, and fast rollout of new modules as your business grows." },
+    ],
+    valueTitle: "Enterprise software that is accessible, without paying for what you do not need.",
+    valueDescription:
+      "We want high-end enterprise technology to be within reach for more businesses across Mexico and Latin America. Forget the thousand-dollar-per-user licenses of traditional ERPs.",
+    valueCta: "Request a custom proposal",
+  },
 };
