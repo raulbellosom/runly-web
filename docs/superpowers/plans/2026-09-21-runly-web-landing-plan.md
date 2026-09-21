@@ -4,9 +4,9 @@
 
 **Goal:** Build the bilingual (ES/EN) Astro marketing site for runly.mx, faithful to the approved Stitch design (`C:\Users\raulb\Downloads\stitch_runly_erp_landing_page\code.html`), with a real module catalog sourced from `runly-erp`, a working SMTP-backed contact form, full SEO, and a Docker deploy config — in the new repo `runly-web`.
 
-**Architecture:** Astro 5 with the `@astrojs/node` standalone adapter (contact form needs a live server), Tailwind CSS for styling (porting the Stitch design tokens), no client-side framework — all interactivity (mobile menu, module filter, FAQ accordion, scroll reveal, MirAI demo, contact form) is vanilla TypeScript inside `<script>` tags, same pattern the Stitch export already uses. `lucide-astro` replaces the Font Awesome CDN for icons (smaller payload, no icon font). Astro's native `i18n` routing serves `/` (Spanish, default) and `/en/` (English) from the same section components, driven by typed dictionaries.
+**Architecture:** Astro 5 with the `@astrojs/node` standalone adapter (contact form needs a live server), Tailwind CSS for styling (porting the Stitch design tokens), no client-side framework — all interactivity (mobile menu, module filter, FAQ accordion, scroll reveal, MirAI demo, contact form) is vanilla TypeScript inside `<script>` tags, same pattern the Stitch export already uses. `@lucide/astro` replaces the Font Awesome CDN for icons (smaller payload, no icon font). Astro's native `i18n` routing serves `/` (Spanish, default) and `/en/` (English) from the same section components, driven by typed dictionaries.
 
-**Tech Stack:** Astro 5, Tailwind CSS 3, `@astrojs/node`, `@astrojs/sitemap`, `lucide-astro`, `@fontsource/plus-jakarta-sans`, Zod, Nodemailer, Vitest (for logic-only unit tests), pnpm, Docker.
+**Tech Stack:** Astro 5, Tailwind CSS 3, `@astrojs/node`, `@astrojs/sitemap`, `@lucide/astro`, `@fontsource/plus-jakarta-sans`, Zod, Nodemailer, Vitest (for logic-only unit tests), pnpm, Docker.
 
 ---
 
@@ -304,21 +304,21 @@ git add astro.config.mjs package.json pnpm-lock.yaml
 git commit -m "chore: configure i18n, sitemap, and node adapter"
 ```
 
-### Task 5: Add lucide-astro and self-hosted font
+### Task 5: Add @lucide/astro and self-hosted font
 
 **Files:**
 - Modify: `package.json`
 
 - [ ] **Step 1: Install packages**
 
-Run: `pnpm add lucide-astro @fontsource/plus-jakarta-sans`
+Run: `pnpm add @lucide/astro @fontsource/plus-jakarta-sans`
 Expected: both added to dependencies in package.json.
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml
-git commit -m "chore: add lucide-astro and self-hosted font"
+git commit -m "chore: add @lucide/astro and self-hosted font"
 ```
 
 ### Task 6: Environment variable scaffolding
@@ -1159,7 +1159,7 @@ Port structure from `code.html` lines 90-133. Replace the placeholder Google-hos
 ```astro
 ---
 // src/components/layout/Header.astro
-import { Menu, ArrowRight } from "lucide-astro";
+import { Menu, ArrowRight } from "@lucide/astro";
 import type { NavDictionary } from "../../i18n/types";
 
 interface Props {
@@ -1468,7 +1468,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/Hero.astro
-import { Boxes, Building2, SlidersHorizontal, Lock, Network, Sparkles } from "lucide-astro";
+import { Boxes, Building2, SlidersHorizontal, Lock, Network, Sparkles } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -1672,7 +1672,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/FlexibilitySection.astro
-import { Puzzle, Zap, Building2, TrendingUp } from "lucide-astro";
+import { Puzzle, Zap, Building2, TrendingUp } from "@lucide/astro";
 import SectionHeading from "../ui/SectionHeading.astro";
 import type { SiteDictionary } from "../../i18n/types";
 
@@ -1784,7 +1784,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/ModulesCatalogSection.astro
-import * as Icons from "lucide-astro";
+import * as Icons from "@lucide/astro";
 import SectionHeading from "../ui/SectionHeading.astro";
 import { modules, moduleCategories, roadmap } from "../../data/modules";
 import type { SiteDictionary } from "../../i18n/types";
@@ -2005,8 +2005,8 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/Rm3ArchitectureSection.astro
-import * as Icons from "lucide-astro";
-import { Atom } from "lucide-astro";
+import * as Icons from "@lucide/astro";
+import { Atom } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -2225,7 +2225,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/ModulesClassificationSection.astro
-import { BadgeCheck, SlidersHorizontal, Users, Check } from "lucide-astro";
+import { BadgeCheck, SlidersHorizontal, Users, Check } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -2439,7 +2439,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/MiraiSection.astro
-import { Sparkles, MessageCircle, FileText, Brain, ShieldCheck, CheckCircle2 } from "lucide-astro";
+import { Sparkles, MessageCircle, FileText, Brain, ShieldCheck, CheckCircle2 } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -2681,7 +2681,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/MultiCompanySection.astro
-import { Users, Flag, UserCog, Check, Plus } from "lucide-astro";
+import { Users, Flag, UserCog, Check, Plus } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -2979,7 +2979,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/WhyChooseSection.astro
-import * as Icons from "lucide-astro";
+import * as Icons from "@lucide/astro";
 import SectionHeading from "../ui/SectionHeading.astro";
 import type { SiteDictionary } from "../../i18n/types";
 
@@ -3138,7 +3138,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/FaqSection.astro
-import { ChevronDown } from "lucide-astro";
+import { ChevronDown } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -3347,7 +3347,7 @@ Expected: PASS.
 ```astro
 ---
 // src/components/sections/ContactSection.astro
-import { Mail, MapPin, Shield, CheckCircle2, Send, Loader2 } from "lucide-astro";
+import { Mail, MapPin, Shield, CheckCircle2, Send, Loader2 } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 import { CONTACT_WHATSAPP_NUMBER } from "../../consts";
 
