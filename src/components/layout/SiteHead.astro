@@ -6,12 +6,16 @@ interface Props {
   title: string;
   description: string;
   locale: "es" | "en";
-  path: string; // e.g. "/" or "/modulos" without locale prefix
+  path: string; // must start with "/", e.g. "/" or "/modulos" — without locale prefix
 }
 
 const { title, description, locale, path } = Astro.props;
 
-const esPath = path === "/" ? "/" : path;
+if (!path.startsWith("/")) {
+  throw new Error(`SiteHead "path" prop must start with "/", received: "${path}"`);
+}
+
+const esPath = path;
 const enPath = path === "/" ? "/en/" : `/en${path}`;
 const canonicalPath = locale === "es" ? esPath : enPath;
 const canonicalUrl = new URL(canonicalPath, SITE_URL).toString();
