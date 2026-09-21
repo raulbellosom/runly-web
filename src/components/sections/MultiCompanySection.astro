@@ -1,0 +1,98 @@
+---
+// src/components/sections/MultiCompanySection.astro
+import { Users, Flag, UserCog, Check, Plus } from "@lucide/astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+}
+
+const { dict } = Astro.props;
+const { multiCompany } = dict;
+
+const iconMap = { Users, Flag, UserCog } as const;
+const colorMap: Record<string, string> = {
+  orange: "bg-orange-100 text-orange-600",
+  blue: "bg-blue-100 text-blue-600",
+  emerald: "bg-emerald-100 text-emerald-600",
+};
+---
+
+<section class="py-24 bg-white border-b border-slate-200 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading eyebrow={multiCompany.eyebrow} title={multiCompany.title} description={multiCompany.description} />
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-6 order-2 lg:order-1">
+        <div class="relative max-w-md mx-auto rounded-2xl p-6 bg-slate-50 border border-slate-200 shadow-xl">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">RD</div>
+              <div>
+                <p class="text-xs font-bold text-slate-800">{multiCompany.mockActiveCompany}</p>
+                <p class="text-[10px] text-slate-400">{multiCompany.mockActiveInstance}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span class="text-xs font-semibold text-slate-600">{multiCompany.mockAdminUser}</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow-lg border border-slate-200">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">{multiCompany.mockSwitcherLabel}</p>
+            <div class="space-y-2">
+              <div class="p-2.5 rounded-lg bg-blue-50/70 border border-blue-200 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs font-bold">RD</div>
+                  <span class="text-xs font-bold text-slate-800">{multiCompany.mockCompanyA}</span>
+                </div>
+                <Check class="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              <div class="p-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 flex items-center justify-between transition-colors">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-md bg-sky-500 text-white flex items-center justify-center text-xs font-bold">MY</div>
+                  <span class="text-xs font-medium text-slate-700">{multiCompany.mockCompanyB}</span>
+                </div>
+                <span class="text-[10px] text-slate-400">{multiCompany.mockChangeLabel}</span>
+              </div>
+              <div class="pt-2 border-t border-slate-100 flex items-center gap-2 text-xs font-semibold text-orange-600">
+                <Plus class="w-3.5 h-3.5" />
+                <span>{multiCompany.mockAddCompany}</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 grid grid-cols-3 gap-2 text-center">
+            <div class="p-2 rounded-lg bg-white border border-slate-200">
+              <span class="block text-xs font-bold text-slate-800">{multiCompany.mockRoleFinance}</span>
+              <span class="text-[10px] text-emerald-600 font-semibold">{multiCompany.mockRoleFinanceAccess}</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white border border-slate-200">
+              <span class="block text-xs font-bold text-slate-800">{multiCompany.mockRoleWarehouse}</span>
+              <span class="text-[10px] text-blue-600 font-semibold">{multiCompany.mockRoleWarehouseAccess}</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white border border-slate-200">
+              <span class="block text-xs font-bold text-slate-800">{multiCompany.mockRoleDirection}</span>
+              <span class="text-[10px] text-purple-600 font-semibold">{multiCompany.mockRoleDirectionAccess}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-6 space-y-6 order-1 lg:order-2">
+        {multiCompany.pillars.map((pillar) => {
+          const Icon = iconMap[pillar.icon as keyof typeof iconMap];
+          return (
+            <div class="flex items-start gap-4">
+              <div class={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${colorMap[pillar.color]}`}>
+                <Icon class="w-5 h-5" />
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-slate-900">{pillar.title}</h3>
+                <p class="text-sm text-slate-600 mt-1 leading-relaxed">{pillar.description}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>

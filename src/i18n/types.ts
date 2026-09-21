@@ -112,4 +112,24 @@ export interface SiteDictionary {
     demoPrompt1: string;
     demoPrompt2: string;
   };
+  multiCompany: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    mockActiveCompany: string;
+    mockActiveInstance: string;
+    mockAdminUser: string;
+    mockSwitcherLabel: string;
+    mockCompanyA: string;
+    mockCompanyB: string;
+    mockChangeLabel: string;
+    mockAddCompany: string;
+    mockRoleFinance: string;
+    mockRoleFinanceAccess: string;
+    mockRoleWarehouse: string;
+    mockRoleWarehouseAccess: string;
+    mockRoleDirection: string;
+    mockRoleDirectionAccess: string;
+    pillars: { icon: string; color: string; title: string; description: string }[];
+  };
 }
