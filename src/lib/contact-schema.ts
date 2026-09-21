@@ -4,7 +4,7 @@ import { z } from "zod";
 export const contactSchema = z.object({
   fullName: z.string().trim().min(2).max(120),
   companyName: z.string().trim().min(2).max(160),
-  email: z.string().trim().email().max(200),
+  email: z.email().trim().max(200),
   phone: z.string().trim().min(7).max(30),
   teamSize: z.string().trim().max(60).optional().default(""),
   interest: z.string().trim().min(2).max(160),
