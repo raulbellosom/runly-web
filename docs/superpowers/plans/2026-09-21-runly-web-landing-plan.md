@@ -114,78 +114,65 @@ git add package.json pnpm-lock.yaml astro.config.mjs tsconfig.json src public
 git commit -m "chore: scaffold astro project"
 ```
 
-### Task 2: Add Tailwind CSS integration
+### Task 2: Add Tailwind CSS integration (v4, CSS-first config)
+
+**Note on Astro/Tailwind versions:** Task 1 ended up on Astro 7.3.3 (latest) instead of the Astro 5 assumed when this plan was originally drafted, because the interactive `create-astro` CLI could not run in this environment and the scaffold was hand-authored instead. Astro 5+ dropped the old `@astrojs/tailwind` integration in favor of Tailwind v4's own Vite plugin, and Tailwind v4 is CSS-first (no `tailwind.config.mjs` — design tokens live in an `@theme` block inside CSS). This task reflects that reality instead of the old `tailwind.config.mjs` approach.
 
 **Files:**
 - Modify: `astro.config.mjs`
-- Create: `tailwind.config.mjs`, `src/styles/global.css`
+- Create: `src/styles/global.css`
 
 - [ ] **Step 1: Add the Tailwind integration**
 
 Run: `pnpm astro add tailwind -y`
-Expected: installs `@astrojs/tailwind` and `tailwindcss`, adds the integration to `astro.config.mjs`, creates `tailwind.config.mjs`.
+Expected: installs `tailwindcss` and `@tailwindcss/vite`, and adds the Vite plugin to `astro.config.mjs` (an import of `@tailwindcss/vite` plus `vite: { plugins: [tailwindcss()] }` in the `defineConfig` call). If the installer instead adds the older `@astrojs/tailwind` integration and creates a `tailwind.config.mjs` (i.e. you are actually on Tailwind v3 tooling), stop and report DONE_WITH_CONCERNS — the steps below assume Tailwind v4; a v3 setup needs the config moved into `tailwind.config.mjs` instead of the `@theme` block in Step 2, and the directives in Task 3 need to stay as `@tailwind base/components/utilities` instead of `@import "tailwindcss";`.
 
-- [ ] **Step 2: Replace `tailwind.config.mjs` with Runly design tokens**
+- [ ] **Step 2: Write `src/styles/global.css` with the Runly design tokens in an `@theme` block**
 
-```js
-// tailwind.config.mjs
-/** @type {import("tailwindcss").Config} */
-export default {
-  content: ["./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}"],
-  darkMode: "class",
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
-      },
-      colors: {
-        runly: {
-          navy: "#070D1E",
-          midnight: "#0B132B",
-          darkcard: "#111B38",
-          orange: "#FF5E14",
-          amber: "#FF9F1C",
-          blue: "#0E3A8C",
-          surface: "#F8FAFC",
-          border: "rgba(226, 232, 240, 0.8)",
-        },
-      },
-      boxShadow: {
-        "glow-orange": "0 0 35px -5px rgba(255, 94, 20, 0.35)",
-        glass: "0 8px 32px 0 rgba(11, 19, 43, 0.06)",
-        "glass-dark": "0 12px 40px 0 rgba(0, 0, 0, 0.45)",
-      },
-    },
-  },
-  plugins: [],
-};
+```css
+/* src/styles/global.css */
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --color-runly-navy: #070d1e;
+  --color-runly-midnight: #0b132b;
+  --color-runly-darkcard: #111b38;
+  --color-runly-orange: #ff5e14;
+  --color-runly-amber: #ff9f1c;
+  --color-runly-blue: #0e3a8c;
+  --color-runly-surface: #f8fafc;
+  --color-runly-border: rgba(226, 232, 240, 0.8);
+
+  --shadow-glow-orange: 0 0 35px -5px rgba(255, 94, 20, 0.35);
+  --shadow-glass: 0 8px 32px 0 rgba(11, 19, 43, 0.06);
+  --shadow-glass-dark: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
 ```
+
+This is the CSS-first equivalent of the old `tailwind.config.mjs` `theme.extend` block: `--color-runly-navy` makes `bg-runly-navy`, `text-runly-navy`, `border-runly-navy`, etc. available automatically, and `--shadow-glow-orange` makes `shadow-glow-orange` available — no separate config file or `content` glob needed, Tailwind v4's Vite plugin scans the module graph automatically.
 
 - [ ] **Step 3: Verify Tailwind builds**
 
 Run: `pnpm astro build`
-Expected: exits 0, `dist/` is generated with compiled CSS containing the `070D1E` custom color (check: `grep -r "070D1E" dist/ | head -1` returns a match).
+Expected: exits 0, `dist/` is generated with compiled CSS containing the `070d1e` custom color (check: `grep -ri "070d1e" dist/client/_astro/*.css | head -1` returns a match — Tailwind v4 lowercases hex colors in output).
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add astro.config.mjs tailwind.config.mjs package.json pnpm-lock.yaml
-git commit -m "chore: add tailwind with runly design tokens"
+git add astro.config.mjs src/styles/global.css package.json pnpm-lock.yaml
+git commit -m "chore: add tailwind v4 with runly design tokens"
 ```
 
 ### Task 3: Global CSS utilities (glass, gradient button, grid pattern, reveal-on-scroll)
 
 **Files:**
-- Create: `src/styles/global.css`
+- Modify: `src/styles/global.css` (created in Task 2 with the `@theme` block — this task appends to the same file, it does not replace it)
 
-- [ ] **Step 1: Write the global stylesheet**
+- [ ] **Step 1: Append the utility classes below the `@theme` block from Task 2**
 
 ```css
-/* src/styles/global.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer utilities {
   .glass-card {
     background: rgba(255, 255, 255, 0.85);
@@ -270,7 +257,7 @@ Expected: installs `@astrojs/node` and `@astrojs/sitemap`, updates `astro.config
 ```js
 // astro.config.mjs
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import node from "@astrojs/node";
 import sitemap from "@astrojs/sitemap";
 
@@ -286,7 +273,6 @@ export default defineConfig({
     },
   },
   integrations: [
-    tailwind(),
     sitemap({
       i18n: {
         defaultLocale: "es",
@@ -294,8 +280,13 @@ export default defineConfig({
       },
     }),
   ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
 ```
+
+Note: keep whatever Tailwind wiring Task 2 already put in place (the Vite plugin import/config) — this step's job is to add `i18n`, `sitemap`, and the `node` adapter around it, not to remove Tailwind. If Task 2 flagged that this project is actually on Tailwind v3 tooling (`@astrojs/tailwind` integration), keep `import tailwind from "@astrojs/tailwind";` and `tailwind()` in `integrations` instead of the `vite.plugins` block above.
 
 - [ ] **Step 3: Verify build still succeeds**
 
