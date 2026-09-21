@@ -345,7 +345,7 @@ export const es: SiteDictionary = {
     whatsappDescription: "Atención ágil con uno de nuestros consultores.",
     whatsappCta: "Contáctanos por WhatsApp",
     whatsappMessage: "Hola, me gustaría solicitar una demostración de RUNLY ERP",
-    emailLabel: "contacto@runly.mx",
+    emailLabel: "hola@runly.mx",
     locationLabel: "México. Cobertura y despliegue para toda Latinoamérica",
     ndaLabel: "Acuerdo de Confidencialidad (NDA) disponible para empresas",
     formTitle: "Solicitud de propuesta o demostración",

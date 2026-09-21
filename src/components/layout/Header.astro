@@ -26,9 +26,9 @@ const links = [
     <a aria-label="RUNLY" class="flex items-center gap-2" href={`${prefix}/`}>
       <img alt="RUNLY - Business in motion" class="h-9 w-auto object-contain" src="/brand/runly-logo-light.png" width="140" height="36" />
     </a>
-    <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+    <nav class="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold text-slate-600">
       {links.map((link) => (
-        <a class="hover:text-runly-orange transition-colors flex items-center gap-1.5" href={link.href}>
+        <a class="hover:text-runly-orange transition-colors flex items-center gap-1.5 whitespace-nowrap" href={link.href}>
           <span>{link.label}</span>
           {link.badge && (
             <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
@@ -37,16 +37,16 @@ const links = [
       ))}
     </nav>
     <div class="flex items-center gap-4">
-      <a class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm" href="#contacto">
+      <a class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm whitespace-nowrap" href="#contacto">
         <span>{nav.requestDemo}</span>
         <ArrowRight class="w-3.5 h-3.5" />
       </a>
-      <button aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" class="md:hidden p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
+      <button aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" class="lg:hidden p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
         <Menu class="w-6 h-6" />
       </button>
     </div>
   </div>
-  <div class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3" id="mobileMenu">
+  <div class="hidden lg:hidden border-t border-slate-200 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3" id="mobileMenu">
     {links.map((link) => (
       <a class="block py-2 text-sm font-medium text-slate-700 hover:text-runly-orange" href={link.href}>{link.label}</a>
     ))}

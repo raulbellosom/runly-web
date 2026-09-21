@@ -23,7 +23,7 @@ const { title, description, locale, path } = Astro.props;
   <head>
     <SiteHead title={title} description={description} locale={locale} path={path} />
   </head>
-  <body class="bg-[#FCFDFF] text-slate-800 font-sans antialiased selection:bg-orange-500 selection:text-white">
+  <body class="bg-[#FCFDFF] text-slate-800 font-sans antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden">
     <slot />
     <noscript>
       <style>

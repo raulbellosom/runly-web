@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import * as Icons from "@lucide/astro";
 import { es } from "../../i18n/es";
-import { modules, roadmap } from "../../data/modules";
+import { modules, moduleCategories, roadmap } from "../../data/modules";
 
 // Guards every place an icon name is stored as a plain string and resolved
 // dynamically at runtime (via resolveIcon), instead of through a locally
@@ -21,6 +21,10 @@ const cases: { label: string; names: string[] }[] = [
   {
     label: "module catalog and roadmap",
     names: [...modules.map((m) => m.icon), ...roadmap.map((r) => r.icon)],
+  },
+  {
+    label: "module category filters",
+    names: moduleCategories.map((c) => c.icon),
   },
   {
     label: "rm3 nodes and pillars",

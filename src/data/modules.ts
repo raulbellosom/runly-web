@@ -318,15 +318,15 @@ export const modules: RunlyModuleEntry[] = [
   },
 ];
 
-export const moduleCategories: { id: ModuleCategory | "all"; label: { es: string; en: string } }[] = [
-  { id: "all", label: { es: "Todos", en: "All" } },
-  { id: "comunicacion", label: { es: "Comunicación", en: "Communication" } },
-  { id: "operaciones", label: { es: "Operaciones", en: "Operations" } },
-  { id: "finanzas", label: { es: "Finanzas", en: "Finance" } },
-  { id: "comercial", label: { es: "Comercial", en: "Commercial" } },
-  { id: "productividad", label: { es: "Productividad", en: "Productivity" } },
-  { id: "plataforma", label: { es: "Plataforma", en: "Platform" } },
-  { id: "sistema", label: { es: "Sistema", en: "System" } },
+export const moduleCategories: { id: ModuleCategory | "all"; label: { es: string; en: string }; icon: string }[] = [
+  { id: "all", label: { es: "Todos", en: "All" }, icon: "LayoutGrid" },
+  { id: "comunicacion", label: { es: "Comunicación", en: "Communication" }, icon: "MessageSquare" },
+  { id: "operaciones", label: { es: "Operaciones", en: "Operations" }, icon: "Boxes" },
+  { id: "finanzas", label: { es: "Finanzas", en: "Finance" }, icon: "Landmark" },
+  { id: "comercial", label: { es: "Comercial", en: "Commercial" }, icon: "ShoppingBag" },
+  { id: "productividad", label: { es: "Productividad", en: "Productivity" }, icon: "SquareKanban" },
+  { id: "plataforma", label: { es: "Plataforma", en: "Platform" }, icon: "Globe" },
+  { id: "sistema", label: { es: "Sistema", en: "System" }, icon: "Layers" },
 ];
 
 export interface RoadmapEntry {
