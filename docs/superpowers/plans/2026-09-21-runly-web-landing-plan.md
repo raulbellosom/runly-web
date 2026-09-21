@@ -1915,7 +1915,7 @@ git add src/i18n src/components/sections/ModulesCatalogSection.astro
 git commit -m "feat: add data-driven modules catalog section with filtering"
 ```
 
-### Task 17: RM3 architecture section
+### Task 17: RM3 architecture section — DONE (commit `4a38cad`; icon resolution moved to shared `src/lib/icons.ts` in `6437b47`)
 
 Source: `code.html` lines 540-647.
 
@@ -1923,7 +1923,7 @@ Source: `code.html` lines 540-647.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/Rm3ArchitectureSection.astro`
 
-- [ ] **Step 1: Add the `rm3` key to types.ts**
+- [x] **Step 1: Add the `rm3` key to types.ts**
 
 ```ts
   rm3: {
@@ -1939,7 +1939,7 @@ Source: `code.html` lines 540-647.
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   rm3: {
@@ -1983,7 +1983,7 @@ Source: `code.html` lines 540-647.
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   rm3: {
@@ -2027,12 +2027,12 @@ Source: `code.html` lines 540-647.
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write Rm3ArchitectureSection.astro**
+- [x] **Step 5: Write Rm3ArchitectureSection.astro**
 
 ```astro
 ---
@@ -2120,14 +2120,14 @@ function nodeIcon(name: string) {
 </section>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/Rm3ArchitectureSection.astro
 git commit -m "feat: add RM3 architecture section"
 ```
 
-### Task 18: Modules classification section (Oficiales / Custom / Community)
+### Task 18: Modules classification section (Oficiales / Custom / Community) — DONE (commit `b875ce3`; refactored to use `SectionHeading` in `6437b47`)
 
 Source: `code.html` lines 648-732.
 
@@ -2135,7 +2135,7 @@ Source: `code.html` lines 648-732.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/ModulesClassificationSection.astro`
 
-- [ ] **Step 1: Add the `classification` key to types.ts**
+- [x] **Step 1: Add the `classification` key to types.ts**
 
 ```ts
   classification: {
@@ -2151,7 +2151,7 @@ Source: `code.html` lines 648-732.
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   classification: {
@@ -2199,7 +2199,7 @@ Source: `code.html` lines 648-732.
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   classification: {
@@ -2247,12 +2247,12 @@ Source: `code.html` lines 648-732.
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write ModulesClassificationSection.astro**
+- [x] **Step 5: Write ModulesClassificationSection.astro**
 
 ```astro
 ---
@@ -2322,14 +2322,14 @@ const { classification } = dict;
 </section>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/ModulesClassificationSection.astro
 git commit -m "feat: add modules classification section"
 ```
 
-### Task 19: MirAI section (with clearly-labeled demo)
+### Task 19: MirAI section (with clearly-labeled demo) — DONE (commit `70cbee9`; `CheckCircle2`→`CircleCheck` rename and `aria-disabled` on inert demo buttons in `6437b47`)
 
 Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runly.inventory`, not a standalone module (see catalog note at the top of this plan) — the section copy must not imply it is separately installable, and the demo transcript must read as an illustrative example, not a live system.
 
@@ -2337,7 +2337,7 @@ Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runl
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/MiraiSection.astro`
 
-- [ ] **Step 1: Add the `mirai` key to types.ts**
+- [x] **Step 1: Add the `mirai` key to types.ts**
 
 ```ts
   mirai: {
@@ -2361,7 +2361,7 @@ Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runl
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   mirai: {
@@ -2411,7 +2411,7 @@ Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runl
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   mirai: {
@@ -2461,12 +2461,12 @@ Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runl
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write MiraiSection.astro**
+- [x] **Step 5: Write MiraiSection.astro**
 
 ```astro
 ---
@@ -2573,7 +2573,7 @@ const colorMap: Record<string, string> = {
 
 Note: the demo prompt chips are visual only (no `onclick`), matching the design spec decision that the MirAI demo is not wired to a real backend in v1.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/MiraiSection.astro
