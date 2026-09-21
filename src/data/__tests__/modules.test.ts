@@ -1,6 +1,6 @@
 // src/data/__tests__/modules.test.ts
 import { describe, expect, it } from "vitest";
-import { modules } from "../modules";
+import { modules, moduleCategories } from "../modules";
 
 describe("modules catalog", () => {
   it("has exactly 21 real Runly modules", () => {
@@ -18,5 +18,12 @@ describe("modules catalog", () => {
 
   it("does not list a MirAI entry as its own module", () => {
     expect(modules.find((m) => m.id === "runly.mirai")).toBeUndefined();
+  });
+
+  it("every module category exists in moduleCategories", () => {
+    const categoryIds = new Set(moduleCategories.map((c) => c.id));
+    for (const mod of modules) {
+      expect(categoryIds.has(mod.category)).toBe(true);
+    }
   });
 });

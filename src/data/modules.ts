@@ -26,7 +26,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.core",
     name: { es: "Runly Core", en: "Runly Core" },
     description: {
-      es: "Nucleo del sistema: modulos, permisos, bitacora y configuracion de instancia.",
+      es: "Núcleo del sistema: módulos, permisos, bitácora y configuración de instancia.",
       en: "System core: modules, permissions, audit log, and instance configuration.",
     },
     category: "sistema",
@@ -40,7 +40,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.identity",
     name: { es: "Identidad", en: "Identity" },
     description: {
-      es: "Usuarios, roles, permisos, membresias y control de acceso.",
+      es: "Usuarios, roles, permisos, membresías y control de acceso.",
       en: "Users, roles, permissions, memberships, and access control.",
     },
     category: "sistema",
@@ -54,7 +54,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.files",
     name: { es: "Archivos", en: "Files" },
     description: {
-      es: "Gestion de archivos, carga, almacenamiento y acceso seguro.",
+      es: "Gestión de archivos, carga, almacenamiento y acceso seguro.",
       en: "File management, uploads, storage, and secure access.",
     },
     category: "sistema",
@@ -68,7 +68,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.company",
     name: { es: "Empresa", en: "Company" },
     description: {
-      es: "Perfil de empresa, direccion, marca visual e identidad corporativa.",
+      es: "Perfil de empresa, dirección, marca visual e identidad corporativa.",
       en: "Company profile, address, visual brand, and corporate identity.",
     },
     category: "sistema",
@@ -110,7 +110,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.fleet",
     name: { es: "Flota", en: "Fleet" },
     description: {
-      es: "Gestion de flota vehicular: vehiculos, reportes y asignacion de conductores.",
+      es: "Gestión de flota vehicular: vehículos, reportes y asignación de conductores.",
       en: "Vehicle fleet management: vehicles, reports, and driver assignment.",
     },
     category: "operaciones",
@@ -124,7 +124,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.inventory",
     name: { es: "Inventario", en: "Inventory" },
     description: {
-      es: "Gestion de inventario y activos de la empresa.",
+      es: "Gestión de inventario y activos de la empresa.",
       en: "Inventory and company asset management.",
     },
     category: "operaciones",
@@ -138,7 +138,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.ledger",
     name: { es: "Libro de cuentas", en: "Ledger" },
     description: {
-      es: "Registro bancario tipo hoja de calculo: depositos, retiros y saldo corriente.",
+      es: "Registro bancario tipo hoja de cálculo: depósitos, retiros y saldo corriente.",
       en: "Spreadsheet-style bank register: deposits, withdrawals, and running balance.",
     },
     category: "finanzas",
@@ -152,7 +152,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.pfm",
     name: { es: "Finanzas personales", en: "Personal Finance" },
     description: {
-      es: "Carteras de efectivo, debito y credito con registro rapido de ingresos y egresos.",
+      es: "Carteras de efectivo, débito y crédito con registro rápido de ingresos y egresos.",
       en: "Cash, debit, and credit wallets with quick income and expense logging.",
     },
     category: "finanzas",
@@ -164,9 +164,9 @@ export const modules: RunlyModuleEntry[] = [
   },
   {
     id: "runly.catalog",
-    name: { es: "Catalogo", en: "Catalog" },
+    name: { es: "Catálogo", en: "Catalog" },
     description: {
-      es: "Gestiona productos, categorias, variantes e inventario.",
+      es: "Gestiona productos, categorías, variantes e inventario.",
       en: "Manage products, categories, variants, and inventory.",
     },
     category: "comercial",
@@ -180,7 +180,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.pos",
     name: { es: "POS", en: "POS" },
     description: {
-      es: "Punto de venta para restaurante, tienda y operaciones hibridas.",
+      es: "Punto de venta para restaurante, tienda y operaciones híbridas.",
       en: "Point of sale for restaurants, retail, and hybrid operations.",
     },
     category: "comercial",
@@ -194,7 +194,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.growth",
     name: { es: "Growth", en: "Growth" },
     description: {
-      es: "Telemetria web, formularios y seguimiento de leads.",
+      es: "Telemetría web, formularios y seguimiento de leads.",
       en: "Web telemetry, forms, and lead tracking.",
     },
     category: "comercial",
@@ -208,7 +208,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.website",
     name: { es: "Sitio web", en: "Website" },
     description: {
-      es: "Sitio web publico, editor visual de paginas y publicacion de contenido.",
+      es: "Sitio web público, editor visual de páginas y publicación de contenido.",
       en: "Public website, visual page editor, and content publishing.",
     },
     category: "plataforma",
@@ -222,7 +222,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.activity",
     name: { es: "Actividad", en: "Activity" },
     description: {
-      es: "Bitacora legible de eventos y feed transversal de Runly ERP.",
+      es: "Bitácora legible de eventos y feed transversal de Runly ERP.",
       en: "Human-readable event log and cross-module activity feed.",
     },
     category: "plataforma",
@@ -250,7 +250,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.calendar",
     name: { es: "Calendario", en: "Calendar" },
     description: {
-      es: "Calendario personal y compartido con eventos, recordatorios y vistas por dia, semana y mes.",
+      es: "Calendario personal y compartido con eventos, recordatorios y vistas por día, semana y mes.",
       en: "Personal and shared calendar with events, reminders, and day/week/month views.",
     },
     category: "sistema",
@@ -264,7 +264,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.projects",
     name: { es: "Proyectos", en: "Projects" },
     description: {
-      es: "Gestion de proyectos y tareas con vistas Kanban, Lista y Timeline.",
+      es: "Gestión de proyectos y tareas con vistas Kanban, Lista y Timeline.",
       en: "Project and task management with Kanban, List, and Timeline views.",
     },
     category: "productividad",
@@ -292,7 +292,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.notes",
     name: { es: "Notas", en: "Notes" },
     description: {
-      es: "Notas enriquecidas con editor de texto, carpetas, etiquetas y colaboracion en tiempo real.",
+      es: "Notas enriquecidas con editor de texto, carpetas, etiquetas y colaboración en tiempo real.",
       en: "Rich notes with a text editor, folders, tags, and real-time collaboration.",
     },
     category: "productividad",
@@ -306,7 +306,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.chat",
     name: { es: "Chat", en: "Chat" },
     description: {
-      es: "Mensajeria interna en tiempo real y chat de soporte para visitantes externos.",
+      es: "Mensajería interna en tiempo real y chat de soporte para visitantes externos.",
       en: "Real-time internal messaging and support chat for external visitors.",
     },
     category: "comunicacion",
@@ -320,7 +320,7 @@ export const modules: RunlyModuleEntry[] = [
 
 export const moduleCategories: { id: ModuleCategory | "all"; label: { es: string; en: string } }[] = [
   { id: "all", label: { es: "Todos", en: "All" } },
-  { id: "comunicacion", label: { es: "Comunicacion", en: "Communication" } },
+  { id: "comunicacion", label: { es: "Comunicación", en: "Communication" } },
   { id: "operaciones", label: { es: "Operaciones", en: "Operations" } },
   { id: "finanzas", label: { es: "Finanzas", en: "Finance" } },
   { id: "comercial", label: { es: "Comercial", en: "Commercial" } },
@@ -335,7 +335,7 @@ export interface RoadmapEntry {
 }
 
 export const roadmap: RoadmapEntry[] = [
-  { name: { es: "Facturacion CFDI 4.0", en: "CFDI 4.0 Invoicing" }, icon: "Receipt" },
-  { name: { es: "Logistica y Envios", en: "Logistics & Shipping" }, icon: "Truck" },
-  { name: { es: "API Publica y Webhooks", en: "Public API & Webhooks" }, icon: "Plug" },
+  { name: { es: "Facturación CFDI 4.0", en: "CFDI 4.0 Invoicing" }, icon: "Receipt" },
+  { name: { es: "Logística y Envíos", en: "Logistics & Shipping" }, icon: "Truck" },
+  { name: { es: "API Pública y Webhooks", en: "Public API & Webhooks" }, icon: "Plug" },
 ];
