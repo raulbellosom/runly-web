@@ -1038,12 +1038,16 @@ interface Props {
   title: string;
   description: string;
   locale: "es" | "en";
-  path: string; // e.g. "/" or "/modulos" without locale prefix
+  path: string; // must start with "/", e.g. "/" or "/modulos" — without locale prefix
 }
 
 const { title, description, locale, path } = Astro.props;
 
-const esPath = path === "/" ? "/" : path;
+if (!path.startsWith("/")) {
+  throw new Error(`SiteHead "path" prop must start with "/", received: "${path}"`);
+}
+
+const esPath = path;
 const enPath = path === "/" ? "/en/" : `/en${path}`;
 const canonicalPath = locale === "es" ? esPath : enPath;
 const canonicalUrl = new URL(canonicalPath, SITE_URL).toString();
@@ -1126,17 +1130,33 @@ const { title, description, locale, path } = Astro.props;
   </head>
   <body class="bg-[#FCFDFF] text-slate-800 font-sans antialiased selection:bg-orange-500 selection:text-white">
     <slot />
+    <noscript>
+      <style>
+        .reveal-on-scroll {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
     <script>
-      const observerOptions = { root: null, rootMargin: "0px 0px -60px 0px", threshold: 0.1 };
-      const revealObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-      document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
+      try {
+        if ("IntersectionObserver" in window) {
+          const observerOptions = { root: null, rootMargin: "0px 0px -60px 0px", threshold: 0.1 };
+          const revealObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                obs.unobserve(entry.target);
+              }
+            });
+          }, observerOptions);
+          document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
+        } else {
+          document.querySelectorAll(".reveal-on-scroll").forEach((el) => el.classList.add("is-visible"));
+        }
+      } catch {
+        document.querySelectorAll(".reveal-on-scroll").forEach((el) => el.classList.add("is-visible"));
+      }
     </script>
   </body>
 </html>
@@ -1207,7 +1227,7 @@ const links = [
         <span>{nav.requestDemo}</span>
         <ArrowRight class="w-3.5 h-3.5" />
       </a>
-      <button aria-label="Toggle menu" class="md:hidden p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
+      <button aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" class="md:hidden p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
         <Menu class="w-6 h-6" />
       </button>
     </div>
@@ -1226,17 +1246,25 @@ const links = [
   const mobileBtn = document.getElementById("mobileMenuBtn");
   const mobileMenu = document.getElementById("mobileMenu");
   if (mobileBtn && mobileMenu) {
+    const closeMenu = () => {
+      mobileMenu.classList.add("hidden");
+      mobileBtn.setAttribute("aria-expanded", "false");
+    };
     mobileBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      mobileMenu.classList.toggle("hidden");
+      const isOpen = !mobileMenu.classList.toggle("hidden");
+      mobileBtn.setAttribute("aria-expanded", String(isOpen));
     });
     mobileMenu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+      link.addEventListener("click", closeMenu);
     });
     document.addEventListener("click", (e) => {
       if (!mobileMenu.contains(e.target as Node) && !mobileBtn.contains(e.target as Node)) {
-        mobileMenu.classList.add("hidden");
+        closeMenu();
       }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
     });
   }
 </script>
