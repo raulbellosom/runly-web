@@ -3061,7 +3061,7 @@ git add src/i18n src/components/sections/WhyChooseSection.astro
 git commit -m "feat: add why choose runly section"
 ```
 
-### Task 23: FAQ section (accessible accordion)
+### Task 23: FAQ section (accessible accordion) — DONE (commit `a5799f7`; `aria-controls` wiring added in `de257a9`)
 
 Source: `code.html` lines 1146-1233. The Stitch copy states "48 a 72 horas" and "2 a 4 semanas" as fixed implementation timelines — reword as estimates so this reads honestly as a general expectation, not a contractual promise.
 
@@ -3069,7 +3069,7 @@ Source: `code.html` lines 1146-1233. The Stitch copy states "48 a 72 horas" and 
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/FaqSection.astro`
 
-- [ ] **Step 1: Add the `faq` key to types.ts**
+- [x] **Step 1: Add the `faq` key to types.ts**
 
 ```ts
   faq: {
@@ -3080,7 +3080,7 @@ Source: `code.html` lines 1146-1233. The Stitch copy states "48 a 72 horas" and 
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   faq: {
@@ -3120,7 +3120,7 @@ Source: `code.html` lines 1146-1233. The Stitch copy states "48 a 72 horas" and 
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   faq: {
@@ -3160,12 +3160,12 @@ Source: `code.html` lines 1146-1233. The Stitch copy states "48 a 72 horas" and 
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write FaqSection.astro**
+- [x] **Step 5: Write FaqSection.astro**
 
 ```astro
 ---
@@ -3222,14 +3222,14 @@ const { faq } = dict;
 </script>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/FaqSection.astro
 git commit -m "feat: add accessible FAQ accordion section"
 ```
 
-### Task 24: Contact section (info column + form UI)
+### Task 24: Contact section (info column + form UI) — DONE (commit `860347f`; uses `CircleCheck`/`LoaderCircle` not deprecated aliases, real loading spinner wired up; screen-reader hint on WhatsApp link added in `de257a9`)
 
 Source: `code.html` lines 1234-1359. The submit behavior here is wired to the real `/api/contact` endpoint built in Phase 5 (Tasks 25-29) — this task builds the markup and the fetch-based client script; Phase 5 must land before this form actually delivers email, but the two can be built in either order since the endpoint contract (`POST /api/contact` with the fields below, JSON response `{ ok: true }` or `{ ok: false, error }`) is fixed now.
 
@@ -3237,7 +3237,7 @@ Source: `code.html` lines 1234-1359. The submit behavior here is wired to the re
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/ContactSection.astro`
 
-- [ ] **Step 1: Add the `contact` key to types.ts**
+- [x] **Step 1: Add the `contact` key to types.ts**
 
 ```ts
   contact: {
@@ -3277,7 +3277,7 @@ Source: `code.html` lines 1234-1359. The submit behavior here is wired to the re
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   contact: {
@@ -3323,7 +3323,7 @@ Source: `code.html` lines 1234-1359. The submit behavior here is wired to the re
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   contact: {
@@ -3369,12 +3369,12 @@ Source: `code.html` lines 1234-1359. The submit behavior here is wired to the re
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write ContactSection.astro**
+- [x] **Step 5: Write ContactSection.astro**
 
 ```astro
 ---
@@ -3540,7 +3540,7 @@ const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURICompone
 
 Note: `submitBtn.dataset.submitting` comes straight from the `data-submitting={contact.submitting}` attribute set in the markup above, so the loading label is already localized with no extra wiring step; the script falls back to the original label only if that attribute is somehow missing. `renderedAt` is added to the form dataset when the page mounts (Tasks 25-26) so the API route rate-limiter can reject bot submissions that fire faster than a human could fill the form.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/ContactSection.astro
