@@ -1,0 +1,41 @@
+---
+// src/components/sections/FlexibilitySection.astro
+import { Puzzle, Zap, Building2, TrendingUp } from "@lucide/astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+}
+
+const { dict } = Astro.props;
+const { flexibility } = dict;
+
+const iconMap = { PuzzlePiece: Puzzle, Zap, Building2, TrendingUp } as const;
+const colorMap: Record<string, string> = {
+  orange: "bg-orange-100 text-orange-600 hover:border-orange-300",
+  blue: "bg-blue-100 text-blue-600 hover:border-blue-300",
+  purple: "bg-purple-100 text-purple-600 hover:border-purple-300",
+  emerald: "bg-emerald-100 text-emerald-600 hover:border-emerald-300",
+};
+---
+
+<section class="py-20 bg-slate-50/70 border-y border-slate-200/70 relative reveal-on-scroll">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading eyebrow={flexibility.eyebrow} title={flexibility.title} description={flexibility.description} />
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {flexibility.cards.map((card) => {
+        const Icon = iconMap[card.icon as keyof typeof iconMap];
+        return (
+          <div class={`glass-card p-7 rounded-2xl transition-all duration-300 hover:shadow-lg ${colorMap[card.color]?.split(" ").slice(2).join(" ")}`}>
+            <div class={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5 ${colorMap[card.color]?.split(" ").slice(0, 2).join(" ")}`}>
+              <Icon class="w-5 h-5" />
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 mb-2">{card.title}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{card.description}</p>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
