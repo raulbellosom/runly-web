@@ -1,0 +1,76 @@
+---
+// src/components/layout/Header.astro
+import { Menu, ArrowRight } from "@lucide/astro";
+import type { NavDictionary } from "../../i18n/types";
+
+interface Props {
+  locale: "es" | "en";
+  nav: NavDictionary;
+}
+
+const { locale, nav } = Astro.props;
+const prefix = locale === "es" ? "" : "/en";
+
+const links = [
+  { href: "#hero", label: nav.platform },
+  { href: "#modulos", label: nav.modules },
+  { href: "#motor-rm3", label: nav.rm3 },
+  { href: "#mirai", label: nav.mirai, badge: "IA" },
+  { href: "#implementacion", label: nav.implementation },
+  { href: "#contacto", label: nav.contact },
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-md transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a aria-label="RUNLY" class="flex items-center gap-2" href={`${prefix}/`}>
+      <img alt="RUNLY - Business in motion" class="h-9 w-auto object-contain" src="/brand/runly-logo-light.png" width="140" height="36" />
+    </a>
+    <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+      {links.map((link) => (
+        <a class="hover:text-runly-orange transition-colors flex items-center gap-1.5" href={link.href}>
+          <span>{link.label}</span>
+          {link.badge && (
+            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
+          )}
+        </a>
+      ))}
+    </nav>
+    <div class="flex items-center gap-4">
+      <a class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm" href="#contacto">
+        <span>{nav.requestDemo}</span>
+        <ArrowRight class="w-3.5 h-3.5" />
+      </a>
+      <button aria-label="Toggle menu" class="md:hidden p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
+        <Menu class="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+  <div class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3" id="mobileMenu">
+    {links.map((link) => (
+      <a class="block py-2 text-sm font-medium text-slate-700 hover:text-runly-orange" href={link.href}>{link.label}</a>
+    ))}
+    <a class="w-full text-center py-3 rounded-xl text-white font-medium text-sm runly-gradient-btn block mt-2" href="#contacto">
+      {nav.requestDemo}
+    </a>
+  </div>
+</header>
+
+<script>
+  const mobileBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  if (mobileBtn && mobileMenu) {
+    mobileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      mobileMenu.classList.toggle("hidden");
+    });
+    mobileMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+    });
+    document.addEventListener("click", (e) => {
+      if (!mobileMenu.contains(e.target as Node) && !mobileBtn.contains(e.target as Node)) {
+        mobileMenu.classList.add("hidden");
+      }
+    });
+  }
+</script>
