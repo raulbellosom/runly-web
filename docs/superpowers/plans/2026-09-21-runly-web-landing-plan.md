@@ -470,37 +470,37 @@ export const es: SiteDictionary = {
   meta: {
     title: "RUNLY ERP - Business in motion | Software modular y multiempresa",
     description:
-      "RUNLY es el ERP modular, multiempresa y colaborativo de Racoon Devs. Elige los modulos que necesitas, conecta a tu equipo y haz crecer tu negocio.",
+      "RUNLY es el ERP modular, multiempresa y colaborativo de Racoon Devs. Elige los módulos que necesitas, conecta a tu equipo y haz crecer tu negocio.",
   },
   nav: {
     platform: "Plataforma",
-    modules: "Modulos",
+    modules: "Módulos",
     rm3: "Arquitectura RM3",
     mirai: "MirAI",
-    implementation: "Implementacion",
+    implementation: "Implementación",
     contact: "Contacto",
-    requestDemo: "Solicitar una demostracion",
+    requestDemo: "Solicitar una demostración",
   },
   footer: {
     tagline:
-      "RUNLY - Business in motion. El sistema operativo modular, multiempresa y colaborativo para empresas que avanzan rapido.",
+      "RUNLY - Business in motion. El sistema operativo modular, multiempresa y colaborativo para empresas que avanzan rápido.",
     platformHeading: "Plataforma",
     ecosystemHeading: "Ecosistema",
     legalHeading: "Legal y Empresa",
-    uptime: "Todos los sistemas operativos en linea (99.98% uptime)",
+    uptime: "Todos los sistemas operativos en línea (99.98% uptime)",
     copyright: "RUNLY ERP - runly.mx. Todos los derechos reservados.",
-    builtBy: "Desarrollado con pasion por",
+    builtBy: "Desarrollado con pasión por",
     links: {
-      modulesCatalog: "Catalogo de Modulos",
+      modulesCatalog: "Catálogo de Módulos",
       rm3Architecture: "Arquitectura RM3",
       mirai: "MirAI (Inteligencia Artificial)",
-      customImplementation: "Implementacion a Medida",
-      officialModules: "Modulos Oficiales",
+      customImplementation: "Implementación a Medida",
+      officialModules: "Módulos Oficiales",
       customDevelopment: "Desarrollo Custom",
       communityPartners: "Community Partners",
-      apiDocs: "Documentacion de API",
+      apiDocs: "Documentación de API",
       privacyNotice: "Aviso de Privacidad",
-      termsOfService: "Terminos de Servicio",
+      termsOfService: "Términos de Servicio",
       dataSecurity: "Seguridad de Datos",
       supportContact: "Contacto de Soporte",
     },
@@ -596,7 +596,7 @@ git commit -m "feat: add i18n dictionary contract with parity test"
 ```ts
 // src/data/__tests__/modules.test.ts
 import { describe, expect, it } from "vitest";
-import { modules } from "../modules";
+import { modules, moduleCategories } from "../modules";
 
 describe("modules catalog", () => {
   it("has exactly 21 real Runly modules", () => {
@@ -614,6 +614,13 @@ describe("modules catalog", () => {
 
   it("does not list a MirAI entry as its own module", () => {
     expect(modules.find((m) => m.id === "runly.mirai")).toBeUndefined();
+  });
+
+  it("every module category exists in moduleCategories", () => {
+    const categoryIds = new Set(moduleCategories.map((c) => c.id));
+    for (const mod of modules) {
+      expect(categoryIds.has(mod.category)).toBe(true);
+    }
   });
 });
 ```
@@ -656,7 +663,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.core",
     name: { es: "Runly Core", en: "Runly Core" },
     description: {
-      es: "Nucleo del sistema: modulos, permisos, bitacora y configuracion de instancia.",
+      es: "Núcleo del sistema: módulos, permisos, bitácora y configuración de instancia.",
       en: "System core: modules, permissions, audit log, and instance configuration.",
     },
     category: "sistema",
@@ -670,7 +677,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.identity",
     name: { es: "Identidad", en: "Identity" },
     description: {
-      es: "Usuarios, roles, permisos, membresias y control de acceso.",
+      es: "Usuarios, roles, permisos, membresías y control de acceso.",
       en: "Users, roles, permissions, memberships, and access control.",
     },
     category: "sistema",
@@ -684,7 +691,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.files",
     name: { es: "Archivos", en: "Files" },
     description: {
-      es: "Gestion de archivos, carga, almacenamiento y acceso seguro.",
+      es: "Gestión de archivos, carga, almacenamiento y acceso seguro.",
       en: "File management, uploads, storage, and secure access.",
     },
     category: "sistema",
@@ -698,7 +705,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.company",
     name: { es: "Empresa", en: "Company" },
     description: {
-      es: "Perfil de empresa, direccion, marca visual e identidad corporativa.",
+      es: "Perfil de empresa, dirección, marca visual e identidad corporativa.",
       en: "Company profile, address, visual brand, and corporate identity.",
     },
     category: "sistema",
@@ -740,7 +747,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.fleet",
     name: { es: "Flota", en: "Fleet" },
     description: {
-      es: "Gestion de flota vehicular: vehiculos, reportes y asignacion de conductores.",
+      es: "Gestión de flota vehicular: vehículos, reportes y asignación de conductores.",
       en: "Vehicle fleet management: vehicles, reports, and driver assignment.",
     },
     category: "operaciones",
@@ -754,7 +761,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.inventory",
     name: { es: "Inventario", en: "Inventory" },
     description: {
-      es: "Gestion de inventario y activos de la empresa.",
+      es: "Gestión de inventario y activos de la empresa.",
       en: "Inventory and company asset management.",
     },
     category: "operaciones",
@@ -768,7 +775,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.ledger",
     name: { es: "Libro de cuentas", en: "Ledger" },
     description: {
-      es: "Registro bancario tipo hoja de calculo: depositos, retiros y saldo corriente.",
+      es: "Registro bancario tipo hoja de cálculo: depósitos, retiros y saldo corriente.",
       en: "Spreadsheet-style bank register: deposits, withdrawals, and running balance.",
     },
     category: "finanzas",
@@ -782,7 +789,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.pfm",
     name: { es: "Finanzas personales", en: "Personal Finance" },
     description: {
-      es: "Carteras de efectivo, debito y credito con registro rapido de ingresos y egresos.",
+      es: "Carteras de efectivo, débito y crédito con registro rápido de ingresos y egresos.",
       en: "Cash, debit, and credit wallets with quick income and expense logging.",
     },
     category: "finanzas",
@@ -794,9 +801,9 @@ export const modules: RunlyModuleEntry[] = [
   },
   {
     id: "runly.catalog",
-    name: { es: "Catalogo", en: "Catalog" },
+    name: { es: "Catálogo", en: "Catalog" },
     description: {
-      es: "Gestiona productos, categorias, variantes e inventario.",
+      es: "Gestiona productos, categorías, variantes e inventario.",
       en: "Manage products, categories, variants, and inventory.",
     },
     category: "comercial",
@@ -810,7 +817,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.pos",
     name: { es: "POS", en: "POS" },
     description: {
-      es: "Punto de venta para restaurante, tienda y operaciones hibridas.",
+      es: "Punto de venta para restaurante, tienda y operaciones híbridas.",
       en: "Point of sale for restaurants, retail, and hybrid operations.",
     },
     category: "comercial",
@@ -824,7 +831,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.growth",
     name: { es: "Growth", en: "Growth" },
     description: {
-      es: "Telemetria web, formularios y seguimiento de leads.",
+      es: "Telemetría web, formularios y seguimiento de leads.",
       en: "Web telemetry, forms, and lead tracking.",
     },
     category: "comercial",
@@ -838,7 +845,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.website",
     name: { es: "Sitio web", en: "Website" },
     description: {
-      es: "Sitio web publico, editor visual de paginas y publicacion de contenido.",
+      es: "Sitio web público, editor visual de páginas y publicación de contenido.",
       en: "Public website, visual page editor, and content publishing.",
     },
     category: "plataforma",
@@ -852,7 +859,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.activity",
     name: { es: "Actividad", en: "Activity" },
     description: {
-      es: "Bitacora legible de eventos y feed transversal de Runly ERP.",
+      es: "Bitácora legible de eventos y feed transversal de Runly ERP.",
       en: "Human-readable event log and cross-module activity feed.",
     },
     category: "plataforma",
@@ -880,7 +887,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.calendar",
     name: { es: "Calendario", en: "Calendar" },
     description: {
-      es: "Calendario personal y compartido con eventos, recordatorios y vistas por dia, semana y mes.",
+      es: "Calendario personal y compartido con eventos, recordatorios y vistas por día, semana y mes.",
       en: "Personal and shared calendar with events, reminders, and day/week/month views.",
     },
     category: "sistema",
@@ -894,7 +901,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.projects",
     name: { es: "Proyectos", en: "Projects" },
     description: {
-      es: "Gestion de proyectos y tareas con vistas Kanban, Lista y Timeline.",
+      es: "Gestión de proyectos y tareas con vistas Kanban, Lista y Timeline.",
       en: "Project and task management with Kanban, List, and Timeline views.",
     },
     category: "productividad",
@@ -922,7 +929,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.notes",
     name: { es: "Notas", en: "Notes" },
     description: {
-      es: "Notas enriquecidas con editor de texto, carpetas, etiquetas y colaboracion en tiempo real.",
+      es: "Notas enriquecidas con editor de texto, carpetas, etiquetas y colaboración en tiempo real.",
       en: "Rich notes with a text editor, folders, tags, and real-time collaboration.",
     },
     category: "productividad",
@@ -936,7 +943,7 @@ export const modules: RunlyModuleEntry[] = [
     id: "runly.chat",
     name: { es: "Chat", en: "Chat" },
     description: {
-      es: "Mensajeria interna en tiempo real y chat de soporte para visitantes externos.",
+      es: "Mensajería interna en tiempo real y chat de soporte para visitantes externos.",
       en: "Real-time internal messaging and support chat for external visitors.",
     },
     category: "comunicacion",
@@ -950,7 +957,7 @@ export const modules: RunlyModuleEntry[] = [
 
 export const moduleCategories: { id: ModuleCategory | "all"; label: { es: string; en: string } }[] = [
   { id: "all", label: { es: "Todos", en: "All" } },
-  { id: "comunicacion", label: { es: "Comunicacion", en: "Communication" } },
+  { id: "comunicacion", label: { es: "Comunicación", en: "Communication" } },
   { id: "operaciones", label: { es: "Operaciones", en: "Operations" } },
   { id: "finanzas", label: { es: "Finanzas", en: "Finance" } },
   { id: "comercial", label: { es: "Comercial", en: "Commercial" } },
@@ -965,16 +972,16 @@ export interface RoadmapEntry {
 }
 
 export const roadmap: RoadmapEntry[] = [
-  { name: { es: "Facturacion CFDI 4.0", en: "CFDI 4.0 Invoicing" }, icon: "Receipt" },
-  { name: { es: "Logistica y Envios", en: "Logistics & Shipping" }, icon: "Truck" },
-  { name: { es: "API Publica y Webhooks", en: "Public API & Webhooks" }, icon: "Plug" },
+  { name: { es: "Facturación CFDI 4.0", en: "CFDI 4.0 Invoicing" }, icon: "Receipt" },
+  { name: { es: "Logística y Envíos", en: "Logistics & Shipping" }, icon: "Truck" },
+  { name: { es: "API Pública y Webhooks", en: "Public API & Webhooks" }, icon: "Plug" },
 ];
 ```
 
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `pnpm test`
-Expected: PASS (3 tests).
+Expected: PASS (4 tests).
 
 - [ ] **Step 5: Commit**
 
@@ -1422,9 +1429,9 @@ Append inside `SiteDictionary` in `src/i18n/types.ts`:
     titleLine1: "Tu empresa en movimiento.",
     titleLine2: "Todo conectado con RUNLY.",
     subtitle:
-      "Gestiona tus operaciones desde una sola plataforma. Elige los modulos que necesitas, conecta a tu equipo y haz crecer tu negocio con un ERP que se adapta a ti.",
+      "Gestiona tus operaciones desde una sola plataforma. Elige los módulos que necesitas, conecta a tu equipo y haz crecer tu negocio con un ERP que se adapta a ti.",
     ctaPrimary: "Descubre RUNLY",
-    ctaSecondary: "Solicitar una demostracion",
+    ctaSecondary: "Solicitar una demostración",
     badgeModular: "Modular",
     badgeMultiCompany: "Multiempresa",
     badgeCustomizable: "Personalizable",
@@ -1587,28 +1594,28 @@ Source: `code.html` lines 220-277.
     eyebrow: "Flexibilidad sin ataduras",
     title: "No cambies tu forma de trabajar para adaptarte a un software.",
     description:
-      "RUNLY se adapta a tus procesos, tu equipo y tus necesidades. Comienza con las herramientas que necesitas y amplia tu plataforma conforme evoluciona tu empresa.",
+      "RUNLY se adapta a tus procesos, tu equipo y tus necesidades. Comienza con las herramientas que necesitas y amplía tu plataforma conforme evoluciona tu empresa.",
     cards: [
       {
         icon: "PuzzlePiece",
         color: "orange",
         title: "Modular por naturaleza",
         description:
-          "Instala y utiliza solo lo que necesitas. Activa o desactiva modulos con un clic sin alterar la estabilidad del sistema.",
+          "Instala y utiliza solo lo que necesitas. Activa o desactiva módulos con un clic sin alterar la estabilidad del sistema.",
       },
       {
         icon: "Zap",
         color: "blue",
         title: "Todo conectado",
         description:
-          "Informacion sincronizada en tiempo real. Un contacto creado en el chat se refleja inmediatamente en cotizaciones y proyectos.",
+          "Información sincronizada en tiempo real. Un contacto creado en el chat se refleja inmediatamente en cotizaciones y proyectos.",
       },
       {
         icon: "Building2",
         color: "purple",
         title: "Un espacio para cada empresa",
         description:
-          "Multiempresa con aislamiento estricto y roles definidos. Alterna entre razones sociales sin cerrar sesion.",
+          "Multiempresa con aislamiento estricto y roles definidos. Alterna entre razones sociales sin cerrar sesión.",
       },
       {
         icon: "TrendingUp",
@@ -1738,7 +1745,6 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
     roadmapTitle: string;
     roadmapDescription: string;
     comingSoonLabel: string;
-    viewModuleLabel: string;
   };
 ```
 
@@ -1746,15 +1752,14 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
 
 ```ts
   modulesCatalog: {
-    eyebrow: "Catalogo RUNLY Core",
+    eyebrow: "Catálogo RUNLY Core",
     title: "Un ecosistema completo para hacer funcionar tu empresa.",
     description:
-      "Desde la colaboracion de tu equipo hasta la organizacion de tus recursos y operaciones, RUNLY reune diferentes herramientas en un mismo lugar.",
+      "Desde la colaboración de tu equipo hasta la organización de tus recursos y operaciones, RUNLY reúne diferentes herramientas en un mismo lugar.",
     roadmapTitle: "Y esto es solo el comienzo. RUNLY evoluciona constantemente.",
     roadmapDescription:
-      "Nuestro equipo en Racoon Devs despliega nuevos modulos y mejoras mensualmente. Todos los clientes con soporte activo reciben acceso inmediato a las actualizaciones.",
-    comingSoonLabel: "Proximamente",
-    viewModuleLabel: "Ver modulo",
+      "Nuestro equipo en Racoon Devs despliega nuevos módulos y mejoras mensualmente. Todos los clientes con soporte activo reciben acceso inmediato a las actualizaciones.",
+    comingSoonLabel: "Próximamente",
   },
 ```
 
@@ -1770,7 +1775,6 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
     roadmapDescription:
       "Our team at Racoon Devs ships new modules and improvements every month. All clients with active support get immediate access to updates.",
     comingSoonLabel: "Coming soon",
-    viewModuleLabel: "View module",
   },
 ```
 
@@ -1912,12 +1916,12 @@ Source: `code.html` lines 540-647.
 ```ts
   rm3: {
     badge: "Arquitectura de vanguardia",
-    title: "Una plataforma. Infinitas posibilidades de adaptacion.",
+    title: "Una plataforma. Infinitas posibilidades de adaptación.",
     description:
-      "RUNLY esta construido sobre el motor modular RM3, disenado para desacoplar procesos, permitir microservicios estables y garantizar actualizaciones sin interrupciones operativas.",
+      "RUNLY está construido sobre el motor modular RM3, diseñado para desacoplar procesos, permitir microservicios estables y garantizar actualizaciones sin interrupciones operativas.",
     coreTitle: "RUNLY CORE",
     coreSubtitle: "Motor Modular RM3",
-    coreDescription: "Orquestador de eventos, autenticacion federada, control de acceso RBAC y sincronizacion global.",
+    coreDescription: "Orquestador de eventos, autenticación federada, control de acceso RBAC y sincronización global.",
     leftNodes: [
       { icon: "Boxes", label: "Inventario Core", tag: "Micro-app" },
       { icon: "MessageCircle", label: "Chat en Tiempo Real", tag: "Websockets" },
@@ -1925,27 +1929,27 @@ Source: `code.html` lines 540-647.
     ],
     rightNodes: [
       { icon: "Sparkles", label: "Motor MirAI", tag: "LLM Context" },
-      { icon: "GitBranch", label: "Modulos Custom", tag: "A la medida" },
+      { icon: "GitBranch", label: "Módulos Custom", tag: "A la medida" },
       { icon: "CloudUpload", label: "APIs Externas", tag: "Bancos / SAT" },
     ],
     pillars: [
       {
         icon: "Boxes",
-        title: "Modulos independientes integrables",
+        title: "Módulos independientes integrables",
         description:
-          "Cada modulo funciona como un componente desacoplado. Puedes actualizar o migrar un area especifica sin riesgo de caidas generales.",
+          "Cada módulo funciona como un componente desacoplado. Puedes actualizar o migrar un área específica sin riesgo de caídas generales.",
       },
       {
         icon: "Split",
-        title: "Ampliacion dinamica",
+        title: "Ampliación dinámica",
         description:
-          "Incorpora campos personalizados, reportes especificos y nuevos flujos sin romper la compatibilidad con futuras versiones de RUNLY.",
+          "Incorpora campos personalizados, reportes específicos y nuevos flujos sin romper la compatibilidad con futuras versiones de RUNLY.",
       },
       {
         icon: "ShieldCheck",
         title: "Flexibilidad operativa segura",
         description:
-          "Garantia de rendimiento optimo con control minucioso sobre permisos, trazabilidad de accesos y auditoria de cambios.",
+          "Garantía de rendimiento óptimo con control minucioso sobre permisos, trazabilidad de accesos y auditoría de cambios.",
       },
     ],
   },
@@ -2124,45 +2128,45 @@ Source: `code.html` lines 648-732.
 ```ts
   classification: {
     eyebrow: "Ecosistema de soluciones",
-    title: "Tu negocio es unico. Tu software tambien puede serlo.",
+    title: "Tu negocio es único. Tu software también puede serlo.",
     description:
-      "Amplia RUNLY con herramientas desarrolladas para diferentes necesidades y construye una plataforma que realmente se ajuste a tu operacion.",
+      "Amplía RUNLY con herramientas desarrolladas para diferentes necesidades y construye una plataforma que realmente se ajuste a tu operación.",
     official: {
       badge: "Certificados Racoon",
-      title: "Modulos Oficiales",
+      title: "Módulos Oficiales",
       description:
-        "Desarrollados, mantenidos y soportados directamente por el equipo de ingenieria de Racoon Devs. Maxima estabilidad, actualizaciones automaticas y compatibilidad garantizada.",
+        "Desarrollados, mantenidos y soportados directamente por el equipo de ingeniería de Racoon Devs. Máxima estabilidad, actualizaciones automáticas y compatibilidad garantizada.",
       bullets: [
         "Actualizaciones sin costo adicional",
-        "Soporte prioritario en espanol",
-        "Integracion nativa inmediata",
+        "Soporte prioritario en español",
+        "Integración nativa inmediata",
       ],
     },
     custom: {
       tag: "Hecho a la medida",
-      badge: "Flujos especificos",
-      title: "Modulos Personalizados",
+      badge: "Flujos específicos",
+      title: "Módulos Personalizados",
       description:
-        "Tu industria tiene una regla de negocio o calculo unico? Disenamos y programamos modulos custom que se integran con fluidez exacta a tu pantalla de RUNLY.",
+        "¿Tu industria tiene una regla de negocio o cálculo único? Diseñamos y programamos módulos custom que se integran con fluidez exacta a tu pantalla de RUNLY.",
       bullets: [
-        "Levantamiento tecnico de procesos",
-        "Adaptacion a tu software heredado",
-        "Exclusivo para tu organizacion",
+        "Levantamiento técnico de procesos",
+        "Adaptación a tu software heredado",
+        "Exclusivo para tu organización",
       ],
     },
     community: {
-      badge: "Ecosistema en construccion",
-      title: "Modulos Community",
+      badge: "Ecosistema en construcción",
+      title: "Módulos Community",
       description:
-        "Estamos sentando las bases para que desarrolladores y partners certificados puedan aportar extensiones y conectores en el futuro, bajo revision de seguridad de nuestro equipo.",
+        "Estamos sentando las bases para que desarrolladores y partners certificados puedan aportar extensiones y conectores en el futuro, bajo revisión de seguridad de nuestro equipo.",
       bullets: [
-        "Estandares abiertos y SDK en desarrollo",
-        "Revision de seguridad y codigo",
-        "Aun no disponible publicamente",
+        "Estándares abiertos y SDK en desarrollo",
+        "Revisión de seguridad y código",
+        "Aún no disponible públicamente",
       ],
     },
-    bannerTitle: "Tienes una idea para un modulo que todavia no existe?",
-    bannerDescription: "Construimos la herramienta exacta para resolver la friccion de tu operacion diaria.",
+    bannerTitle: "¿Tienes una idea para un módulo que todavía no existe?",
+    bannerDescription: "Construimos la herramienta exacta para resolver la fricción de tu operación diaria.",
     bannerCta: "Hablemos de tu proyecto",
   },
 ```
@@ -2333,29 +2337,29 @@ Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runl
 
 ```ts
   mirai: {
-    badge: "Inteligencia Artificial Practica",
+    badge: "Inteligencia Artificial Práctica",
     title: "Conoce a MirAI.",
-    titleHighlight: "Inteligencia que acompana tu trabajo.",
+    titleHighlight: "Inteligencia que acompaña tu trabajo.",
     description:
-      "RUNLY incorpora herramientas impulsadas por inteligencia artificial para facilitar tareas repetitivas, interpretar informacion desestructurada y ayudarte a tomar mejores decisiones en segundos. MirAI vive dentro de Chat y del asistente de Inventario, no es un modulo aparte.",
+      "RUNLY incorpora herramientas impulsadas por inteligencia artificial para facilitar tareas repetitivas, interpretar información desestructurada y ayudarte a tomar mejores decisiones en segundos. MirAI vive dentro de Chat y del asistente de Inventario, no es un módulo aparte.",
     capabilities: [
       {
         icon: "MessageCircle",
         color: "purple",
         title: "Asistente conversacional integrado",
-        description: "Pregunta sobre el inventario, solicita resumenes de reuniones o consulta el estatus de proyectos usando lenguaje natural en espanol.",
+        description: "Pregunta sobre el inventario, solicita resúmenes de reuniones o consulta el estatus de proyectos usando lenguaje natural en español.",
       },
       {
         icon: "FileText",
         color: "orange",
-        title: "Interpretacion de tickets y facturas",
-        description: "Sube fotos de tickets o comprobantes desde tu telefono; MirAI extrae monto, fecha, RFC y categoria contable de forma automatica.",
+        title: "Interpretación de tickets y facturas",
+        description: "Sube fotos de tickets o comprobantes desde tu teléfono; MirAI extrae monto, fecha, RFC y categoría contable de forma automática.",
       },
       {
         icon: "Brain",
         color: "blue",
-        title: "Apoyo contextual por modulo",
-        description: "Si estas en Proyectos, MirAI te ayuda a redactar criterios de aceptacion. Si estas en CRM, sugiere follow-ups comerciales.",
+        title: "Apoyo contextual por módulo",
+        description: "Si estás en Proyectos, MirAI te ayuda a redactar criterios de aceptación. Si estás en CRM, sugiere follow-ups comerciales.",
       },
       {
         icon: "ShieldCheck",
@@ -2365,9 +2369,9 @@ Source: `code.html` lines 733-877. MirAI is a capability of `runly.chat` / `runl
       },
     ],
     demoLabel: "MirAI Asistente",
-    demoContext: "Ejemplo ilustrativo - no es una conversacion en vivo",
-    demoDisclaimer: "Vista de ejemplo de como responde MirAI dentro de Runly ERP",
-    demoUserMessage: "MirAI, cual es el saldo proyectado para nomina a fin de mes entre las dos empresas?",
+    demoContext: "Ejemplo ilustrativo - no es una conversación en vivo",
+    demoDisclaimer: "Vista de ejemplo de cómo responde MirAI dentro de Runly ERP",
+    demoUserMessage: "¿MirAI, cuál es el saldo proyectado para nómina a fin de mes entre las dos empresas?",
     demoAssistantIntro: "Analizando los libros de cuentas de Racoon Devs y Maquinaria y Canteras:",
     demoLineCompanyA: "Racoon Devs (8 colaboradores): $148,500 MXN",
     demoLineCompanyB: "Maquinaria y Canteras (12 colab.): $210,000 MXN",
@@ -2588,39 +2592,39 @@ Source: `code.html` lines 878-994.
     eyebrow: "Multitenancy Nativo",
     title: "Un solo lugar para conectar a todo tu equipo.",
     description:
-      "Trabaja con tus colaboradores desde una plataforma que reune informacion, comunicacion y herramientas para las diferentes areas de tu organizacion.",
+      "Trabaja con tus colaboradores desde una plataforma que reúne información, comunicación y herramientas para las diferentes áreas de tu organización.",
     mockActiveCompany: "Racoon Devs",
     mockActiveInstance: "Instancia Activa",
     mockAdminUser: "Raul (Admin)",
-    mockSwitcherLabel: "Cambiar de razon social / sucursal",
+    mockSwitcherLabel: "Cambiar de razón social / sucursal",
     mockCompanyA: "Racoon Devs S.A.S.",
     mockCompanyB: "Maquinaria y Canteras",
     mockChangeLabel: "Cambiar",
     mockAddCompany: "Crear o vincular nueva empresa",
     mockRoleFinance: "Finanzas",
     mockRoleFinanceAccess: "Acceso Restringido",
-    mockRoleWarehouse: "Almacen",
+    mockRoleWarehouse: "Almacén",
     mockRoleWarehouseAccess: "Lectura/Escritura",
-    mockRoleDirection: "Direccion",
-    mockRoleDirectionAccess: "Auditoria Global",
+    mockRoleDirection: "Dirección",
+    mockRoleDirectionAccess: "Auditoría Global",
     pillars: [
       {
         icon: "Users",
         color: "orange",
         title: "Equipos verdaderamente conectados",
-        description: "Evita la dispersion en 5 aplicaciones no conectadas. En RUNLY los chats de proyectos, archivos adjuntos y estados de pago conviven bajo el mismo techo.",
+        description: "Evita la dispersión en 5 aplicaciones no conectadas. En RUNLY los chats de proyectos, archivos adjuntos y estados de pago conviven bajo el mismo techo.",
       },
       {
         icon: "Flag",
         color: "blue",
         title: "Diferentes empresas en una plataforma",
-        description: "Manejas un grupo empresarial o diversas marcas? Administra cada empresa con catalogo, cuentas bancarias e inventarios completamente independientes.",
+        description: "¿Manejas un grupo empresarial o diversas marcas? Administra cada empresa con catálogo, cuentas bancarias e inventarios completamente independientes.",
       },
       {
         icon: "UserCog",
         color: "emerald",
         title: "Accesos y permisos organizados",
-        description: "Control granular por rol. Tus vendedores solo acceden a cotizaciones y catalogo, mientras los contadores gestionan libros y facturas con total seguridad.",
+        description: "Control granular por rol. Tus vendedores solo acceden a cotizaciones y catálogo, mientras los contadores gestionan libros y facturas con total seguridad.",
       },
     ],
   },
@@ -2816,18 +2820,18 @@ Source: `code.html` lines 995-1071.
 ```ts
   implementation: {
     badge: "Transparencia y honestidad comercial",
-    title: "No vendemos paquetes. Construimos la solucion que necesitas.",
+    title: "No vendemos paquetes. Construimos la solución que necesitas.",
     description:
-      "Cada empresa tiene necesidades diferentes. Por eso, en RUNLY ofrecemos implementaciones personalizadas que se ajustan a tu operacion, tus objetivos y tu presupuesto.",
+      "Cada empresa tiene necesidades diferentes. Por eso, en RUNLY ofrecemos implementaciones personalizadas que se ajustan a tu operación, tus objetivos y tu presupuesto.",
     steps: [
-      { number: "01", title: "Cuentanos sobre tu empresa", description: "Analizamos tus procesos actuales, dolores operativos y las herramientas que tu equipo ya utiliza en el dia a dia." },
-      { number: "02", title: "Disenamos tu solucion", description: "Seleccionamos los modulos precisos y definimos las adaptaciones a la medida requeridas, sin modulos innecesarios." },
-      { number: "03", title: "Implementamos RUNLY", description: "Configuramos tu instancia cloud, migramos catalogos base y capacitamos a tus lideres de area de forma practica." },
-      { number: "04", title: "Evolucionamos contigo", description: "Acompanamiento continuo, soporte directo con desarrolladores e incorporacion agil de nuevos modulos cuando tu negocio crezca." },
+      { number: "01", title: "Cuéntanos sobre tu empresa", description: "Analizamos tus procesos actuales, dolores operativos y las herramientas que tu equipo ya utiliza en el día a día." },
+      { number: "02", title: "Diseñamos tu solución", description: "Seleccionamos los módulos precisos y definimos las adaptaciones a la medida requeridas, sin módulos innecesarios." },
+      { number: "03", title: "Implementamos RUNLY", description: "Configuramos tu instancia cloud, migramos catálogos base y capacitamos a tus líderes de área de forma práctica." },
+      { number: "04", title: "Evolucionamos contigo", description: "Acompañamiento continuo, soporte directo con desarrolladores e incorporación ágil de nuevos módulos cuando tu negocio crezca." },
     ],
     valueTitle: "Software empresarial accesible, sin pagar por lo que no necesitas.",
     valueDescription:
-      "Buscamos que la tecnologia empresarial de alto nivel este al alcance de mas negocios en Mexico y Latinoamerica. Olvidate de licencias prohibitivas de miles de dolares por usuario de los ERPs tradicionales.",
+      "Buscamos que la tecnología empresarial de alto nivel esté al alcance de más negocios en México y Latinoamérica. Olvídate de licencias prohibitivas de miles de dólares por usuario de los ERPs tradicionales.",
     valueCta: "Solicitar una propuesta personalizada",
   },
 ```
@@ -2934,17 +2938,17 @@ Source: `code.html` lines 1072-1145.
 ```ts
   whyChoose: {
     eyebrow: "Diferenciadores Clave",
-    title: "Tecnologia empresarial que trabaja a tu favor.",
-    description: "Disenado desde cero para erradicar la complejidad innecesaria y dar agilidad real a equipos en constante crecimiento.",
+    title: "Tecnología empresarial que trabaja a tu favor.",
+    description: "Diseñado desde cero para erradicar la complejidad innecesaria y dar agilidad real a equipos en constante crecimiento.",
     cards: [
-      { icon: "Boxes", color: "orange", title: "Modular y adaptable", description: "Paga e instala solo los modulos que tu operacion necesita hoy." },
+      { icon: "Boxes", color: "orange", title: "Modular y adaptable", description: "Paga e instala solo los módulos que tu operación necesita hoy." },
       { icon: "HandCoins", color: "emerald", title: "Sin costos inflados", description: "Cero sobrecostos por funciones que tu equipo nunca va a abrir." },
       { icon: "Building2", color: "blue", title: "Multiempresa nativo", description: "Administra diferentes empresas o sucursales con aislamiento estricto." },
-      { icon: "Headset", color: "purple", title: "Soporte directo por devs", description: "Atencion en espanol de Mexico directa de los creadores en Racoon Devs." },
-      { icon: "Sparkles", color: "pink", title: "IA practica no decorativa", description: "MirAI automatiza lectura de comprobantes y consultas de stock reales." },
-      { icon: "CloudUpload", color: "amber", title: "Innovacion continua", description: "Nuevas funciones y optimizaciones mensuales sin costes ocultos." },
+      { icon: "Headset", color: "purple", title: "Soporte directo por devs", description: "Atención en español de México directa de los creadores en Racoon Devs." },
+      { icon: "Sparkles", color: "pink", title: "IA práctica no decorativa", description: "MirAI automatiza lectura de comprobantes y consultas de stock reales." },
+      { icon: "CloudUpload", color: "amber", title: "Innovación continua", description: "Nuevas funciones y optimizaciones mensuales sin costes ocultos." },
       { icon: "Smartphone", color: "cyan", title: "100% Cloud y Responsive", description: "Accede desde tu computadora, tablet o smartphone con alta fluidez." },
-      { icon: "ShieldCheck", color: "indigo", title: "Seguridad y Respaldo", description: "Backups automaticos diarios y cifrado de datos en reposo y transito." },
+      { icon: "ShieldCheck", color: "indigo", title: "Seguridad y Respaldo", description: "Backups automáticos diarios y cifrado de datos en reposo y tránsito." },
     ],
   },
 ```
@@ -3057,32 +3061,32 @@ Source: `code.html` lines 1146-1233. The Stitch copy states "48 a 72 horas" and 
     description: "Todo lo que necesitas saber antes de implementar RUNLY en tu empresa.",
     items: [
       {
-        question: "RUNLY funciona para empresas pequenas o solo para grandes organizaciones?",
-        answer: "RUNLY esta disenado con una arquitectura modular precisamente para adaptarse a cualquier tamano. Una empresa de 3 personas puede comenzar unicamente con Chat, Calendario y Finanzas, mientras que una companyia consolidada puede operar inventarios complejos multialmacen y multiples razones sociales.",
+        question: "¿RUNLY funciona para empresas pequeñas o solo para grandes organizaciones?",
+        answer: "RUNLY está diseñado con una arquitectura modular precisamente para adaptarse a cualquier tamaño. Una empresa de 3 personas puede comenzar únicamente con Chat, Calendario y Finanzas, mientras que una compañía consolidada puede operar inventarios complejos multialmacén y múltiples razones sociales.",
       },
       {
-        question: "Tengo que contratar todos los modulos obligatoriamente?",
-        answer: "No. En RUNLY no creemos en los paquetes forzosos. Tu eliges exactamente que modulos habilitar en tu instancia. Si en el futuro necesitas un modulo adicional, lo activas con un clic sin necesidad de reinstalar ni migrar el sistema.",
+        question: "¿Tengo que contratar todos los módulos obligatoriamente?",
+        answer: "No. En RUNLY no creemos en los paquetes forzosos. Tú eliges exactamente qué módulos habilitar en tu instancia. Si en el futuro necesitas un módulo adicional, lo activas con un clic sin necesidad de reinstalar ni migrar el sistema.",
       },
       {
-        question: "Puedo solicitar modulos o funcionalidades personalizadas para mi empresa?",
-        answer: "Si, es una de nuestras principales fortalezas comerciales. Nuestro equipo en Racoon Devs puede desarrollar modulos personalizados exclusivos basados en la arquitectura RM3 que se adaptan exactamente a los calculos, aprobaciones o regulaciones de tu negocio.",
+        question: "¿Puedo solicitar módulos o funcionalidades personalizadas para mi empresa?",
+        answer: "Sí, es una de nuestras principales fortalezas comerciales. Nuestro equipo en Racoon Devs puede desarrollar módulos personalizados exclusivos basados en la arquitectura RM3 que se adaptan exactamente a los cálculos, aprobaciones o regulaciones de tu negocio.",
       },
       {
-        question: "Como funciona la gestion multiempresa?",
-        answer: "Puedes dar de alta multiples entidades o marcas bajo un mismo acceso maestro. Cada empresa tiene bases de datos logicamente aisladas (inventario, empleados, cuentas bancarias), permitiendo que los administradores alternen entre una y otra con un solo clic.",
+        question: "¿Cómo funciona la gestión multiempresa?",
+        answer: "Puedes dar de alta múltiples entidades o marcas bajo un mismo acceso maestro. Cada empresa tiene bases de datos lógicamente aisladas (inventario, empleados, cuentas bancarias), permitiendo que los administradores alternen entre una y otra con un solo clic.",
       },
       {
-        question: "Mis datos estan protegidos y respaldados?",
-        answer: "Si. Toda la comunicacion viaja cifrada con SSL/TLS. Realizamos copias de seguridad automaticas diarias y contamos con redundancia en la nube, buscando garantizar disponibilidad y proteccion contra perdidas imprevistas.",
+        question: "¿Mis datos están protegidos y respaldados?",
+        answer: "Sí. Toda la comunicación viaja cifrada con SSL/TLS. Realizamos copias de seguridad automáticas diarias y contamos con redundancia en la nube, buscando garantizar disponibilidad y protección contra pérdidas imprevistas.",
       },
       {
-        question: "Como se calcula el costo de RUNLY si no hay precios fijos publicados?",
-        answer: "Cotizamos de forma justa basandonos en: los modulos exactos requeridos, el numero de usuarios activos concurrentes y si requieres desarrollo personalizado. Esto evita que pagues por caracteristicas infladas que no aportan valor a tu giro.",
+        question: "¿Cómo se calcula el costo de RUNLY si no hay precios fijos publicados?",
+        answer: "Cotizamos de forma justa basándonos en: los módulos exactos requeridos, el número de usuarios activos concurrentes y si requieres desarrollo personalizado. Esto evita que pagues por características infladas que no aportan valor a tu giro.",
       },
       {
-        question: "Cuanto tiempo toma la implementacion y puesta en marcha?",
-        answer: "Para instancias estandar con modulos Core, la puesta en marcha suele tomar entre 2 y 3 dias habiles. Para proyectos con desarrollos custom y migracion compleja de bases de datos, definimos un calendario por fases, habitualmente de 2 a 4 semanas segun el alcance.",
+        question: "¿Cuánto tiempo toma la implementación y puesta en marcha?",
+        answer: "Para instancias estándar con módulos Core, la puesta en marcha suele tomar entre 2 y 3 días hábiles. Para proyectos con desarrollos custom y migración compleja de bases de datos, definimos un calendario por fases, habitualmente de 2 a 4 semanas según el alcance.",
       },
     ],
   },
@@ -3251,43 +3255,43 @@ Source: `code.html` lines 1234-1359. The submit behavior here is wired to the re
   contact: {
     eyebrow: "Comienza hoy",
     title: "Hagamos que tu empresa avance.",
-    description: "Cuentanos que necesita tu negocio y descubre como podemos adaptar RUNLY a tu manera de trabajar. Sin compromisos forzosos.",
-    whatsappTitle: "Prefieres hablar de inmediato?",
-    whatsappDescription: "Atencion agil con uno de nuestros consultores.",
-    whatsappCta: "Contactanos por WhatsApp",
-    whatsappMessage: "Hola, me gustaria solicitar una demostracion de RUNLY ERP",
+    description: "Cuéntanos qué necesita tu negocio y descubre cómo podemos adaptar RUNLY a tu manera de trabajar. Sin compromisos forzosos.",
+    whatsappTitle: "¿Prefieres hablar de inmediato?",
+    whatsappDescription: "Atención ágil con uno de nuestros consultores.",
+    whatsappCta: "Contáctanos por WhatsApp",
+    whatsappMessage: "Hola, me gustaría solicitar una demostración de RUNLY ERP",
     emailLabel: "contacto@runly.mx",
-    locationLabel: "Mexico. Cobertura y despliegue para toda Latinoamerica",
+    locationLabel: "México. Cobertura y despliegue para toda Latinoamérica",
     ndaLabel: "Acuerdo de Confidencialidad (NDA) disponible para empresas",
-    formTitle: "Solicitud de propuesta o demostracion",
+    formTitle: "Solicitud de propuesta o demostración",
     fields: {
       fullName: "Nombre completo *",
-      fullNamePlaceholder: "Ej. Raul Gomez",
+      fullNamePlaceholder: "Ej. Raúl Gómez",
       company: "Nombre de la empresa *",
       companyPlaceholder: "Ej. Maquinaria y Canteras",
       email: "Correo empresarial *",
       emailPlaceholder: "raul@miempresa.com",
-      phone: "Telefono o WhatsApp *",
+      phone: "Teléfono o WhatsApp *",
       phonePlaceholder: "+52 55 1234 5678",
-      teamSize: "Tamano aproximado del equipo",
-      teamSizeOptions: ["1 a 5 personas", "6 a 20 personas", "21 a 50 personas", "Mas de 50 personas"],
-      interest: "Principal interes *",
+      teamSize: "Tamaño aproximado del equipo",
+      teamSizeOptions: ["1 a 5 personas", "6 a 20 personas", "21 a 50 personas", "Más de 50 personas"],
+      interest: "Principal interés *",
       interestOptions: [
-        "Solicitar demostracion virtual",
-        "Conocer modulos y alcances",
-        "Implementacion empresarial",
-        "Desarrollo de modulo personalizado",
-        "Resolver dudas tecnicas",
+        "Solicitar demostración virtual",
+        "Conocer módulos y alcances",
+        "Implementación empresarial",
+        "Desarrollo de módulo personalizado",
+        "Resolver dudas técnicas",
       ],
-      needs: "Que procesos necesitas gestionar con RUNLY? *",
-      needsPlaceholder: "Ej. Inventario multialmacen, control de gastos entre dos empresas y chat de soporte integrado...",
+      needs: "¿Qué procesos necesitas gestionar con RUNLY? *",
+      needsPlaceholder: "Ej. Inventario multialmacén, control de gastos entre dos empresas y chat de soporte integrado...",
       consent: "Acepto el Aviso de Privacidad y el tratamiento de mis datos para ser contactado por Racoon Devs.",
     },
     submit: "Enviar solicitud",
     submitting: "Procesando solicitud...",
-    successMessage: "Gracias por tu interes! Un consultor de Racoon Devs se pondra en contacto contigo en breve.",
-    errorMessage: "No pudimos enviar tu solicitud. Intenta de nuevo o escribenos por WhatsApp.",
-    privacyNotice: "Al enviar este formulario aceptas nuestro Aviso de Privacidad. Tu informacion nunca sera compartida.",
+    successMessage: "¡Gracias por tu interés! Un consultor de Racoon Devs se pondrá en contacto contigo en breve.",
+    errorMessage: "No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos por WhatsApp.",
+    privacyNotice: "Al enviar este formulario aceptas nuestro Aviso de Privacidad. Tu información nunca será compartida.",
   },
 ```
 
@@ -3678,13 +3682,13 @@ import { describe, expect, it } from "vitest";
 import { contactSchema } from "../contact-schema";
 
 const validPayload = {
-  fullName: "Raul Gomez",
+  fullName: "Raúl Gómez",
   companyName: "Maquinaria y Canteras",
   email: "raul@miempresa.com",
   phone: "+52 55 1234 5678",
   teamSize: "6 a 20 personas",
-  interest: "Solicitar demostracion virtual",
-  needs: "Inventario multialmacen y chat de soporte integrado",
+  interest: "Solicitar demostración virtual",
+  needs: "Inventario multialmacén y chat de soporte integrado",
   consent: true,
   website: "",
   locale: "es",
@@ -3881,13 +3885,13 @@ import { buildContactEmail, sendContactEmail } from "../mailer";
 import type { ContactFormPayload } from "../contact-schema";
 
 const payload: ContactFormPayload = {
-  fullName: "Raul Gomez",
+  fullName: "Raúl Gómez",
   companyName: "Maquinaria y Canteras",
   email: "raul@miempresa.com",
   phone: "+52 55 1234 5678",
   teamSize: "6 a 20 personas",
-  interest: "Solicitar demostracion virtual",
-  needs: "Inventario multialmacen y chat de soporte integrado",
+  interest: "Solicitar demostración virtual",
+  needs: "Inventario multialmacén y chat de soporte integrado",
   consent: true,
   website: "",
   locale: "es",
@@ -3900,7 +3904,7 @@ describe("buildContactEmail", () => {
     expect(email.subject).toContain("Maquinaria y Canteras");
     expect(email.text).toContain("raul@miempresa.com");
     expect(email.text).toContain("+52 55 1234 5678");
-    expect(email.text).toContain("Inventario multialmacen");
+    expect(email.text).toContain("Inventario multialmacén");
   });
 });
 
@@ -3954,9 +3958,9 @@ export function buildContactEmail(payload: ContactFormPayload) {
     `Nombre: ${payload.fullName}`,
     `Empresa: ${payload.companyName}`,
     `Correo: ${payload.email}`,
-    `Telefono: ${payload.phone}`,
-    `Tamano de equipo: ${payload.teamSize || "No especificado"}`,
-    `Interes: ${payload.interest}`,
+    `Teléfono: ${payload.phone}`,
+    `Tamaño de equipo: ${payload.teamSize || "No especificado"}`,
+    `Interés: ${payload.interest}`,
     `Idioma del formulario: ${payload.locale}`,
     "",
     "Necesidades:",
@@ -4038,13 +4042,13 @@ import { handleContactRequest } from "../handle-contact-request";
 import { createRateLimiter } from "../rate-limit";
 
 const basePayload = {
-  fullName: "Raul Gomez",
+  fullName: "Raúl Gómez",
   companyName: "Maquinaria y Canteras",
   email: "raul@miempresa.com",
   phone: "+52 55 1234 5678",
   teamSize: "6 a 20 personas",
-  interest: "Solicitar demostracion virtual",
-  needs: "Inventario multialmacen y chat de soporte integrado",
+  interest: "Solicitar demostración virtual",
+  needs: "Inventario multialmacén y chat de soporte integrado",
   consent: true,
   website: "",
   locale: "es" as const,
