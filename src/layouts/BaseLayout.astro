@@ -1,0 +1,41 @@
+---
+// src/layouts/BaseLayout.astro
+import "@fontsource/plus-jakarta-sans/400.css";
+import "@fontsource/plus-jakarta-sans/500.css";
+import "@fontsource/plus-jakarta-sans/600.css";
+import "@fontsource/plus-jakarta-sans/700.css";
+import "@fontsource/plus-jakarta-sans/800.css";
+import "../styles/global.css";
+import SiteHead from "../components/layout/SiteHead.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  locale: "es" | "en";
+  path: string;
+}
+
+const { title, description, locale, path } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale} class="scroll-smooth">
+  <head>
+    <SiteHead title={title} description={description} locale={locale} path={path} />
+  </head>
+  <body class="bg-[#FCFDFF] text-slate-800 font-sans antialiased selection:bg-orange-500 selection:text-white">
+    <slot />
+    <script>
+      const observerOptions = { root: null, rootMargin: "0px 0px -60px 0px", threshold: 0.1 };
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
+    </script>
+  </body>
+</html>

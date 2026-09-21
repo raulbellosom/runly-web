@@ -1,0 +1,64 @@
+---
+// src/components/layout/SiteHead.astro
+import { SITE_URL, SITE_NAME, COMPANY_NAME } from "../../consts";
+
+interface Props {
+  title: string;
+  description: string;
+  locale: "es" | "en";
+  path: string; // e.g. "/" or "/modulos" without locale prefix
+}
+
+const { title, description, locale, path } = Astro.props;
+
+const esPath = path === "/" ? "/" : path;
+const enPath = path === "/" ? "/en/" : `/en${path}`;
+const canonicalPath = locale === "es" ? esPath : enPath;
+const canonicalUrl = new URL(canonicalPath, SITE_URL).toString();
+const esUrl = new URL(esPath, SITE_URL).toString();
+const enUrl = new URL(enPath, SITE_URL).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: COMPANY_NAME,
+      url: "https://racoondevs.com",
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: SITE_NAME,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: SITE_URL,
+      description,
+    },
+  ],
+};
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+<link rel="alternate" hreflang="es-MX" href={esUrl} />
+<link rel="alternate" hreflang="en-US" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={esUrl} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:image" content={new URL("/brand/og-cover.png", SITE_URL).toString()} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL("/brand/og-cover.png", SITE_URL).toString()} />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
