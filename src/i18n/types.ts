@@ -40,4 +40,34 @@ export interface SiteDictionary {
   };
   nav: NavDictionary;
   footer: FooterDictionary;
+  hero: {
+    badge: string;
+    titleLine1: string;
+    titleLine2: string;
+    subtitle: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    badgeModular: string;
+    badgeMultiCompany: string;
+    badgeCustomizable: string;
+    windowUrl: string;
+    floatingMultiBranchTitle: string;
+    floatingMultiBranchSubtitle: string;
+    floatingMiraiTitle: string;
+    floatingMiraiSubtitle: string;
+  };
+  flexibility: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    cards: { icon: string; color: string; title: string; description: string }[];
+  };
+  modulesCatalog: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    roadmapTitle: string;
+    roadmapDescription: string;
+    comingSoonLabel: string;
+  };
 }
