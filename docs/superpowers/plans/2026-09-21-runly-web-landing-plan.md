@@ -4540,43 +4540,38 @@ git commit -m "docs: add readme with dev, env, and deploy instructions"
 
 ## Phase 9 — Final validation
 
-### Task 36: Full verification pass
+### Task 36: Full verification pass — DONE (steps 1-5 verified directly; step 6 partially done, see notes)
 
 **Files:** none created; this task only runs checks across the whole project.
 
-- [ ] **Step 1: Run the full test suite**
+- [x] **Step 1: Run the full test suite**
 
 Run: `pnpm test`
-Expected: all tests pass (dictionary parity, modules catalog, contact schema, rate limiter, mailer, contact request handler).
+Result: 7 test files, 27 tests, all passing.
 
-- [ ] **Step 2: Run the Astro typecheck**
+- [x] **Step 2: Run the Astro typecheck**
 
 Run: `pnpm astro check`
-Expected: 0 errors, 0 warnings related to missing props or unknown imports.
+Result: 42 files, 0 errors, 0 warnings, 0 hints.
 
-- [ ] **Step 3: Run the production build**
+- [x] **Step 3: Run the production build**
 
 Run: `pnpm astro build`
-Expected: exits 0. Confirm both locales exist: `ls dist/client/index.html dist/client/en/index.html`.
+Result: exits 0. Both locales confirmed: `dist/client/index.html` and `dist/client/en/index.html` both exist and contain all 11 sections' anchor ids.
 
-- [ ] **Step 4: Confirm no secrets are committed**
+- [x] **Step 4: Confirm no secrets are committed**
 
 Run: `git grep -nE "SMTP_(HOST|USER|PASSWORD)\s*=" -- . ':!.env.example' ':!docs' ':!README.md'`
-Expected: no output (the only places these variable names appear as `KEY=value` are `.env.example`, `docs/`, and `README.md`, and there they have no real values, only the placeholder `.env.example` blanks).
+Result: no output — confirmed clean.
 
-- [ ] **Step 5: Confirm every module in the real catalog is present and none is invented**
+- [x] **Step 5: Confirm every module in the real catalog is present and none is invented**
 
-Run: `pnpm test -- src/data/__tests__/modules.test.ts`
-Expected: PASS — this re-confirms the 21-module count and MirAI-is-not-a-module assertions from Task 8 as a final gate.
+Run: `pnpm exec vitest run src/data/__tests__/modules.test.ts`
+Result: PASS (4/4) — 21-module count and MirAI-is-not-a-module assertions hold.
 
-- [ ] **Step 6: Manual browser check (both locales, both breakpoints)**
+- [ ] **Step 6: Manual browser check (both locales, both breakpoints)** — PARTIALLY DONE
 
-Run: `pnpm astro dev`, then open `http://localhost:4321/` and `http://localhost:4321/en/` in a browser at a mobile width (375px) and a desktop width (1440px). Confirm:
-- No horizontal scroll at either width.
-- Mobile menu opens and closes and every link scrolls to its section.
-- Module filter buttons actually filter the grid.
-- FAQ accordion opens one item at a time.
-- Contact form shows the success or error state instead of hanging silently (test against the MailDev setup from Task 30, Step 6).
+No real browser was available in this session to visually confirm layout at 375px/1440px. What WAS verified instead: real SMTP round-trip via a direct `POST /api/contact` request against a live dev server + MailDev (Task 30), structural presence of every section/anchor in the built HTML for both locales, and code-level confirmation (during code review) that the mobile menu, module filter, and FAQ accordion scripts correctly toggle classes/ARIA state. **Recommend the user open both locale pages in an actual browser at mobile and desktop widths before considering the visual QA complete** — this is the one checklist item not independently verified end-to-end in this session.
 
 - [ ] **Step 7: Final commit**
 
