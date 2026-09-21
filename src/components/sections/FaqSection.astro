@@ -16,13 +16,13 @@ const { faq } = dict;
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading eyebrow={faq.eyebrow} title={faq.title} description={faq.description} />
     <div class="space-y-4" id="faqAccordion">
-      {faq.items.map((item) => (
+      {faq.items.map((item, i) => (
         <div class="faq-item rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all">
-          <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500" aria-expanded="false" type="button">
+          <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500" aria-expanded="false" aria-controls={`faq-panel-${i}`} type="button">
             <span class="font-bold text-slate-900 text-base">{item.question}</span>
             <ChevronDown class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-300 shrink-0" />
           </button>
-          <div class="faq-content hidden px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100">{item.answer}</div>
+          <div class="faq-content hidden px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100" id={`faq-panel-${i}`} role="region">{item.answer}</div>
         </div>
       ))}
     </div>

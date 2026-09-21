@@ -12,6 +12,7 @@ interface Props {
 const { dict, locale } = Astro.props;
 const { contact } = dict;
 const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(contact.whatsappMessage)}`;
+const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens in a new tab)";
 ---
 
 <section class="py-24 bg-white relative" id="contacto">
@@ -33,6 +34,7 @@ const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURICompone
           </div>
           <a class="mt-4 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors" href={waHref} rel="noopener noreferrer" target="_blank">
             <span>{contact.whatsappCta}</span>
+            <span class="sr-only">{newTabHint}</span>
           </a>
         </div>
         <div class="space-y-3 text-xs text-slate-600">
