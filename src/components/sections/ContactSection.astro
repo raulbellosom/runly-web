@@ -13,7 +13,10 @@ const { dict, locale } = Astro.props;
 const { contact } = dict;
 const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(contact.whatsappMessage)}`;
 const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens in a new tab)";
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 ---
+
+{recaptchaSiteKey && <script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`} is:inline />}
 
 <section class="py-24 bg-white relative" id="contacto">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +49,7 @@ const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens
       <div class="lg:col-span-7">
         <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 border border-slate-200 shadow-sm">
           <h3 class="text-xl font-bold text-slate-900 mb-6">{contact.formTitle}</h3>
-          <form class="space-y-4" id="contactForm" data-locale={locale}>
+          <form class="space-y-4" id="contactForm" data-locale={locale} data-recaptcha-site-key={recaptchaSiteKey}>
             <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -128,6 +131,23 @@ const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens
       submitSpinner.classList.remove("hidden");
 
       const formData = new FormData(form);
+      const siteKey = form.dataset.recaptchaSiteKey;
+      let recaptchaToken = "";
+      if (siteKey) {
+        const grecaptcha = (window as any).grecaptcha;
+        if (grecaptcha) {
+          try {
+            recaptchaToken = await new Promise<string>((resolve, reject) => {
+              grecaptcha.ready(() => {
+                grecaptcha.execute(siteKey, { action: "contact_submit" }).then(resolve, reject);
+              });
+            });
+          } catch {
+            recaptchaToken = "";
+          }
+        }
+      }
+
       const payload = {
         fullName: formData.get("fullName"),
         companyName: formData.get("companyName"),
@@ -140,6 +160,7 @@ const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens
         website: formData.get("website"), // honeypot, must stay empty
         locale: form.dataset.locale,
         renderedAtMs: Number(form.dataset.renderedAt ?? Date.now()),
+        recaptchaToken,
       };
 
       try {

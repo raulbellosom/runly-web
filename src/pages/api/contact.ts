@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { createRateLimiter } from "../../lib/rate-limit";
 import { createTransporter, sendContactEmail } from "../../lib/mailer";
 import { handleContactRequest } from "../../lib/handle-contact-request";
+import { isHumanRecaptcha } from "../../lib/recaptcha";
 
 export const prerender = false;
 
@@ -33,6 +34,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
           from: env.SMTP_FROM,
           to: env.CONTACT_TO_EMAIL,
         }),
+      verifyRecaptcha: (token) =>
+        env.RECAPTCHA_SECRET_KEY ? isHumanRecaptcha(token, env.RECAPTCHA_SECRET_KEY) : Promise.resolve(true),
     },
   });
 

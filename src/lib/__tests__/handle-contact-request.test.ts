@@ -21,6 +21,7 @@ function makeDeps(overrides: Partial<Parameters<typeof handleContactRequest>[0][
     rateLimiter: createRateLimiter({ windowMs: 60_000, maxRequests: 5 }),
     sendEmail: vi.fn().mockResolvedValue({ ok: true }),
     minFillTimeMs: 1500,
+    verifyRecaptcha: vi.fn().mockResolvedValue(true),
     ...overrides,
   };
 }
@@ -89,5 +90,27 @@ describe("handleContactRequest", () => {
     });
     expect(result.status).toBe(400);
     expect(deps.sendEmail).not.toHaveBeenCalled();
+  });
+
+  it("rejects a failed reCAPTCHA verification without calling sendEmail", async () => {
+    const deps = makeDeps({ verifyRecaptcha: vi.fn().mockResolvedValue(false) });
+    const result = await handleContactRequest({
+      body: { ...basePayload, renderedAtMs: Date.now() - 5000, recaptchaToken: "low-score-token" },
+      ip: "1.2.3.10",
+      deps,
+    });
+    expect(result.status).toBe(400);
+    expect(result.body.ok).toBe(false);
+    expect(deps.sendEmail).not.toHaveBeenCalled();
+  });
+
+  it("passes the payload's recaptchaToken to verifyRecaptcha", async () => {
+    const deps = makeDeps();
+    await handleContactRequest({
+      body: { ...basePayload, renderedAtMs: Date.now() - 5000, recaptchaToken: "abc-token" },
+      ip: "1.2.3.11",
+      deps,
+    });
+    expect(deps.verifyRecaptcha).toHaveBeenCalledWith("abc-token");
   });
 });

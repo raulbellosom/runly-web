@@ -9,6 +9,10 @@ interface HandleContactRequestArgs {
     rateLimiter: ReturnType<typeof createRateLimiter>;
     sendEmail: (payload: ReturnType<typeof contactSchema.parse>) => Promise<{ ok: true } | { ok: false; error: string }>;
     minFillTimeMs: number;
+    // Should resolve false for a missing/low-score/invalid token. The real
+    // wiring in pages/api/contact.ts returns true unconditionally when no
+    // reCAPTCHA secret key is configured, so this never blocks local dev.
+    verifyRecaptcha: (token: string) => Promise<boolean>;
   };
 }
 
@@ -35,6 +39,11 @@ export async function handleContactRequest({
   const fillTimeMs = Date.now() - parsed.data.renderedAtMs;
   if (fillTimeMs < deps.minFillTimeMs) {
     return { status: 400, body: { ok: false, error: "submitted_too_fast" } };
+  }
+
+  const isHuman = await deps.verifyRecaptcha(parsed.data.recaptchaToken);
+  if (!isHuman) {
+    return { status: 400, body: { ok: false, error: "recaptcha_failed" } };
   }
 
   const sendResult = await deps.sendEmail(parsed.data);

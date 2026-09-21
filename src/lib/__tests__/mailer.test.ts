@@ -15,6 +15,7 @@ const payload: ContactFormPayload = {
   website: "",
   locale: "es",
   renderedAtMs: Date.now(),
+  recaptchaToken: "test-token",
 };
 
 describe("buildContactEmail", () => {

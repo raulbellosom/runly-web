@@ -13,6 +13,10 @@ export const contactSchema = z.object({
   website: z.string().max(0), // honeypot: must be empty
   locale: z.enum(["es", "en"]),
   renderedAtMs: z.number().int().positive(),
+  // reCAPTCHA v3 token. Optional at the schema level (not every deployment
+  // has reCAPTCHA configured) — whether it is actually required is decided
+  // in handleContactRequest, based on whether a secret key is configured.
+  recaptchaToken: z.string().trim().optional().default(""),
 });
 
 export type ContactFormPayload = z.infer<typeof contactSchema>;
