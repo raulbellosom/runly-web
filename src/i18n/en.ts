@@ -302,4 +302,39 @@ export const en: SiteDictionary = {
       { icon: "ShieldCheck", color: "indigo", title: "Security and backups", description: "Automatic daily backups and data encryption at rest and in transit." },
     ],
   },
+  faq: {
+    eyebrow: "Common questions",
+    title: "Frequently Asked Questions",
+    description: "Everything you need to know before implementing RUNLY at your company.",
+    items: [
+      {
+        question: "Does RUNLY work for small businesses or only large organizations?",
+        answer: "RUNLY is built with a modular architecture precisely so it adapts to any size. A 3-person company can start with just Chat, Calendar, and Finance, while an established company can run complex multi-warehouse inventory and multiple legal entities.",
+      },
+      {
+        question: "Do I have to purchase every module?",
+        answer: "No. RUNLY does not believe in forced bundles. You choose exactly which modules to enable on your instance. If you need an additional module later, you turn it on with one click, no reinstall or migration required.",
+      },
+      {
+        question: "Can I request custom modules or features for my company?",
+        answer: "Yes, it is one of our main strengths. Our team at Racoon Devs can build exclusive custom modules on the RM3 architecture that match your exact calculations, approvals, or industry regulations.",
+      },
+      {
+        question: "How does multi-company management work?",
+        answer: "You can register multiple entities or brands under one master account. Each company has logically isolated data (inventory, employees, bank accounts), letting admins switch between them with one click.",
+      },
+      {
+        question: "Is my data protected and backed up?",
+        answer: "Yes. All communication travels encrypted with SSL/TLS. We run automatic daily backups and rely on cloud redundancy, aiming to guarantee availability and protection against unexpected data loss.",
+      },
+      {
+        question: "How is the cost of RUNLY calculated if there are no published fixed prices?",
+        answer: "We quote fairly based on: the exact modules required, the number of concurrent active users, and whether you need custom development. This keeps you from paying for inflated features that add no value to your business.",
+      },
+      {
+        question: "How long does implementation and go-live take?",
+        answer: "For standard instances with Core modules, go-live usually takes about 2 to 3 business days. For projects with custom development and complex data migration, we set a phased timeline, typically 2 to 4 weeks depending on scope.",
+      },
+    ],
+  },
 };

@@ -147,4 +147,10 @@ export interface SiteDictionary {
     description: string;
     cards: { icon: string; color: string; title: string; description: string }[];
   };
+  faq: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: { question: string; answer: string }[];
+  };
 }

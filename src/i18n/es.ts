@@ -302,4 +302,39 @@ export const es: SiteDictionary = {
       { icon: "ShieldCheck", color: "indigo", title: "Seguridad y Respaldo", description: "Backups automáticos diarios y cifrado de datos en reposo y tránsito." },
     ],
   },
+  faq: {
+    eyebrow: "Dudas habituales",
+    title: "Preguntas Frecuentes",
+    description: "Todo lo que necesitas saber antes de implementar RUNLY en tu empresa.",
+    items: [
+      {
+        question: "¿RUNLY funciona para empresas pequeñas o solo para grandes organizaciones?",
+        answer: "RUNLY está diseñado con una arquitectura modular precisamente para adaptarse a cualquier tamaño. Una empresa de 3 personas puede comenzar únicamente con Chat, Calendario y Finanzas, mientras que una compañía consolidada puede operar inventarios complejos multialmacén y múltiples razones sociales.",
+      },
+      {
+        question: "¿Tengo que contratar todos los módulos obligatoriamente?",
+        answer: "No. En RUNLY no creemos en los paquetes forzosos. Tú eliges exactamente qué módulos habilitar en tu instancia. Si en el futuro necesitas un módulo adicional, lo activas con un clic sin necesidad de reinstalar ni migrar el sistema.",
+      },
+      {
+        question: "¿Puedo solicitar módulos o funcionalidades personalizadas para mi empresa?",
+        answer: "Sí, es una de nuestras principales fortalezas comerciales. Nuestro equipo en Racoon Devs puede desarrollar módulos personalizados exclusivos basados en la arquitectura RM3 que se adaptan exactamente a los cálculos, aprobaciones o regulaciones de tu negocio.",
+      },
+      {
+        question: "¿Cómo funciona la gestión multiempresa?",
+        answer: "Puedes dar de alta múltiples entidades o marcas bajo un mismo acceso maestro. Cada empresa tiene bases de datos lógicamente aisladas (inventario, empleados, cuentas bancarias), permitiendo que los administradores alternen entre una y otra con un solo clic.",
+      },
+      {
+        question: "¿Mis datos están protegidos y respaldados?",
+        answer: "Sí. Toda la comunicación viaja cifrada con SSL/TLS. Realizamos copias de seguridad automáticas diarias y contamos con redundancia en la nube, buscando garantizar disponibilidad y protección contra pérdidas imprevistas.",
+      },
+      {
+        question: "¿Cómo se calcula el costo de RUNLY si no hay precios fijos publicados?",
+        answer: "Cotizamos de forma justa basándonos en: los módulos exactos requeridos, el número de usuarios activos concurrentes y si requieres desarrollo personalizado. Esto evita que pagues por características infladas que no aportan valor a tu giro.",
+      },
+      {
+        question: "¿Cuánto tiempo toma la implementación y puesta en marcha?",
+        answer: "Para instancias estándar con módulos Core, la puesta en marcha suele tomar entre 2 y 3 días hábiles. Para proyectos con desarrollos custom y migración compleja de bases de datos, definimos un calendario por fases, habitualmente de 2 a 4 semanas según el alcance.",
+      },
+    ],
+  },
 };

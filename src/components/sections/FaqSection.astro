@@ -1,0 +1,49 @@
+---
+// src/components/sections/FaqSection.astro
+import { ChevronDown } from "@lucide/astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+}
+
+const { dict } = Astro.props;
+const { faq } = dict;
+---
+
+<section class="py-24 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading eyebrow={faq.eyebrow} title={faq.title} description={faq.description} />
+    <div class="space-y-4" id="faqAccordion">
+      {faq.items.map((item) => (
+        <div class="faq-item rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all">
+          <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500" aria-expanded="false" type="button">
+            <span class="font-bold text-slate-900 text-base">{item.question}</span>
+            <ChevronDown class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-300 shrink-0" />
+          </button>
+          <div class="faq-content hidden px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100">{item.answer}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const triggers = document.querySelectorAll<HTMLButtonElement>(".faq-trigger");
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const content = trigger.nextElementSibling as HTMLElement;
+      const icon = trigger.querySelector(".faq-icon");
+      const isHidden = content.classList.contains("hidden");
+      document.querySelectorAll(".faq-content").forEach((c) => c.classList.add("hidden"));
+      document.querySelectorAll(".faq-trigger").forEach((t) => t.setAttribute("aria-expanded", "false"));
+      document.querySelectorAll(".faq-icon").forEach((i) => i.classList.remove("rotate-180"));
+      if (isHidden) {
+        content.classList.remove("hidden");
+        trigger.setAttribute("aria-expanded", "true");
+        icon?.classList.add("rotate-180");
+      }
+    });
+  });
+</script>
