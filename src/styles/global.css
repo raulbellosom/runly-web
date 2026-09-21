@@ -1,0 +1,19 @@
+/* src/styles/global.css */
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --color-runly-navy: #070d1e;
+  --color-runly-midnight: #0b132b;
+  --color-runly-darkcard: #111b38;
+  --color-runly-orange: #ff5e14;
+  --color-runly-amber: #ff9f1c;
+  --color-runly-blue: #0e3a8c;
+  --color-runly-surface: #f8fafc;
+  --color-runly-border: rgba(226, 232, 240, 0.8);
+
+  --shadow-glow-orange: 0 0 35px -5px rgba(255, 94, 20, 0.35);
+  --shadow-glass: 0 8px 32px 0 rgba(11, 19, 43, 0.06);
+  --shadow-glass-dark: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
