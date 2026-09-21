@@ -1022,12 +1022,12 @@ git commit -m "feat: add site-wide constants with pending contact placeholders"
 
 ## Phase 2 — Layout primitives
 
-### Task 10: BaseLayout and SiteHead (SEO shell)
+### Task 10: BaseLayout and SiteHead (SEO shell) — DONE (commit `1f36abf`)
 
 **Files:**
 - Create: `src/layouts/BaseLayout.astro`, `src/components/layout/SiteHead.astro`
 
-- [ ] **Step 1: Write SiteHead.astro**
+- [x] **Step 1: Write SiteHead.astro**
 
 ```astro
 ---
@@ -1096,7 +1096,7 @@ const jsonLd = {
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 ```
 
-- [ ] **Step 2: Write BaseLayout.astro**
+- [x] **Step 2: Write BaseLayout.astro**
 
 ```astro
 ---
@@ -1142,26 +1142,26 @@ const { title, description, locale, path } = Astro.props;
 </html>
 ```
 
-- [ ] **Step 3: Verify typecheck**
+- [x] **Step 3: Verify typecheck**
 
 Run: `pnpm astro check`
 Expected: 0 errors (there is nothing importing these files yet, so Astro only checks syntax — that is expected at this stage).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/layouts src/components/layout/SiteHead.astro
 git commit -m "feat: add base layout and SEO head component"
 ```
 
-### Task 11: Header with nav and mobile menu
+### Task 11: Header with nav and mobile menu — DONE (commit `91943ff`)
 
 **Files:**
 - Create: `src/components/layout/Header.astro`
 
 Port structure from `code.html` lines 90-133. Replace the placeholder Google-hosted logo `src` with `/brand/runly-logo-light.png` (copied in Task 32). Icons: `fa-arrow-right` becomes `ArrowRight`, `fa-bars` becomes `Menu`.
 
-- [ ] **Step 1: Write Header.astro**
+- [x] **Step 1: Write Header.astro**
 
 ```astro
 ---
@@ -1242,21 +1242,21 @@ const links = [
 </script>
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/layout/Header.astro
 git commit -m "feat: add header with nav and mobile menu"
 ```
 
-### Task 12: Footer
+### Task 12: Footer — DONE (commit `c8cd3e2`)
 
 **Files:**
 - Create: `src/components/layout/Footer.astro`
 
 Port content from `code.html` lines 1361-1417. Logo swaps to the real asset; year is computed, not hardcoded.
 
-- [ ] **Step 1: Write Footer.astro**
+- [x] **Step 1: Write Footer.astro**
 
 ```astro
 ---
@@ -1325,19 +1325,19 @@ const year = new Date().getFullYear();
 
 Note: `privacyNotice`/`termsOfService`/`dataSecurity` render as plain text, not links, because those pages do not exist yet (do not link to a 404). Add them as real `/legal/*` pages in a follow-up plan once the legal copy exists — out of scope here per the design spec section 11.
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/layout/Footer.astro
 git commit -m "feat: add footer"
 ```
 
-### Task 13: Shared UI primitives
+### Task 13: Shared UI primitives — DONE (commit `4633787`)
 
 **Files:**
 - Create: `src/components/ui/SectionHeading.astro`, `src/components/ui/GlassCard.astro`
 
-- [ ] **Step 1: Write SectionHeading.astro**
+- [x] **Step 1: Write SectionHeading.astro**
 
 ```astro
 ---
@@ -1361,7 +1361,7 @@ const alignClass = align === "center" ? "text-center mx-auto" : "text-left";
 </div>
 ```
 
-- [ ] **Step 2: Write GlassCard.astro**
+- [x] **Step 2: Write GlassCard.astro**
 
 ```astro
 ---
@@ -1379,7 +1379,7 @@ const { class: className = "", dark = false } = Astro.props;
 </div>
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui
