@@ -82,4 +82,15 @@ export interface SiteDictionary {
     rightNodes: { icon: string; label: string; tag: string }[];
     pillars: { icon: string; title: string; description: string }[];
   };
+  classification: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    official: { badge: string; title: string; description: string; bullets: string[] };
+    custom: { tag: string; badge: string; title: string; description: string; bullets: string[] };
+    community: { badge: string; title: string; description: string; bullets: string[] };
+    bannerTitle: string;
+    bannerDescription: string;
+    bannerCta: string;
+  };
 }

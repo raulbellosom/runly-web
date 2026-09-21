@@ -143,4 +143,47 @@ export const es: SiteDictionary = {
       },
     ],
   },
+  classification: {
+    eyebrow: "Ecosistema de soluciones",
+    title: "Tu negocio es único. Tu software también puede serlo.",
+    description:
+      "Amplía RUNLY con herramientas desarrolladas para diferentes necesidades y construye una plataforma que realmente se ajuste a tu operación.",
+    official: {
+      badge: "Certificados Racoon",
+      title: "Módulos Oficiales",
+      description:
+        "Desarrollados, mantenidos y soportados directamente por el equipo de ingeniería de Racoon Devs. Máxima estabilidad, actualizaciones automáticas y compatibilidad garantizada.",
+      bullets: [
+        "Actualizaciones sin costo adicional",
+        "Soporte prioritario en español",
+        "Integración nativa inmediata",
+      ],
+    },
+    custom: {
+      tag: "Hecho a la medida",
+      badge: "Flujos específicos",
+      title: "Módulos Personalizados",
+      description:
+        "¿Tu industria tiene una regla de negocio o cálculo único? Diseñamos y programamos módulos custom que se integran con fluidez exacta a tu pantalla de RUNLY.",
+      bullets: [
+        "Levantamiento técnico de procesos",
+        "Adaptación a tu software heredado",
+        "Exclusivo para tu organización",
+      ],
+    },
+    community: {
+      badge: "Ecosistema en construcción",
+      title: "Módulos Community",
+      description:
+        "Estamos sentando las bases para que desarrolladores y partners certificados puedan aportar extensiones y conectores en el futuro, bajo revisión de seguridad de nuestro equipo.",
+      bullets: [
+        "Estándares abiertos y SDK en desarrollo",
+        "Revisión de seguridad y código",
+        "Aún no disponible públicamente",
+      ],
+    },
+    bannerTitle: "¿Tienes una idea para un módulo que todavía no existe?",
+    bannerDescription: "Construimos la herramienta exacta para resolver la fricción de tu operación diaria.",
+    bannerCta: "Hablemos de tu proyecto",
+  },
 };

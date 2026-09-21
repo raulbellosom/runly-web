@@ -1,0 +1,65 @@
+---
+// src/components/sections/ModulesClassificationSection.astro
+import { BadgeCheck, SlidersHorizontal, Users, Check } from "@lucide/astro";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+}
+
+const { dict } = Astro.props;
+const { classification } = dict;
+---
+
+<section class="py-24 bg-slate-50 border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-sm font-bold text-orange-600 uppercase tracking-widest mb-2">{classification.eyebrow}</h2>
+      <p class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{classification.title}</p>
+      <p class="mt-4 text-base sm:text-lg text-slate-600">{classification.description}</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6"><BadgeCheck class="w-5 h-5" /></div>
+          <span class="text-xs font-bold text-orange-600 uppercase tracking-wider">{classification.official.badge}</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1 mb-3">{classification.official.title}</h3>
+          <p class="text-sm text-slate-600 leading-relaxed mb-6">{classification.official.description}</p>
+        </div>
+        <ul class="text-xs text-slate-600 space-y-2.5 pt-6 border-t border-slate-100">
+          {classification.official.bullets.map((b) => <li class="flex items-center gap-2"><Check class="w-3.5 h-3.5 text-emerald-500" /> {b}</li>)}
+        </ul>
+      </div>
+      <div class="bg-white rounded-2xl p-8 border-2 border-orange-500 shadow-md relative flex flex-col justify-between">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-orange-500 text-white text-[11px] font-bold tracking-wide uppercase">{classification.custom.tag}</div>
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-orange-500 text-white flex items-center justify-center mb-6"><SlidersHorizontal class="w-5 h-5" /></div>
+          <span class="text-xs font-bold text-orange-600 uppercase tracking-wider">{classification.custom.badge}</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1 mb-3">{classification.custom.title}</h3>
+          <p class="text-sm text-slate-600 leading-relaxed mb-6">{classification.custom.description}</p>
+        </div>
+        <ul class="text-xs text-slate-600 space-y-2.5 pt-6 border-t border-slate-100">
+          {classification.custom.bullets.map((b) => <li class="flex items-center gap-2"><Check class="w-3.5 h-3.5 text-emerald-500" /> {b}</li>)}
+        </ul>
+      </div>
+      <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6"><Users class="w-5 h-5" /></div>
+          <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">{classification.community.badge}</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-1 mb-3">{classification.community.title}</h3>
+          <p class="text-sm text-slate-600 leading-relaxed mb-6">{classification.community.description}</p>
+        </div>
+        <ul class="text-xs text-slate-600 space-y-2.5 pt-6 border-t border-slate-100">
+          {classification.community.bullets.map((b) => <li class="flex items-center gap-2"><Check class="w-3.5 h-3.5 text-emerald-500" /> {b}</li>)}
+        </ul>
+      </div>
+    </div>
+    <div class="rounded-2xl p-8 bg-gradient-to-r from-slate-900 via-runly-midnight to-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold mb-1">{classification.bannerTitle}</h3>
+        <p class="text-sm text-slate-300">{classification.bannerDescription}</p>
+      </div>
+      <a class="whitespace-nowrap px-6 py-3 rounded-xl text-white font-semibold text-sm runly-gradient-btn shadow-md" href="#contacto">{classification.bannerCta} &rarr;</a>
+    </div>
+  </div>
+</section>

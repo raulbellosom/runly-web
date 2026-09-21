@@ -143,4 +143,47 @@ export const en: SiteDictionary = {
       },
     ],
   },
+  classification: {
+    eyebrow: "Solutions ecosystem",
+    title: "Your business is unique. Your software can be too.",
+    description:
+      "Extend RUNLY with tools built for different needs and put together a platform that truly fits your operation.",
+    official: {
+      badge: "Racoon-certified",
+      title: "Official Modules",
+      description:
+        "Built, maintained, and supported directly by the Racoon Devs engineering team. Maximum stability, automatic updates, and guaranteed compatibility.",
+      bullets: [
+        "Updates at no extra cost",
+        "Priority support in Spanish",
+        "Immediate native integration",
+      ],
+    },
+    custom: {
+      tag: "Made to measure",
+      badge: "Specific workflows",
+      title: "Custom Modules",
+      description:
+        "Does your industry have a unique business rule or calculation? We design and build custom modules that integrate seamlessly into your RUNLY screens.",
+      bullets: [
+        "Technical process discovery",
+        "Adapts to your legacy software",
+        "Exclusive to your organization",
+      ],
+    },
+    community: {
+      badge: "Ecosystem in the works",
+      title: "Community Modules",
+      description:
+        "We are laying the groundwork so certified developers and partners can contribute extensions and connectors in the future, under our team security review.",
+      bullets: [
+        "Open standards and SDK in progress",
+        "Security and code review",
+        "Not publicly available yet",
+      ],
+    },
+    bannerTitle: "Have an idea for a module that does not exist yet?",
+    bannerDescription: "We build the exact tool to remove the friction from your daily operation.",
+    bannerCta: "Let us talk about your project",
+  },
 };
