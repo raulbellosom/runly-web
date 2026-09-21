@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
 
 Sitemap: https://runly.mx/sitemap-index.xml

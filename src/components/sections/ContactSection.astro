@@ -14,6 +14,10 @@ const { contact } = dict;
 const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(contact.whatsappMessage)}`;
 const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens in a new tab)";
 const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+// Static build: no backend runs here. The form posts to an external API
+// configured at build time via PUBLIC_CONTACT_API_URL (safe to expose, it's
+// just a URL). See contact-api-reference/README.md for what that API must do.
+const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
 ---
 
 {recaptchaSiteKey && <script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`} is:inline />}
@@ -49,7 +53,7 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
       <div class="lg:col-span-7">
         <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 border border-slate-200 shadow-sm">
           <h3 class="text-xl font-bold text-slate-900 mb-6">{contact.formTitle}</h3>
-          <form class="space-y-4" id="contactForm" data-locale={locale} data-recaptcha-site-key={recaptchaSiteKey}>
+          <form class="space-y-4" id="contactForm" data-locale={locale} data-recaptcha-site-key={recaptchaSiteKey} data-contact-api-url={contactApiUrl}>
             <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -130,6 +134,19 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
       submitIcon.classList.add("hidden");
       submitSpinner.classList.remove("hidden");
 
+      const contactApiUrl = form.dataset.contactApiUrl;
+      if (!contactApiUrl) {
+        // PUBLIC_CONTACT_API_URL isn't configured for this build: no backend
+        // to submit to yet. Fail loudly instead of posting to a relative
+        // path that doesn't exist on this static site.
+        errorBox.classList.remove("hidden");
+        submitBtn.disabled = false;
+        submitLabel.textContent = originalLabel;
+        submitIcon.classList.remove("hidden");
+        submitSpinner.classList.add("hidden");
+        return;
+      }
+
       const formData = new FormData(form);
       const siteKey = form.dataset.recaptchaSiteKey;
       let recaptchaToken = "";
@@ -164,7 +181,7 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
       };
 
       try {
-        const response = await fetch("/api/contact", {
+        const response = await fetch(contactApiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

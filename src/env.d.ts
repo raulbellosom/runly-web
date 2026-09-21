@@ -1,16 +1,11 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-  readonly SMTP_HOST: string;
-  readonly SMTP_PORT: string;
-  readonly SMTP_SECURE: string;
-  readonly SMTP_USER: string;
-  readonly SMTP_PASSWORD: string;
-  readonly SMTP_FROM: string;
-  readonly CONTACT_TO_EMAIL: string;
   readonly PUBLIC_SITE_URL: string;
   readonly PUBLIC_RECAPTCHA_SITE_KEY: string;
-  readonly RECAPTCHA_SECRET_KEY: string;
+  // External contact API the static site posts to (e.g. https://api.runly.mx/public/contact).
+  // No server secrets live in this build — see contact-api-reference/README.md.
+  readonly PUBLIC_CONTACT_API_URL: string;
 }
 
 interface ImportMeta {

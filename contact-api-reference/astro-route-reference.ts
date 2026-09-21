@@ -1,9 +1,11 @@
-// src/pages/api/contact.ts
+// REFERENCE ONLY — this is no longer wired into the Astro build (runly-web
+// is a static site now). It documents the exact request handling the real
+// Runly backend/API needs to reproduce. See README.md in this folder.
 import type { APIRoute } from "astro";
-import { createRateLimiter } from "../../lib/rate-limit";
-import { createTransporter, sendContactEmail } from "../../lib/mailer";
-import { handleContactRequest } from "../../lib/handle-contact-request";
-import { isHumanRecaptcha } from "../../lib/recaptcha";
+import { createRateLimiter } from "./src/rate-limit";
+import { createTransporter, sendContactEmail } from "./src/mailer";
+import { handleContactRequest } from "./src/handle-contact-request";
+import { isHumanRecaptcha } from "./src/recaptcha";
 
 export const prerender = false;
 
