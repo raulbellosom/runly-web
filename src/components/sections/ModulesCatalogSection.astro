@@ -1,0 +1,92 @@
+---
+// src/components/sections/ModulesCatalogSection.astro
+import * as Icons from "@lucide/astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import { modules, moduleCategories, roadmap } from "../../data/modules";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+  locale: "es" | "en";
+}
+
+const { dict, locale } = Astro.props;
+const { modulesCatalog } = dict;
+---
+
+<section class="py-24 bg-white relative" id="modulos">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading eyebrow={modulesCatalog.eyebrow} title={modulesCatalog.title} description={modulesCatalog.description} />
+
+    <div class="flex flex-wrap items-center justify-center gap-2 mb-12" data-purpose="module-filters">
+      {moduleCategories.map((cat, i) => (
+        <button
+          class={`filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${i === 0 ? "active bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
+          data-filter={cat.id}
+        >
+          {cat.label[locale]}{cat.id === "all" ? ` (${modules.length})` : ""}
+        </button>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="modulesGrid">
+      {modules.map((mod) => {
+        const Icon = (Icons as Record<string, any>)[mod.icon] ?? Icons.Boxes;
+        return (
+          <div class="module-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category={mod.category}>
+            <div>
+              <div class="w-12 h-12 rounded-xl text-white flex items-center justify-center text-xl mb-3 shadow-sm" style={`background-color:${mod.color}`}>
+                <Icon class="w-5 h-5" />
+              </div>
+              <h3 class="font-bold text-slate-900 text-base">{mod.name[locale]}</h3>
+              <p class="text-xs text-slate-400 mb-2">Runly ERP</p>
+              <p class="text-xs text-slate-600 leading-relaxed mb-4">{mod.description[locale]}</p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-mono">v{mod.version}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <div class="mt-16 p-8 rounded-3xl bg-slate-50 border border-dashed border-slate-300">
+      <div class="max-w-3xl mb-8">
+        <h3 class="text-xl font-bold text-slate-900 mb-2">{modulesCatalog.roadmapTitle}</h3>
+        <p class="text-sm text-slate-600">{modulesCatalog.roadmapDescription}</p>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {roadmap.map((item) => {
+          const Icon = (Icons as Record<string, any>)[item.icon] ?? Icons.Boxes;
+          return (
+            <div class="p-4 rounded-xl bg-white border border-slate-200 text-center hover:border-orange-300 transition-colors">
+              <Icon class="w-5 h-5 text-orange-500 mb-2 mx-auto" />
+              <p class="text-xs font-bold text-slate-800">{item.name[locale]}</p>
+              <span class="text-[10px] text-slate-400 font-medium">{modulesCatalog.comingSoonLabel}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  const cards = document.querySelectorAll(".module-card");
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach((b) => {
+        b.classList.remove("bg-slate-900", "text-white");
+        b.classList.add("bg-slate-100", "text-slate-600");
+      });
+      btn.classList.remove("bg-slate-100", "text-slate-600");
+      btn.classList.add("bg-slate-900", "text-white");
+      const category = btn.getAttribute("data-filter");
+      cards.forEach((card) => {
+        const match = category === "all" || card.getAttribute("data-category") === category;
+        (card as HTMLElement).style.display = match ? "flex" : "none";
+      });
+    });
+  });
+</script>
