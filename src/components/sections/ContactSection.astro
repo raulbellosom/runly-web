@@ -1,0 +1,166 @@
+---
+// src/components/sections/ContactSection.astro
+import { Mail, MapPin, Shield, CircleCheck, Send, LoaderCircle } from "@lucide/astro";
+import type { SiteDictionary } from "../../i18n/types";
+import { CONTACT_WHATSAPP_NUMBER } from "../../consts";
+
+interface Props {
+  dict: SiteDictionary;
+  locale: "es" | "en";
+}
+
+const { dict, locale } = Astro.props;
+const { contact } = dict;
+const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(contact.whatsappMessage)}`;
+---
+
+<section class="py-24 bg-white relative" id="contacto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-5 space-y-8">
+        <div>
+          <span class="text-xs font-bold text-orange-600 uppercase tracking-widest px-3 py-1 rounded-full bg-orange-100">{contact.eyebrow}</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4">{contact.title}</h2>
+          <p class="mt-4 text-base text-slate-600 leading-relaxed">{contact.description}</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-200">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-2xl">&#9742;</div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">{contact.whatsappTitle}</h3>
+              <p class="text-xs text-slate-600">{contact.whatsappDescription}</p>
+            </div>
+          </div>
+          <a class="mt-4 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors" href={waHref} rel="noopener noreferrer" target="_blank">
+            <span>{contact.whatsappCta}</span>
+          </a>
+        </div>
+        <div class="space-y-3 text-xs text-slate-600">
+          <p class="flex items-center gap-2.5"><Mail class="w-4 h-4 text-orange-500" /> <span>{contact.emailLabel}</span></p>
+          <p class="flex items-center gap-2.5"><MapPin class="w-4 h-4 text-orange-500" /> <span>{contact.locationLabel}</span></p>
+          <p class="flex items-center gap-2.5"><Shield class="w-4 h-4 text-orange-500" /> <span>{contact.ndaLabel}</span></p>
+        </div>
+      </div>
+      <div class="lg:col-span-7">
+        <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 border border-slate-200 shadow-sm">
+          <h3 class="text-xl font-bold text-slate-900 mb-6">{contact.formTitle}</h3>
+          <form class="space-y-4" id="contactForm" data-locale={locale}>
+            <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="fullName">{contact.fields.fullName}</label>
+                <input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="fullName" name="fullName" placeholder={contact.fields.fullNamePlaceholder} required type="text" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="companyName">{contact.fields.company}</label>
+                <input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="companyName" name="companyName" placeholder={contact.fields.companyPlaceholder} required type="text" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="email">{contact.fields.email}</label>
+                <input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="email" name="email" placeholder={contact.fields.emailPlaceholder} required type="email" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="phone">{contact.fields.phone}</label>
+                <input class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="phone" name="phone" placeholder={contact.fields.phonePlaceholder} required type="tel" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="teamSize">{contact.fields.teamSize}</label>
+                <select class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="teamSize" name="teamSize">
+                  {contact.fields.teamSizeOptions.map((opt) => <option value={opt}>{opt}</option>)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="interest">{contact.fields.interest}</label>
+                <select class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="interest" name="interest" required>
+                  {contact.fields.interestOptions.map((opt) => <option value={opt}>{opt}</option>)}
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="needs">{contact.fields.needs}</label>
+              <textarea class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white" id="needs" name="needs" placeholder={contact.fields.needsPlaceholder} required rows="3"></textarea>
+            </div>
+            <label class="flex items-start gap-2 text-xs text-slate-600">
+              <input type="checkbox" name="consent" required class="mt-0.5" />
+              <span>{contact.fields.consent}</span>
+            </label>
+            <button class="w-full py-3.5 rounded-xl text-white font-semibold text-sm runly-gradient-btn shadow-md flex items-center justify-center gap-2" id="submitBtn" type="submit" data-submitting={contact.submitting}>
+              <span id="submitLabel">{contact.submit}</span>
+              <Send id="submitIcon" class="w-3.5 h-3.5" />
+              <LoaderCircle id="submitSpinner" class="w-3.5 h-3.5 hidden animate-spin" />
+            </button>
+            <div class="hidden p-4 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-medium text-center" id="formSuccess">
+              <CircleCheck class="w-4 h-4 inline mr-1.5 text-emerald-600" /> {contact.successMessage}
+            </div>
+            <div class="hidden p-4 rounded-xl bg-red-100 text-red-800 text-xs font-medium text-center" id="formError">{contact.errorMessage}</div>
+            <p class="text-[11px] text-slate-500 text-center pt-2">{contact.privacyNotice}</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("contactForm") as HTMLFormElement | null;
+  const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement | null;
+  const submitLabel = document.getElementById("submitLabel");
+  const submitIcon = document.getElementById("submitIcon");
+  const submitSpinner = document.getElementById("submitSpinner");
+  const success = document.getElementById("formSuccess");
+  const errorBox = document.getElementById("formError");
+
+  if (form && submitBtn && submitLabel && submitIcon && submitSpinner && success && errorBox) {
+    const originalLabel = submitLabel.textContent ?? "";
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      success.classList.add("hidden");
+      errorBox.classList.add("hidden");
+      submitBtn.disabled = true;
+      submitLabel.textContent = submitBtn.dataset.submitting ?? originalLabel;
+      submitIcon.classList.add("hidden");
+      submitSpinner.classList.remove("hidden");
+
+      const formData = new FormData(form);
+      const payload = {
+        fullName: formData.get("fullName"),
+        companyName: formData.get("companyName"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        teamSize: formData.get("teamSize"),
+        interest: formData.get("interest"),
+        needs: formData.get("needs"),
+        consent: formData.get("consent") === "on",
+        website: formData.get("website"), // honeypot, must stay empty
+        locale: form.dataset.locale,
+        renderedAtMs: Number(form.dataset.renderedAt ?? Date.now()),
+      };
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (response.ok && result.ok) {
+          form.reset();
+          success.classList.remove("hidden");
+        } else {
+          errorBox.classList.remove("hidden");
+        }
+      } catch {
+        errorBox.classList.remove("hidden");
+      } finally {
+        submitBtn.disabled = false;
+        submitLabel.textContent = originalLabel;
+        submitIcon.classList.remove("hidden");
+        submitSpinner.classList.add("hidden");
+      }
+    });
+  }
+</script>

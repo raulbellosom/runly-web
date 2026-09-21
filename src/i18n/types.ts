@@ -153,4 +153,39 @@ export interface SiteDictionary {
     description: string;
     items: { question: string; answer: string }[];
   };
+  contact: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    whatsappTitle: string;
+    whatsappDescription: string;
+    whatsappCta: string;
+    whatsappMessage: string;
+    emailLabel: string;
+    locationLabel: string;
+    ndaLabel: string;
+    formTitle: string;
+    fields: {
+      fullName: string;
+      fullNamePlaceholder: string;
+      company: string;
+      companyPlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
+      phone: string;
+      phonePlaceholder: string;
+      teamSize: string;
+      teamSizeOptions: string[];
+      interest: string;
+      interestOptions: string[];
+      needs: string;
+      needsPlaceholder: string;
+      consent: string;
+    };
+    submit: string;
+    submitting: string;
+    successMessage: string;
+    errorMessage: string;
+    privacyNotice: string;
+  };
 }
