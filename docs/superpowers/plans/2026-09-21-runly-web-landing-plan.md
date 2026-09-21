@@ -169,12 +169,12 @@ git add astro.config.mjs src/styles/global.css package.json pnpm-lock.yaml
 git commit -m "chore: add tailwind v4 with runly design tokens"
 ```
 
-### Task 3: Global CSS utilities (glass, gradient button, grid pattern, reveal-on-scroll)
+### Task 3: Global CSS utilities (glass, gradient button, grid pattern, reveal-on-scroll) — DONE (commit `999118b`)
 
 **Files:**
 - Modify: `src/styles/global.css` (created in Task 2 with the `@theme` block — this task appends to the same file, it does not replace it)
 
-- [ ] **Step 1: Append the utility classes below the `@theme` block from Task 2**
+- [x] **Step 1: Append the utility classes below the `@theme` block from Task 2**
 
 ```css
 @layer utilities {
@@ -239,24 +239,24 @@ git commit -m "chore: add tailwind v4 with runly design tokens"
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/styles/global.css
 git commit -m "style: add glassmorphism and reveal-on-scroll utilities"
 ```
 
-### Task 4: Configure i18n, sitemap, and the Node adapter in astro.config.mjs
+### Task 4: Configure i18n, sitemap, and the Node adapter in astro.config.mjs — DONE (commit `8c42f85`)
 
 **Files:**
 - Modify: `astro.config.mjs`
 
-- [ ] **Step 1: Install the remaining integrations**
+- [x] **Step 1: Install the remaining integrations**
 
 Run: `pnpm astro add node sitemap -y`
 Expected: installs `@astrojs/node` and `@astrojs/sitemap`, updates `astro.config.mjs`.
 
-- [ ] **Step 2: Replace astro.config.mjs with the full config**
+- [x] **Step 2: Replace astro.config.mjs with the full config**
 
 ```js
 // astro.config.mjs
@@ -292,41 +292,41 @@ export default defineConfig({
 
 Note: keep whatever Tailwind wiring Task 2 already put in place (the Vite plugin import/config) — this step's job is to add `i18n`, `sitemap`, and the `node` adapter around it, not to remove Tailwind. If Task 2 flagged that this project is actually on Tailwind v3 tooling (`@astrojs/tailwind` integration), keep `import tailwind from "@astrojs/tailwind";` and `tailwind()` in `integrations` instead of the `vite.plugins` block above.
 
-- [ ] **Step 3: Verify build still succeeds**
+- [x] **Step 3: Verify build still succeeds**
 
 Run: `pnpm astro build`
 Expected: exits 0.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add astro.config.mjs package.json pnpm-lock.yaml
 git commit -m "chore: configure i18n, sitemap, and node adapter"
 ```
 
-### Task 5: Add @lucide/astro and self-hosted font
+### Task 5: Add @lucide/astro and self-hosted font — DONE (commits `6121b86`, corrected in `67d267c`)
 
 **Files:**
 - Modify: `package.json`
 
-- [ ] **Step 1: Install packages**
+- [x] **Step 1: Install packages**
 
 Run: `pnpm add @lucide/astro @fontsource/plus-jakarta-sans`
 Expected: both added to dependencies in package.json.
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml
 git commit -m "chore: add @lucide/astro and self-hosted font"
 ```
 
-### Task 6: Environment variable scaffolding
+### Task 6: Environment variable scaffolding — DONE (commit `204c143`)
 
 **Files:**
 - Create: `.env.example`, `src/env.d.ts`
 
-- [ ] **Step 1: Write .env.example**
+- [x] **Step 1: Write .env.example**
 
 ```bash
 # SMTP (required for the contact form to actually send email, see docs/superpowers/specs/2026-09-21-runly-web-landing-design.md section 7)
@@ -342,7 +342,7 @@ CONTACT_TO_EMAIL=
 PUBLIC_SITE_URL=https://runly.mx
 ```
 
-- [ ] **Step 2: Write src/env.d.ts**
+- [x] **Step 2: Write src/env.d.ts**
 
 ```ts
 /// <reference types="astro/client" />
@@ -363,7 +363,7 @@ interface ImportMeta {
 }
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add .env.example src/env.d.ts
@@ -3519,6 +3519,8 @@ git commit -m "feat: add contact section with client-side submit handling"
 
 ### Task 25: Spanish homepage (`/`)
 
+**Important:** Task 4 set `output: "server"` (required for the live `/api/contact` route), which means every page is server-rendered on demand by default — the opposite of what the design spec wants for the marketing pages (prerendered/static for SEO and performance). `export const prerender = true;` opts this specific page back into static generation at build time; only `src/pages/api/contact.ts` (Task 30) stays server-rendered. Do not skip this line.
+
 **Files:**
 - Create: `src/pages/index.astro`
 - Modify: `src/pages/index.astro` (delete the placeholder created by Task 1 scaffold, replace entirely)
@@ -3543,6 +3545,8 @@ import WhyChooseSection from "../components/sections/WhyChooseSection.astro";
 import FaqSection from "../components/sections/FaqSection.astro";
 import ContactSection from "../components/sections/ContactSection.astro";
 import { getDictionary } from "../i18n";
+
+export const prerender = true;
 
 const locale = "es" as const;
 const dict = getDictionary(locale);
@@ -3611,6 +3615,8 @@ import WhyChooseSection from "../../components/sections/WhyChooseSection.astro";
 import FaqSection from "../../components/sections/FaqSection.astro";
 import ContactSection from "../../components/sections/ContactSection.astro";
 import { getDictionary } from "../../i18n";
+
+export const prerender = true;
 
 const locale = "en" as const;
 const dict = getDictionary(locale);
