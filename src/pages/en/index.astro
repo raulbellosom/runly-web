@@ -1,0 +1,46 @@
+---
+// src/pages/en/index.astro
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import Hero from "../../components/sections/Hero.astro";
+import FlexibilitySection from "../../components/sections/FlexibilitySection.astro";
+import ModulesCatalogSection from "../../components/sections/ModulesCatalogSection.astro";
+import Rm3ArchitectureSection from "../../components/sections/Rm3ArchitectureSection.astro";
+import ModulesClassificationSection from "../../components/sections/ModulesClassificationSection.astro";
+import MiraiSection from "../../components/sections/MiraiSection.astro";
+import MultiCompanySection from "../../components/sections/MultiCompanySection.astro";
+import ImplementationSection from "../../components/sections/ImplementationSection.astro";
+import WhyChooseSection from "../../components/sections/WhyChooseSection.astro";
+import FaqSection from "../../components/sections/FaqSection.astro";
+import ContactSection from "../../components/sections/ContactSection.astro";
+import { getDictionary } from "../../i18n";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const dict = getDictionary(locale);
+---
+
+<BaseLayout title={dict.meta.title} description={dict.meta.description} locale={locale} path="/en/">
+  <Header locale={locale} nav={dict.nav} />
+  <main>
+    <Hero dict={dict} />
+    <FlexibilitySection dict={dict} />
+    <ModulesCatalogSection dict={dict} locale={locale} />
+    <Rm3ArchitectureSection dict={dict} />
+    <ModulesClassificationSection dict={dict} />
+    <MiraiSection dict={dict} />
+    <MultiCompanySection dict={dict} />
+    <ImplementationSection dict={dict} />
+    <WhyChooseSection dict={dict} />
+    <FaqSection dict={dict} />
+    <ContactSection dict={dict} locale={locale} />
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>
+
+<script>
+  const form = document.getElementById("contactForm") as HTMLFormElement | null;
+  if (form) form.dataset.renderedAt = String(Date.now());
+</script>
