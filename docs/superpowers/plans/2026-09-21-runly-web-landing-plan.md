@@ -372,18 +372,18 @@ git commit -m "chore: document required environment variables"
 
 ## Phase 1 — Data and i18n foundation
 
-### Task 7: i18n dictionary scaffolding
+### Task 7: i18n dictionary scaffolding — DONE (commit `c6df5c1`, diacritics fixed in `74d0d80`)
 
 **Files:**
 - Create: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`, `src/i18n/index.ts`
 - Test: `src/i18n/__tests__/dictionary.test.ts`
 
-- [ ] **Step 1: Add Vitest**
+- [x] **Step 1: Add Vitest**
 
 Run: `pnpm add -D vitest`
 Add to package.json scripts: `"test": "vitest run"`.
 
-- [ ] **Step 2: Write the failing test (dictionary key parity)**
+- [x] **Step 2: Write the failing test (dictionary key parity)**
 
 ```ts
 // src/i18n/__tests__/dictionary.test.ts
@@ -407,12 +407,12 @@ describe("i18n dictionaries", () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `pnpm test`
 Expected: FAIL, cannot find module `../es` (files do not exist yet).
 
-- [ ] **Step 4: Write the dictionary type contract**
+- [x] **Step 4: Write the dictionary type contract**
 
 ```ts
 // src/i18n/types.ts
@@ -460,7 +460,7 @@ export interface SiteDictionary {
 }
 ```
 
-- [ ] **Step 5: Write es.ts and en.ts with the nav and footer content**
+- [x] **Step 5: Write es.ts and en.ts with the nav and footer content**
 
 ```ts
 // src/i18n/es.ts
@@ -554,7 +554,7 @@ export const en: SiteDictionary = {
 };
 ```
 
-- [ ] **Step 6: Write the locale resolver helper**
+- [x] **Step 6: Write the locale resolver helper**
 
 ```ts
 // src/i18n/index.ts
@@ -573,25 +573,25 @@ export function getDictionary(locale: string): SiteDictionary {
 export * from "./types";
 ```
 
-- [ ] **Step 7: Run test to verify it passes**
+- [x] **Step 7: Run test to verify it passes**
 
 Run: `pnpm test`
 Expected: PASS (1 test).
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add package.json src/i18n
 git commit -m "feat: add i18n dictionary contract with parity test"
 ```
 
-### Task 8: Real module catalog data (src/data/modules.ts)
+### Task 8: Real module catalog data (src/data/modules.ts) — DONE (commit `f61512a`, fixed in `74d0d80`)
 
 **Files:**
 - Create: `src/data/modules.ts`
 - Test: `src/data/__tests__/modules.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```ts
 // src/data/__tests__/modules.test.ts
@@ -625,12 +625,12 @@ describe("modules catalog", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `pnpm test`
 Expected: FAIL, cannot find module `../modules`.
 
-- [ ] **Step 3: Write src/data/modules.ts**
+- [x] **Step 3: Write src/data/modules.ts**
 
 Use the table in the "Real module catalog" section at the top of this plan for every field. Full file:
 
@@ -978,24 +978,24 @@ export const roadmap: RoadmapEntry[] = [
 ];
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `pnpm test`
 Expected: PASS (4 tests).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/data
 git commit -m "feat: add real Runly module catalog data"
 ```
 
-### Task 9: Site-wide constants (src/consts.ts)
+### Task 9: Site-wide constants (src/consts.ts) — DONE (commit `7a25009`)
 
 **Files:**
 - Create: `src/consts.ts`
 
-- [ ] **Step 1: Write the constants file**
+- [x] **Step 1: Write the constants file**
 
 ```ts
 // src/consts.ts
@@ -1013,7 +1013,7 @@ export const COMPANY_NAME = "Racoon Devs";
 export const COMPANY_URL = "https://racoondevs.com";
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/consts.ts
