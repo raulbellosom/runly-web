@@ -93,4 +93,23 @@ export interface SiteDictionary {
     bannerDescription: string;
     bannerCta: string;
   };
+  mirai: {
+    badge: string;
+    title: string;
+    titleHighlight: string;
+    description: string;
+    capabilities: { icon: string; color: string; title: string; description: string }[];
+    demoLabel: string;
+    demoContext: string;
+    demoDisclaimer: string;
+    demoUserMessage: string;
+    demoAssistantIntro: string;
+    demoLineCompanyA: string;
+    demoLineCompanyB: string;
+    demoTotalLabel: string;
+    demoConfirmation: string;
+    demoPromptsLabel: string;
+    demoPrompt1: string;
+    demoPrompt2: string;
+  };
 }
