@@ -3549,7 +3549,7 @@ git commit -m "feat: add contact section with client-side submit handling"
 
 ## Phase 4 — Page assembly
 
-### Task 25: Spanish homepage (`/`)
+### Task 25: Spanish homepage (`/`) — DONE (commit `4b24c83`)
 
 **Important:** Task 4 set `output: "server"` (required for the live `/api/contact` route), which means every page is server-rendered on demand by default — the opposite of what the design spec wants for the marketing pages (prerendered/static for SEO and performance). `export const prerender = true;` opts this specific page back into static generation at build time; only `src/pages/api/contact.ts` (Task 30) stays server-rendered. Do not skip this line.
 
@@ -3557,7 +3557,7 @@ git commit -m "feat: add contact section with client-side submit handling"
 - Create: `src/pages/index.astro`
 - Modify: `src/pages/index.astro` (delete the placeholder created by Task 1 scaffold, replace entirely)
 
-- [ ] **Step 1: Write src/pages/index.astro**
+- [x] **Step 1: Write src/pages/index.astro**
 
 ```astro
 ---
@@ -3608,24 +3608,24 @@ const dict = getDictionary(locale);
 </script>
 ```
 
-- [ ] **Step 2: Verify the dev server renders it**
+- [x] **Step 2: Verify the dev server renders it**
 
 Run: `pnpm astro dev --port 4321 &` then `curl -s http://localhost:4321/ | grep -o "Business in motion" | head -1` (stop the server after with `kill %1`).
 Expected: prints `Business in motion` (confirms the page rendered past the hero, since that phrase only appears once the layout and hero mount correctly).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/pages/index.astro
 git commit -m "feat: assemble spanish homepage"
 ```
 
-### Task 26: English homepage (`/en/`)
+### Task 26: English homepage (`/en/`) — DONE (commit `4b24c83`)
 
 **Files:**
 - Create: `src/pages/en/index.astro`
 
-- [ ] **Step 1: Write src/pages/en/index.astro**
+- [x] **Step 1: Write src/pages/en/index.astro**
 
 Identical structure to Task 25, with `locale = "en"` and `path="/en/"`:
 
@@ -3678,12 +3678,12 @@ const dict = getDictionary(locale);
 </script>
 ```
 
-- [ ] **Step 2: Verify both locales build**
+- [x] **Step 2: Verify both locales build**
 
 Run: `pnpm astro build`
 Expected: exits 0, `dist/client/index.html` and `dist/client/en/index.html` both exist (check: `ls dist/client/index.html dist/client/en/index.html`).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/pages/en/index.astro
