@@ -1418,7 +1418,7 @@ git commit -m "feat: add SectionHeading and GlassCard primitives"
 
 Each section task extends the i18n dictionary (Modify `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts` by adding one new top-level key to `SiteDictionary`) and then adds the matching Astro component. After writing the dictionary addition, re-run `pnpm test` (dictionary parity test from Task 7) before moving on — this catches missing translations immediately.
 
-### Task 14: Hero section
+### Task 14: Hero section — DONE (commit `53046db`; follow-up fixes in `d58b60a`: localized `imageAlt`, renamed `Building2` to `BuildingComplex`)
 
 Source: `code.html` lines 136-219.
 
@@ -1426,7 +1426,7 @@ Source: `code.html` lines 136-219.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/Hero.astro`
 
-- [ ] **Step 1: Add the `hero` key to the dictionary type**
+- [x] **Step 1: Add the `hero` key to the dictionary type**
 
 Append inside `SiteDictionary` in `src/i18n/types.ts`:
 
@@ -1449,7 +1449,7 @@ Append inside `SiteDictionary` in `src/i18n/types.ts`:
   };
 ```
 
-- [ ] **Step 2: Add the `hero` content to es.ts (insert before the closing brace of the exported object)**
+- [x] **Step 2: Add the `hero` content to es.ts (insert before the closing brace of the exported object)**
 
 ```ts
   hero: {
@@ -1471,7 +1471,7 @@ Append inside `SiteDictionary` in `src/i18n/types.ts`:
   },
 ```
 
-- [ ] **Step 3: Add the matching `hero` content to en.ts**
+- [x] **Step 3: Add the matching `hero` content to en.ts**
 
 ```ts
   hero: {
@@ -1493,12 +1493,12 @@ Append inside `SiteDictionary` in `src/i18n/types.ts`:
   },
 ```
 
-- [ ] **Step 4: Run the dictionary parity test**
+- [x] **Step 4: Run the dictionary parity test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write Hero.astro**
+- [x] **Step 5: Write Hero.astro**
 
 ```astro
 ---
@@ -1589,14 +1589,14 @@ const { hero } = dict;
 
 Note: `product-dashboard-preview.png` does not exist yet. Task 32 (brand assets) copies a real screenshot once the user provides one; until then use a neutral placeholder image of the same aspect ratio so layout does not break, and track this as a known gap in the final report (do not claim it is a real screenshot).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/Hero.astro
 git commit -m "feat: add hero section"
 ```
 
-### Task 15: Flexibility section (4-card grid)
+### Task 15: Flexibility section (4-card grid) — DONE (commit `6812598`; icon renamed to `BuildingComplex` in `d58b60a`)
 
 Source: `code.html` lines 220-277.
 
@@ -1604,7 +1604,7 @@ Source: `code.html` lines 220-277.
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/FlexibilitySection.astro`
 
-- [ ] **Step 1: Add the `flexibility` key to types.ts**
+- [x] **Step 1: Add the `flexibility` key to types.ts**
 
 ```ts
   flexibility: {
@@ -1615,7 +1615,7 @@ Source: `code.html` lines 220-277.
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   flexibility: {
@@ -1656,7 +1656,7 @@ Source: `code.html` lines 220-277.
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   flexibility: {
@@ -1697,12 +1697,12 @@ Source: `code.html` lines 220-277.
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write FlexibilitySection.astro**
+- [x] **Step 5: Write FlexibilitySection.astro**
 
 ```astro
 ---
@@ -1748,14 +1748,14 @@ const colorMap: Record<string, string> = {
 </section>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/FlexibilitySection.astro
 git commit -m "feat: add flexibility section"
 ```
 
-### Task 16: Modules catalog section (data-driven, filterable)
+### Task 16: Modules catalog section (data-driven, filterable) — DONE (commit `f33d2ad`; `aria-pressed` + icon-existence test added in `d58b60a`, which also added `vitest.config.ts` using `getViteConfig` so vitest can resolve `.astro` imports like `@lucide/astro`)
 
 Source: `code.html` lines 278-539. This is the only section driven by `src/data/modules.ts` (Task 8) instead of literal copy in the dictionary — the dictionary only holds the section heading and the two static microcopy strings (roadmap intro, filter aria-labels).
 
@@ -1763,7 +1763,7 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
 - Modify: `src/i18n/types.ts`, `src/i18n/es.ts`, `src/i18n/en.ts`
 - Create: `src/components/sections/ModulesCatalogSection.astro`
 
-- [ ] **Step 1: Add the `modulesCatalog` key to types.ts**
+- [x] **Step 1: Add the `modulesCatalog` key to types.ts**
 
 ```ts
   modulesCatalog: {
@@ -1776,7 +1776,7 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
   };
 ```
 
-- [ ] **Step 2: Add content to es.ts**
+- [x] **Step 2: Add content to es.ts**
 
 ```ts
   modulesCatalog: {
@@ -1791,7 +1791,7 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
   },
 ```
 
-- [ ] **Step 3: Add content to en.ts**
+- [x] **Step 3: Add content to en.ts**
 
 ```ts
   modulesCatalog: {
@@ -1806,12 +1806,12 @@ Source: `code.html` lines 278-539. This is the only section driven by `src/data/
   },
 ```
 
-- [ ] **Step 4: Run test**
+- [x] **Step 4: Run test**
 
 Run: `pnpm test`
 Expected: PASS.
 
-- [ ] **Step 5: Write ModulesCatalogSection.astro**
+- [x] **Step 5: Write ModulesCatalogSection.astro**
 
 ```astro
 ---
@@ -1908,7 +1908,7 @@ const { modulesCatalog } = dict;
 </script>
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/i18n src/components/sections/ModulesCatalogSection.astro
