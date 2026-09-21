@@ -104,4 +104,43 @@ export const es: SiteDictionary = {
       "Nuestro equipo en Racoon Devs despliega nuevos módulos y mejoras mensualmente. Todos los clientes con soporte activo reciben acceso inmediato a las actualizaciones.",
     comingSoonLabel: "Próximamente",
   },
+  rm3: {
+    badge: "Arquitectura de vanguardia",
+    title: "Una plataforma. Infinitas posibilidades de adaptación.",
+    description:
+      "RUNLY está construido sobre el motor modular RM3, diseñado para desacoplar procesos, permitir microservicios estables y garantizar actualizaciones sin interrupciones operativas.",
+    coreTitle: "RUNLY CORE",
+    coreSubtitle: "Motor Modular RM3",
+    coreDescription: "Orquestador de eventos, autenticación federada, control de acceso RBAC y sincronización global.",
+    leftNodes: [
+      { icon: "Boxes", label: "Inventario Core", tag: "Micro-app" },
+      { icon: "MessageCircle", label: "Chat en Tiempo Real", tag: "Websockets" },
+      { icon: "Building2", label: "Multi-Tenant Hub", tag: "Aislamiento" },
+    ],
+    rightNodes: [
+      { icon: "Sparkles", label: "Motor MirAI", tag: "LLM Context" },
+      { icon: "GitBranch", label: "Módulos Custom", tag: "A la medida" },
+      { icon: "CloudUpload", label: "APIs Externas", tag: "Bancos / SAT" },
+    ],
+    pillars: [
+      {
+        icon: "Boxes",
+        title: "Módulos independientes integrables",
+        description:
+          "Cada módulo funciona como un componente desacoplado. Puedes actualizar o migrar un área específica sin riesgo de caídas generales.",
+      },
+      {
+        icon: "Split",
+        title: "Ampliación dinámica",
+        description:
+          "Incorpora campos personalizados, reportes específicos y nuevos flujos sin romper la compatibilidad con futuras versiones de RUNLY.",
+      },
+      {
+        icon: "ShieldCheck",
+        title: "Flexibilidad operativa segura",
+        description:
+          "Garantía de rendimiento óptimo con control minucioso sobre permisos, trazabilidad de accesos y auditoría de cambios.",
+      },
+    ],
+  },
 };

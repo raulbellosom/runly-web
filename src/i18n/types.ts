@@ -71,4 +71,15 @@ export interface SiteDictionary {
     roadmapDescription: string;
     comingSoonLabel: string;
   };
+  rm3: {
+    badge: string;
+    title: string;
+    description: string;
+    coreTitle: string;
+    coreSubtitle: string;
+    coreDescription: string;
+    leftNodes: { icon: string; label: string; tag: string }[];
+    rightNodes: { icon: string; label: string; tag: string }[];
+    pillars: { icon: string; title: string; description: string }[];
+  };
 }

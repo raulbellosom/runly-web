@@ -1,0 +1,83 @@
+---
+// src/components/sections/Rm3ArchitectureSection.astro
+import * as Icons from "@lucide/astro";
+import { Atom } from "@lucide/astro";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+}
+
+const { dict } = Astro.props;
+const { rm3 } = dict;
+
+function nodeIcon(name: string) {
+  return (Icons as Record<string, any>)[name] ?? Icons.Boxes;
+}
+---
+
+<section class="py-24 bg-runly-navy text-white relative overflow-hidden bg-grid-pattern-dark reveal-on-scroll" id="motor-rm3">
+  <div class="absolute -top-40 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-40 left-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-bold text-orange-400 uppercase tracking-widest px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20">{rm3.badge}</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-4">{rm3.title}</h2>
+      <p class="mt-4 text-base sm:text-lg text-slate-300">{rm3.description}</p>
+    </div>
+
+    <div class="my-16 p-8 rounded-3xl glass-card-dark border border-slate-700/60 max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div class="space-y-4">
+          {rm3.leftNodes.map((node) => {
+            const Icon = nodeIcon(node.icon);
+            return (
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <Icon class="w-4 h-4 text-orange-400" />
+                  <span class="text-sm font-semibold">{node.label}</span>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400">{node.tag}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div class="text-center p-8 rounded-2xl bg-gradient-to-b from-slate-900 to-runly-midnight border-2 border-orange-500/80 shadow-glow-orange relative">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-500/20 border border-orange-500 flex items-center justify-center text-orange-400 mb-4">
+            <Atom class="w-8 h-8" />
+          </div>
+          <h3 class="text-xl font-extrabold text-white">{rm3.coreTitle}</h3>
+          <p class="text-xs text-orange-400 font-mono mt-1">{rm3.coreSubtitle}</p>
+          <p class="text-xs text-slate-300 mt-3">{rm3.coreDescription}</p>
+        </div>
+        <div class="space-y-4">
+          {rm3.rightNodes.map((node) => {
+            const Icon = nodeIcon(node.icon);
+            return (
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <Icon class="w-4 h-4 text-pink-400" />
+                  <span class="text-sm font-semibold">{node.label}</span>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400">{node.tag}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {rm3.pillars.map((pillar) => {
+        const Icon = nodeIcon(pillar.icon);
+        return (
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+            <Icon class="w-6 h-6 text-orange-400 mb-3" />
+            <h4 class="text-base font-bold mb-2">{pillar.title}</h4>
+            <p class="text-sm text-slate-300 leading-relaxed">{pillar.description}</p>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
