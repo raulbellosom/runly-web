@@ -4292,12 +4292,12 @@ git commit -m "feat: wire the contact API route with rate limiting and honeypot 
 
 ## Phase 6 — SEO finishing touches
 
-### Task 31: robots.txt
+### Task 31: robots.txt — DONE (commit `948f97f`)
 
 **Files:**
 - Create: `public/robots.txt`
 
-- [ ] **Step 1: Write robots.txt**
+- [x] **Step 1: Write robots.txt**
 
 ```
 User-agent: *
@@ -4307,12 +4307,12 @@ Disallow: /api/
 Sitemap: https://runly.mx/sitemap-index.xml
 ```
 
-- [ ] **Step 2: Verify the sitemap is generated**
+- [x] **Step 2: Verify the sitemap is generated**
 
 Run: `pnpm astro build`
 Expected: `dist/client/sitemap-index.xml` and `dist/client/sitemap-0.xml` exist and list both `https://runly.mx/` and `https://runly.mx/en/` (check: `grep -o "runly.mx[^<]*" dist/client/sitemap-0.xml`).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add public/robots.txt
@@ -4321,12 +4321,12 @@ git commit -m "chore: add robots.txt pointing to the sitemap"
 
 ## Phase 7 — Brand assets
 
-### Task 32: Copy real brand assets into the project
+### Task 32: Copy real brand assets into the project — DONE (commit `55661b9`; no ImageMagick available, so the hero/OG placeholders were built as SVG referencing the real isotype instead of PNG — flagged for a real screenshot/OG image before launch)
 
 **Files:**
 - Create: `public/brand/runly-logo-light.png`, `public/brand/runly-logo-dark.png`, `public/brand/runly-isotipo-light.png`, `public/brand/runly-isotipo-dark.png`, `public/brand/runly-app-icon-light.png`, `public/brand/runly-app-icon-dark.png`, `public/favicon.svg`
 
-- [ ] **Step 1: Copy the confirmed brand files from Downloads**
+- [x] **Step 1: Copy the confirmed brand files from Downloads**
 
 Run:
 ```bash
@@ -4342,12 +4342,12 @@ cp "/c/Users/raulb/Downloads/runly-isotipo-alter-blue.svg" public/brand/runly-is
 ```
 Expected: all 9 files copied, `ls public/brand` shows them.
 
-- [ ] **Step 2: Generate the favicon from the SVG isotype**
+- [x] **Step 2: Generate the favicon from the SVG isotype**
 
 Run: `cp public/brand/runly-isotipo-alter-blue.svg public/favicon.svg`
 Expected: `public/favicon.svg` exists (Header/BaseLayout already reference `/favicon.svg` from Task 10).
 
-- [ ] **Step 3: Create a neutral placeholder for the hero product screenshot and the OG cover image**
+- [x] **Step 3: Create a neutral placeholder for the hero product screenshot and the OG cover image**
 
 There is no real Runly dashboard screenshot available in this session. Rather than fabricate one, create a clearly-labeled placeholder using the real isotype on a brand-colored background at the correct aspect ratio, so layout and CLS stay correct until a real screenshot is supplied:
 
@@ -4363,7 +4363,7 @@ magick -size 1200x630 xc:"#070D1E" \
 ```
 Expected: both files created at the exact dimensions referenced in Hero.astro (Task 14) and SiteHead.astro (Task 10). If ImageMagick is not available, use any image editor to produce the same two files at the same dimensions — the exact visual is a placeholder pending Task 40's follow-up (real screenshot).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add public/brand public/favicon.svg
@@ -4374,12 +4374,12 @@ Note: `product-dashboard-preview.png` and `og-cover.png` are explicitly placehol
 
 ## Phase 8 — Docker and deployment
 
-### Task 33: Dockerfile
+### Task 33: Dockerfile — DONE (commit `b796ed5`; added node_modules copy to runtime stage since Astro's node adapter needs it; NOT smoke-tested with a real docker build, Docker Desktop daemon was not running in this session)
 
 **Files:**
 - Create: `Dockerfile`, `.dockerignore`
 
-- [ ] **Step 1: Write .dockerignore**
+- [x] **Step 1: Write .dockerignore**
 
 ```
 node_modules
@@ -4391,7 +4391,7 @@ dist
 !.env.example
 ```
 
-- [ ] **Step 2: Write the multi-stage Dockerfile**
+- [x] **Step 2: Write the multi-stage Dockerfile**
 
 ```dockerfile
 # Dockerfile
@@ -4413,12 +4413,12 @@ EXPOSE 4321
 CMD ["node", "./dist/server/entry.mjs"]
 ```
 
-- [ ] **Step 3: Verify the image builds**
+- [ ] **Step 3: Verify the image builds** — NOT DONE: Docker Desktop's daemon was not running in this session (`docker ps` failed to connect). Run this yourself before deploying.
 
 Run: `docker build -t runly-web:local .`
 Expected: exits 0.
 
-- [ ] **Step 4: Verify the container serves the homepage**
+- [ ] **Step 4: Verify the container serves the homepage** — NOT DONE, same reason as Step 3.
 
 Run:
 ```bash
@@ -4432,19 +4432,19 @@ docker rm -f runly-web-smoke
 ```
 Expected: prints `200`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Dockerfile .dockerignore
 git commit -m "chore: add production dockerfile"
 ```
 
-### Task 34: docker-compose service
+### Task 34: docker-compose service — DONE (commit `d1a778a`; `docker compose config` validated successfully)
 
 **Files:**
 - Create: `docker-compose.yml`
 
-- [ ] **Step 1: Write docker-compose.yml**
+- [x] **Step 1: Write docker-compose.yml**
 
 ```yaml
 services:
@@ -4463,24 +4463,24 @@ services:
       retries: 3
 ```
 
-- [ ] **Step 2: Verify compose config is valid**
+- [x] **Step 2: Verify compose config is valid**
 
 Run: `docker compose config`
 Expected: exits 0, prints the resolved config with no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add docker-compose.yml
 git commit -m "chore: add docker-compose service definition"
 ```
 
-### Task 35: README with dev, build, and deploy instructions
+### Task 35: README with dev, build, and deploy instructions — DONE (commit `d6a1511`)
 
 **Files:**
 - Create: `README.md`
 
-- [ ] **Step 1: Write README.md**
+- [x] **Step 1: Write README.md**
 
 ```markdown
 # Runly Web
@@ -4531,7 +4531,7 @@ This runs the site on port 4321 inside the container. It does **not** configure 
 None of these three steps are executed by this repository or its tooling — they are infrastructure changes outside the scope of the landing page build, and must be done deliberately against the real production environment.
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add README.md
