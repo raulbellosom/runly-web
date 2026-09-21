@@ -1,6 +1,6 @@
 ---
 // src/components/sections/FlexibilitySection.astro
-import { Puzzle, Zap, Building2, TrendingUp } from "@lucide/astro";
+import { Puzzle, Zap, BuildingComplex, TrendingUp } from "@lucide/astro";
 import SectionHeading from "../ui/SectionHeading.astro";
 import type { SiteDictionary } from "../../i18n/types";
 
@@ -11,7 +11,10 @@ interface Props {
 const { dict } = Astro.props;
 const { flexibility } = dict;
 
-const iconMap = { PuzzlePiece: Puzzle, Zap, Building2, TrendingUp } as const;
+// Dictionary content still stores the icon name as "Building2" (matching the
+// real product's own icon choice) — mapped here to the non-deprecated
+// @lucide/astro export so the rendered icon and the type-checker both stay clean.
+const iconMap = { PuzzlePiece: Puzzle, Zap, Building2: BuildingComplex, TrendingUp } as const;
 const colorMap: Record<string, string> = {
   orange: "bg-orange-100 text-orange-600 hover:border-orange-300",
   blue: "bg-blue-100 text-blue-600 hover:border-blue-300",

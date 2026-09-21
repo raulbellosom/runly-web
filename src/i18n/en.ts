@@ -41,6 +41,7 @@ export const en: SiteDictionary = {
     },
   },
   hero: {
+    imageAlt: "RUNLY ERP main interface",
     badge: "Your business. Your way of working.",
     titleLine1: "Your business in motion.",
     titleLine2: "Everything connected with RUNLY.",

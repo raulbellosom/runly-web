@@ -23,6 +23,7 @@ const { modulesCatalog } = dict;
         <button
           class={`filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${i === 0 ? "active bg-slate-900 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
           data-filter={cat.id}
+          aria-pressed={i === 0 ? "true" : "false"}
         >
           {cat.label[locale]}{cat.id === "all" ? ` (${modules.length})` : ""}
         </button>
@@ -79,9 +80,11 @@ const { modulesCatalog } = dict;
       filterBtns.forEach((b) => {
         b.classList.remove("bg-slate-900", "text-white");
         b.classList.add("bg-slate-100", "text-slate-600");
+        b.setAttribute("aria-pressed", "false");
       });
       btn.classList.remove("bg-slate-100", "text-slate-600");
       btn.classList.add("bg-slate-900", "text-white");
+      btn.setAttribute("aria-pressed", "true");
       const category = btn.getAttribute("data-filter");
       cards.forEach((card) => {
         const match = category === "all" || card.getAttribute("data-category") === category;

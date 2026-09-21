@@ -41,6 +41,7 @@ export interface SiteDictionary {
   nav: NavDictionary;
   footer: FooterDictionary;
   hero: {
+    imageAlt: string;
     badge: string;
     titleLine1: string;
     titleLine2: string;

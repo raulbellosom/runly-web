@@ -1,6 +1,6 @@
 ---
 // src/components/sections/Hero.astro
-import { Boxes, Building2, SlidersHorizontal, Lock, Network, Sparkles } from "@lucide/astro";
+import { Boxes, BuildingComplex, SlidersHorizontal, Lock, Network, Sparkles } from "@lucide/astro";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -30,7 +30,7 @@ const { hero } = dict;
     <div class="flex items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold text-slate-500 mb-14">
       <span class="flex items-center gap-1.5"><Boxes class="w-4 h-4 text-orange-500" /> {hero.badgeModular}</span>
       <span class="text-slate-300">&bull;</span>
-      <span class="flex items-center gap-1.5"><Building2 class="w-4 h-4 text-blue-600" /> {hero.badgeMultiCompany}</span>
+      <span class="flex items-center gap-1.5"><BuildingComplex class="w-4 h-4 text-blue-600" /> {hero.badgeMultiCompany}</span>
       <span class="text-slate-300">&bull;</span>
       <span class="flex items-center gap-1.5"><SlidersHorizontal class="w-4 h-4 text-emerald-500" /> {hero.badgeCustomizable}</span>
     </div>
@@ -51,7 +51,7 @@ const { hero } = dict;
           </div>
           <div class="relative">
             <img
-              alt="RUNLY - interfaz principal"
+              alt={hero.imageAlt}
               class="w-full h-auto object-cover select-none"
               src="/brand/product-dashboard-preview.png"
               width="1600"

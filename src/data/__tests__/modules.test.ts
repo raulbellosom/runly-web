@@ -1,6 +1,7 @@
 // src/data/__tests__/modules.test.ts
 import { describe, expect, it } from "vitest";
-import { modules, moduleCategories } from "../modules";
+import * as Icons from "@lucide/astro";
+import { modules, moduleCategories, roadmap } from "../modules";
 
 describe("modules catalog", () => {
   it("has exactly 21 real Runly modules", () => {
@@ -24,6 +25,16 @@ describe("modules catalog", () => {
     const categoryIds = new Set(moduleCategories.map((c) => c.id));
     for (const mod of modules) {
       expect(categoryIds.has(mod.category)).toBe(true);
+    }
+  });
+
+  it("every module and roadmap icon resolves to a real @lucide/astro export", () => {
+    const iconMap = Icons as unknown as Record<string, unknown>;
+    for (const mod of modules) {
+      expect(iconMap[mod.icon], `unknown icon "${mod.icon}" on module "${mod.id}"`).toBeDefined();
+    }
+    for (const item of roadmap) {
+      expect(iconMap[item.icon], `unknown icon "${item.icon}" on roadmap item "${item.name.en}"`).toBeDefined();
     }
   });
 });
