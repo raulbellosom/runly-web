@@ -57,6 +57,11 @@ export interface SiteDictionary {
     floatingMiraiTitle: string;
     floatingMiraiSubtitle: string;
   };
+  about: {
+    eyebrow: string;
+    title: string;
+    paragraphs: string[];
+  };
   flexibility: {
     eyebrow: string;
     title: string;

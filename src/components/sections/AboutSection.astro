@@ -1,0 +1,21 @@
+---
+// src/components/sections/AboutSection.astro
+import SectionHeading from "../ui/SectionHeading.astro";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+}
+
+const { dict } = Astro.props;
+const { about } = dict;
+---
+
+<section class="py-16 bg-white" id="acerca-de">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading eyebrow={about.eyebrow} title={about.title} align="left" />
+    <div class="space-y-4 -mt-8">
+      {about.paragraphs.map((paragraph) => <p class="text-base text-slate-600 leading-relaxed">{paragraph}</p>)}
+    </div>
+  </div>
+</section>

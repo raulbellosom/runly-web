@@ -58,6 +58,15 @@ export const es: SiteDictionary = {
     floatingMiraiTitle: "MirAI asistente listo",
     floatingMiraiSubtitle: "100% contextual activo",
   },
+  about: {
+    eyebrow: "Acerca de RUNLY",
+    title: "¿Qué es RUNLY?",
+    paragraphs: [
+      "RUNLY es una plataforma de gestión empresarial (ERP) modular, desarrollada por Racoon Devs, que permite a las empresas administrar sus operaciones, proyectos, finanzas, inventarios, empleados y comunicación interna desde un mismo lugar.",
+      "La plataforma integra herramientas de colaboración, mensajería, reuniones y gestión de calendarios para organizar el trabajo entre los miembros de una empresa.",
+      "Los usuarios pueden conectar su cuenta de Google para consultar en RUNLY los eventos de su Google Calendar. Este acceso es de solo lectura: RUNLY únicamente muestra los eventos existentes y no crea, modifica ni elimina eventos en el calendario de Google del usuario.",
+    ],
+  },
   flexibility: {
     eyebrow: "Flexibilidad sin ataduras",
     title: "No cambies tu forma de trabajar para adaptarte a un software.",

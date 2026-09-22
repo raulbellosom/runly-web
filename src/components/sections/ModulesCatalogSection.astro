@@ -36,7 +36,7 @@ const { modulesCatalog } = dict;
 
     <div class="relative -mx-4 px-4 sm:mx-0 sm:px-0">
       <div class="modules-scroll overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 snap-x snap-mandatory sm:snap-none">
-        <div class="grid grid-flow-col grid-rows-2 auto-cols-[42%] gap-3 sm:grid-flow-row sm:grid-rows-none sm:auto-cols-auto sm:grid-cols-3 md:grid-cols-4 sm:gap-6" id="modulesGrid">
+        <div class="grid grid-flow-col grid-rows-2 auto-cols-[42%] gap-3 sm:grid-flow-row sm:grid-rows-none sm:auto-cols-auto sm:grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] sm:gap-6" id="modulesGrid">
           {modules.map((mod) => {
             const Icon = resolveIcon(mod.icon);
             return (
