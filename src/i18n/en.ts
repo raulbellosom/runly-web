@@ -64,7 +64,7 @@ export const en: SiteDictionary = {
     paragraphs: [
       "RUNLY is a modular business management platform (ERP), built by Racoon Devs, that lets companies manage their operations, projects, finances, inventory, employees, and internal communication from one place.",
       "The platform brings together collaboration tools, messaging, meetings, and calendar management to help teams organize their work.",
-      "Users can connect their Google account to view their Google Calendar events inside RUNLY. This access is read-only: RUNLY only displays existing events and does not create, modify, or delete events on the user's Google Calendar.",
+      "Users can connect their Google account to view their Google Calendar events inside RUNLY.",
     ],
   },
   flexibility: {
