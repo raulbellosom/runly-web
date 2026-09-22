@@ -7,6 +7,7 @@ import "@fontsource/plus-jakarta-sans/700.css";
 import "@fontsource/plus-jakarta-sans/800.css";
 import "../styles/global.css";
 import SiteHead from "../components/layout/SiteHead.astro";
+import ChatWidgetIsland from "../components/ChatWidgetIsland";
 
 interface Props {
   title: string;
@@ -53,5 +54,22 @@ const { title, description, locale, path } = Astro.props;
         document.querySelectorAll(".reveal-on-scroll").forEach((el) => el.classList.add("is-visible"));
       }
     </script>
+    <script>
+      // Runly Growth analytics — no-ops when PUBLIC_RUNLY_ERP_URL/COMPANY
+      // aren't configured. Respects the site's analyticsMode (off /
+      // anonymous / consent_required) as set in Growth → Sitios conectados;
+      // this site has no cookie-consent banner yet, so we never call
+      // setConsent() ourselves — see README's Contact form / analytics notes.
+      import { runlySdk } from "../lib/runly-sdk";
+      runlySdk?.analytics.start().catch(() => {});
+    </script>
+    <!--
+      Guest live chat (runly.chat module via Growth). Renders nothing when
+      PUBLIC_RUNLY_* isn't configured, or when the ERP reports the chat
+      service unavailable/not installed — see ChatWidgetIsland.tsx.
+      client:idle: not critical to first paint, hydrate once the browser
+      is idle.
+    -->
+    <ChatWidgetIsland client:idle />
   </body>
 </html>

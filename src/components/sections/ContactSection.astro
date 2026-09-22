@@ -13,14 +13,15 @@ const { dict, locale } = Astro.props;
 const { contact } = dict;
 const waHref = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(contact.whatsappMessage)}`;
 const newTabHint = locale === "es" ? "(se abre en una pestaña nueva)" : "(opens in a new tab)";
-const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
-// Static build: no backend runs here. The form posts to an external API
-// configured at build time via PUBLIC_CONTACT_API_URL (safe to expose, it's
-// just a URL). See contact-api-reference/README.md for what that API must do.
-const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
+// Static build: no backend runs here. The form submits straight into the
+// Growth module of the Runly ERP instance via @raulbellosom/runly-sdk's
+// shared client (see src/lib/runly-sdk.ts). See README's Contact form
+// section for what these env vars need to be.
+const contactFormId = import.meta.env.PUBLIC_RUNLY_CONTACT_FORM_ID ?? "";
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
 ---
 
-{recaptchaSiteKey && <script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`} is:inline />}
+{turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline />}
 
 <section class="py-24 bg-white relative" id="contacto">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,7 +54,13 @@ const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
       <div class="lg:col-span-7">
         <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 border border-slate-200 shadow-sm">
           <h3 class="text-xl font-bold text-slate-900 mb-6">{contact.formTitle}</h3>
-          <form class="space-y-4" id="contactForm" data-locale={locale} data-recaptcha-site-key={recaptchaSiteKey} data-contact-api-url={contactApiUrl}>
+          <form
+            class="space-y-4"
+            id="contactForm"
+            data-locale={locale}
+            data-form-id={contactFormId}
+            data-turnstile-site-key={turnstileSiteKey}
+          >
             <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off" />
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -97,6 +104,7 @@ const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
               <input type="checkbox" name="consent" required class="mt-0.5" />
               <span>{contact.fields.consent}</span>
             </label>
+            {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-appearance="interaction-only"></div>}
             <button class="w-full py-3.5 rounded-xl text-white font-semibold text-sm runly-gradient-btn shadow-md flex items-center justify-center gap-2" id="submitBtn" type="submit" data-submitting={contact.submitting}>
               <span id="submitLabel">{contact.submit}</span>
               <Send id="submitIcon" class="w-3.5 h-3.5" />
@@ -115,6 +123,8 @@ const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
 </section>
 
 <script>
+  import { runlySdk } from "../../lib/runly-sdk";
+
   const form = document.getElementById("contactForm") as HTMLFormElement | null;
   const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement | null;
   const submitLabel = document.getElementById("submitLabel");
@@ -125,47 +135,32 @@ const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
 
   if (form && submitBtn && submitLabel && submitIcon && submitSpinner && success && errorBox) {
     const originalLabel = submitLabel.textContent ?? "";
+    const { formId, turnstileSiteKey } = form.dataset;
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       success.classList.add("hidden");
       errorBox.classList.add("hidden");
+
+      // PUBLIC_RUNLY_ERP_URL / PUBLIC_RUNLY_COMPANY / PUBLIC_RUNLY_CONTACT_FORM_ID
+      // aren't fully configured for this build: no ERP form to submit to yet.
+      // Fail loudly instead of pretending to succeed.
+      if (!runlySdk || !formId) {
+        errorBox.classList.remove("hidden");
+        return;
+      }
+
       submitBtn.disabled = true;
       submitLabel.textContent = submitBtn.dataset.submitting ?? originalLabel;
       submitIcon.classList.add("hidden");
       submitSpinner.classList.remove("hidden");
 
-      const contactApiUrl = form.dataset.contactApiUrl;
-      if (!contactApiUrl) {
-        // PUBLIC_CONTACT_API_URL isn't configured for this build: no backend
-        // to submit to yet. Fail loudly instead of posting to a relative
-        // path that doesn't exist on this static site.
-        errorBox.classList.remove("hidden");
-        submitBtn.disabled = false;
-        submitLabel.textContent = originalLabel;
-        submitIcon.classList.remove("hidden");
-        submitSpinner.classList.add("hidden");
-        return;
-      }
-
       const formData = new FormData(form);
-      const siteKey = form.dataset.recaptchaSiteKey;
-      let recaptchaToken = "";
-      if (siteKey) {
-        const grecaptcha = (window as any).grecaptcha;
-        if (grecaptcha) {
-          try {
-            recaptchaToken = await new Promise<string>((resolve, reject) => {
-              grecaptcha.ready(() => {
-                grecaptcha.execute(siteKey, { action: "contact_submit" }).then(resolve, reject);
-              });
-            });
-          } catch {
-            recaptchaToken = "";
-          }
-        }
-      }
+      const honeypot = formData.get("website");
+      const turnstile = (window as any).turnstile;
+      const turnstileToken = turnstileSiteKey ? (turnstile?.getResponse?.() ?? "") : "";
 
-      const payload = {
+      const values = {
         fullName: formData.get("fullName"),
         companyName: formData.get("companyName"),
         email: formData.get("email"),
@@ -174,25 +169,18 @@ const contactApiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? "";
         interest: formData.get("interest"),
         needs: formData.get("needs"),
         consent: formData.get("consent") === "on",
-        website: formData.get("website"), // honeypot, must stay empty
         locale: form.dataset.locale,
-        renderedAtMs: Number(form.dataset.renderedAt ?? Date.now()),
-        recaptchaToken,
       };
 
       try {
-        const response = await fetch(contactApiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+        await runlySdk.forms.submit(formId, values, {
+          idempotencyKey: crypto.randomUUID(),
+          honeypot: typeof honeypot === "string" ? honeypot : "",
+          ...(turnstileToken ? { turnstileToken } : {}),
         });
-        const result = await response.json();
-        if (response.ok && result.ok) {
-          form.reset();
-          success.classList.remove("hidden");
-        } else {
-          errorBox.classList.remove("hidden");
-        }
+        form.reset();
+        turnstile?.reset?.();
+        success.classList.remove("hidden");
       } catch {
         errorBox.classList.remove("hidden");
       } finally {

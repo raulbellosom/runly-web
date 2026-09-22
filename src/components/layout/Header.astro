@@ -1,6 +1,6 @@
 ---
 // src/components/layout/Header.astro
-import { Menu, ArrowRight } from "@lucide/astro";
+import { Menu, X, ArrowRight } from "@lucide/astro";
 import type { NavDictionary } from "../../i18n/types";
 
 interface Props {
@@ -56,12 +56,13 @@ const links = [
         <span>{nav.requestDemo}</span>
         <ArrowRight class="w-3.5 h-3.5" />
       </a>
-      <button aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" class="lg:hidden p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
-        <Menu class="w-6 h-6" />
+      <button aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu" class="lg:hidden relative p-2 text-slate-700 hover:text-runly-orange rounded-lg focus:outline-none" id="mobileMenuBtn">
+        <Menu class="menu-icon-open w-6 h-6" />
+        <X class="menu-icon-close w-6 h-6 absolute inset-0 m-auto" />
       </button>
     </div>
   </div>
-  <div class="hidden lg:hidden border-t border-slate-200 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3" id="mobileMenu">
+  <div class="mobile-nav-panel lg:hidden absolute inset-x-0 top-full z-40 border-t border-slate-200 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3 shadow-lg" id="mobileMenu">
     {links.map((link) => (
       <a class="block py-2 text-sm font-medium text-slate-700 hover:text-runly-orange" href={link.href}>{link.label}</a>
     ))}
@@ -87,12 +88,12 @@ const links = [
   const mobileMenu = document.getElementById("mobileMenu");
   if (mobileBtn && mobileMenu) {
     const closeMenu = () => {
-      mobileMenu.classList.add("hidden");
+      mobileMenu.classList.remove("is-open");
       mobileBtn.setAttribute("aria-expanded", "false");
     };
     mobileBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = !mobileMenu.classList.toggle("hidden");
+      const isOpen = mobileMenu.classList.toggle("is-open");
       mobileBtn.setAttribute("aria-expanded", String(isOpen));
     });
     mobileMenu.querySelectorAll("a").forEach((link) => {
