@@ -175,9 +175,12 @@ export interface SiteDictionary {
       phone: string;
       phonePlaceholder: string;
       teamSize: string;
-      teamSizeOptions: string[];
+      // value is a stable, locale-independent key sent to Runly's form
+      // validation (the ERP's field "options" whitelist matches on this,
+      // not on the translated label) — must be identical across en/es.
+      teamSizeOptions: { value: string; label: string }[];
       interest: string;
-      interestOptions: string[];
+      interestOptions: { value: string; label: string }[];
       needs: string;
       needsPlaceholder: string;
       consent: string;
