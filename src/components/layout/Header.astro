@@ -16,12 +16,12 @@ const langSwitcher = [
 ];
 
 const links = [
-  { href: "#hero", label: nav.platform },
-  { href: "#modulos", label: nav.modules },
-  { href: "#motor-rm3", label: nav.rm3 },
-  { href: "#mirai", label: nav.mirai, badge: "IA" },
-  { href: "#implementacion", label: nav.implementation },
-  { href: "#contacto", label: nav.contact },
+  { href: `${prefix}/#hero`, label: nav.platform },
+  { href: `${prefix}/#modulos`, label: nav.modules },
+  { href: `${prefix}/#motor-rm3`, label: nav.rm3 },
+  { href: `${prefix}/#mirai`, label: nav.mirai, badge: "IA" },
+  { href: `${prefix}/#implementacion`, label: nav.implementation },
+  { href: `${prefix}/#contacto`, label: nav.contact },
 ];
 ---
 
@@ -52,7 +52,7 @@ const links = [
           </a>
         ))}
       </div>
-      <a class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm whitespace-nowrap" href="#contacto">
+      <a class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm whitespace-nowrap" href={`${prefix}/#contacto`}>
         <span>{nav.requestDemo}</span>
         <ArrowRight class="w-3.5 h-3.5" />
       </a>
@@ -77,7 +77,7 @@ const links = [
         </a>
       ))}
     </div>
-    <a class="w-full text-center py-3 rounded-xl text-white font-medium text-sm runly-gradient-btn block mt-2" href="#contacto">
+    <a class="w-full text-center py-3 rounded-xl text-white font-medium text-sm runly-gradient-btn block mt-2" href={`${prefix}/#contacto`}>
       {nav.requestDemo}
     </a>
   </div>

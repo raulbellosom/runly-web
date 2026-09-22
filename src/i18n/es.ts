@@ -383,4 +383,291 @@ export const es: SiteDictionary = {
     errorMessage: "No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos por WhatsApp.",
     privacyNotice: "Al enviar este formulario aceptas nuestro Aviso de Privacidad. Tu información nunca será compartida.",
   },
+  legal: {
+    privacy: {
+      metaTitle: "Aviso de Privacidad | RUNLY",
+      metaDescription:
+        "Aviso de privacidad de RUNLY conforme a la LFPDPPP: qué datos recabamos, para qué los usamos y cómo ejercer tus derechos ARCO.",
+      eyebrow: "Legal",
+      title: "Aviso de Privacidad",
+      lastUpdated: "Última actualización: 21 de septiembre de 2026",
+      intro:
+        "Este Aviso de Privacidad describe cómo Racoon Devs recaba, usa y protege los datos personales de quienes visitan este sitio, solicitan información sobre RUNLY o utilizan la plataforma, de conformidad con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) de México.",
+      sections: [
+        {
+          heading: "Identidad y domicilio del responsable",
+          paragraphs: [
+            "El responsable del tratamiento de tus datos personales es [RAZÓN SOCIAL LEGAL DE RACOON DEVS], con domicilio en [DOMICILIO FISCAL COMPLETO], México, y RFC [RFC].",
+          ],
+        },
+        {
+          heading: "Datos personales que recabamos",
+          paragraphs: [
+            "Recabamos datos personales que nos proporcionas directamente al solicitar una demostración, contactarnos o usar RUNLY, así como datos técnicos generados por el uso de la plataforma.",
+          ],
+          list: [
+            "Datos de identificación y contacto: nombre, correo electrónico, teléfono, empresa y puesto.",
+            "Datos de la solicitud: tamaño de equipo, interés principal y necesidades descritas en el formulario de contacto.",
+            "Datos de la cuenta: credenciales de acceso y configuración de la instancia de RUNLY contratada.",
+            "Datos de uso: registros de actividad dentro de los módulos que utilizas.",
+            "Datos técnicos: dirección IP, tipo de dispositivo y navegador, recabados de forma automática.",
+            "Comunicaciones: el contenido de los mensajes que nos envías por correo, WhatsApp o el chat de soporte.",
+          ],
+        },
+        {
+          heading: "Finalidades del tratamiento",
+          paragraphs: [
+            "Finalidades primarias, necesarias para la relación contigo: responder tu solicitud de información o demostración, proveer y dar soporte a la plataforma RUNLY, gestionar tu cuenta y cumplir obligaciones legales y contractuales.",
+            "Finalidades secundarias, no indispensables: enviarte comunicaciones comerciales sobre nuevos módulos o funcionalidades. Puedes negar el tratamiento para estas finalidades secundarias en cualquier momento escribiendo a hola@runly.mx, sin que esto afecte los servicios que ya contrataste.",
+          ],
+        },
+        {
+          heading: "Transferencia de datos",
+          paragraphs: [
+            "Tus datos personales pueden compartirse únicamente con los siguientes terceros, y solo en la medida necesaria para operar el servicio:",
+          ],
+          list: [
+            "Proveedores de infraestructura y hosting que alojan la plataforma RUNLY.",
+            "Proveedores de procesamiento de pagos, cuando aplique, para la facturación del servicio.",
+            "Autoridades competentes, cuando exista un requerimiento legal válido.",
+          ],
+        },
+        {
+          heading: "Derechos ARCO y cómo ejercerlos",
+          paragraphs: [
+            "Tienes derecho a Acceder, Rectificar y Cancelar tus datos personales, así como a Oponerte a su tratamiento (derechos ARCO), y a revocar el consentimiento que en su caso nos hayas otorgado. Para ejercer cualquiera de estos derechos, escríbenos a hola@runly.mx indicando tu nombre completo y el derecho que deseas ejercer; te responderemos en un plazo máximo de 20 días hábiles.",
+          ],
+        },
+        {
+          heading: "Uso de cookies y tecnologías de rastreo",
+          paragraphs: [
+            "Este sitio utiliza cookies y tecnologías similares únicamente con fines analíticos y de funcionamiento básico. No utilizamos estas tecnologías para publicidad dirigida ni para compartir datos con redes publicitarias.",
+          ],
+        },
+        {
+          heading: "Conservación de datos",
+          paragraphs: [
+            "Conservamos tus datos personales durante el tiempo necesario para cumplir las finalidades descritas en este aviso y las obligaciones legales aplicables; una vez cumplido ese plazo, los eliminamos o anonimizamos de forma segura.",
+          ],
+        },
+        {
+          heading: "Cambios a este aviso de privacidad",
+          paragraphs: [
+            "Podemos actualizar este aviso de privacidad para reflejar cambios en nuestras prácticas o en la normativa aplicable. Publicaremos cualquier cambio en esta misma página junto con su fecha de actualización.",
+          ],
+        },
+        {
+          heading: "Contacto",
+          paragraphs: ["Si tienes dudas sobre este aviso de privacidad o sobre el tratamiento de tus datos, contáctanos en hola@runly.mx."],
+        },
+      ],
+    },
+    terms: {
+      metaTitle: "Términos de Servicio | RUNLY",
+      metaDescription: "Términos de Servicio que rigen el uso de la plataforma ERP RUNLY, operada por Racoon Devs.",
+      eyebrow: "Legal",
+      title: "Términos de Servicio",
+      lastUpdated: "Última actualización: 21 de septiembre de 2026",
+      intro:
+        "Estos Términos de Servicio rigen el acceso y uso de RUNLY, la plataforma ERP modular operada por Racoon Devs. Al usar RUNLY o solicitar una demostración, aceptas estos términos.",
+      sections: [
+        {
+          heading: "Aceptación de los términos",
+          paragraphs: [
+            "Al crear una cuenta, solicitar una demostración o utilizar RUNLY de cualquier forma, aceptas quedar obligado por estos Términos de Servicio y por nuestro Aviso de Privacidad. Si no estás de acuerdo, no debes utilizar la plataforma.",
+          ],
+        },
+        {
+          heading: "Descripción del servicio",
+          paragraphs: [
+            "RUNLY es una plataforma ERP modular, multiempresa y colaborativa que se contrata como software como servicio (SaaS), compuesta por módulos oficiales y, en su caso, desarrollos personalizados para tu empresa.",
+          ],
+        },
+        {
+          heading: "Cuentas y suscripciones",
+          paragraphs: ["El acceso a RUNLY se otorga mediante cuentas de usuario asociadas a la empresa que contrata el servicio."],
+          list: [
+            "Eres responsable de mantener la confidencialidad de tus credenciales de acceso.",
+            "Debes proporcionar información veraz y actualizada al crear tu cuenta.",
+            "La empresa contratante es responsable de administrar los permisos y accesos de sus usuarios.",
+            "Las condiciones comerciales específicas (módulos contratados, alcance, tarifas) se acuerdan por separado en la propuesta o contrato firmado con cada cliente.",
+          ],
+        },
+        {
+          heading: "Uso aceptable",
+          paragraphs: ["Al usar RUNLY, te comprometes a no:"],
+          list: [
+            "Utilizar la plataforma para fines ilícitos o que violen derechos de terceros.",
+            "Intentar vulnerar la seguridad de la plataforma o acceder a datos de otras empresas sin autorización.",
+            "Realizar ingeniería inversa del software, salvo en los casos permitidos por la ley.",
+            "Sobrecargar deliberadamente la infraestructura del servicio.",
+            "Revender o sublicenciar el acceso a RUNLY sin autorización previa por escrito.",
+          ],
+        },
+        {
+          heading: "Propiedad intelectual",
+          paragraphs: [
+            "RUNLY, su código, diseño, marca y documentación son propiedad de Racoon Devs o de sus licenciantes. Estos términos no te otorgan ningún derecho de propiedad sobre la plataforma; únicamente un derecho de uso conforme al contrato vigente. Los datos que ingresas a la plataforma siguen siendo de tu propiedad.",
+          ],
+        },
+        {
+          heading: "Tarifas y facturación",
+          paragraphs: [
+            "Las tarifas aplicables a cada cliente se establecen en la propuesta comercial o contrato correspondiente y pueden variar según los módulos contratados y el volumen de uso. El incumplimiento de pago puede resultar en la suspensión del acceso al servicio, previa notificación.",
+          ],
+        },
+        {
+          heading: "Disponibilidad del servicio",
+          paragraphs: [
+            "Trabajamos para mantener RUNLY disponible de forma continua, pero no garantizamos un funcionamiento ininterrumpido o libre de errores. Podemos realizar mantenimientos programados, notificándolo con anticipación razonable cuando sea posible.",
+          ],
+        },
+        {
+          heading: "Limitación de responsabilidad",
+          paragraphs: [
+            "En la máxima medida permitida por la ley, Racoon Devs no será responsable por daños indirectos, incidentales o consecuentes derivados del uso de RUNLY. Nuestra responsabilidad total frente a ti se limita al monto efectivamente pagado por el servicio en los últimos 12 meses.",
+          ],
+        },
+        {
+          heading: "Terminación",
+          paragraphs: [
+            "Puedes dejar de usar RUNLY en cualquier momento conforme a los términos de cancelación de tu contrato. Podemos suspender o terminar tu acceso si incumples estos términos, previa notificación cuando las circunstancias lo permitan.",
+          ],
+        },
+        {
+          heading: "Modificaciones a estos términos",
+          paragraphs: [
+            "Podemos actualizar estos Términos de Servicio periódicamente. Publicaremos cualquier cambio relevante en esta página junto con su fecha de actualización; el uso continuado de RUNLY después de un cambio implica su aceptación.",
+          ],
+        },
+        {
+          heading: "Ley aplicable y jurisdicción",
+          paragraphs: [
+            "Estos términos se rigen por las leyes de México. Para cualquier controversia relacionada con estos términos, las partes se someten a los tribunales competentes de México, salvo que el contrato firmado con tu empresa establezca algo distinto.",
+          ],
+        },
+        {
+          heading: "Contacto",
+          paragraphs: ["Si tienes preguntas sobre estos Términos de Servicio, escríbenos a hola@runly.mx."],
+        },
+      ],
+    },
+    security: {
+      metaTitle: "Seguridad de Datos | RUNLY",
+      metaDescription: "Conoce las medidas técnicas y organizativas con las que RUNLY protege la información de tu empresa.",
+      eyebrow: "Legal",
+      title: "Seguridad de Datos",
+      lastUpdated: "Última actualización: 21 de septiembre de 2026",
+      intro:
+        "En Racoon Devs protegemos la información que gestionas en RUNLY con medidas técnicas y organizativas diseñadas para mantener su confidencialidad, integridad y disponibilidad.",
+      sections: [
+        {
+          heading: "Nuestro compromiso con la seguridad",
+          paragraphs: [
+            "La seguridad de tus datos es una prioridad en el diseño y operación de RUNLY, no un añadido posterior. Aplicamos buenas prácticas de la industria en cada capa de la plataforma.",
+          ],
+        },
+        {
+          heading: "Cifrado y protección de datos",
+          paragraphs: ["Protegemos la información tanto en tránsito como en reposo mediante cifrado."],
+          list: [
+            "Toda la comunicación entre tu navegador y RUNLY viaja cifrada mediante HTTPS/TLS.",
+            "Los datos almacenados en nuestra infraestructura se resguardan con cifrado en reposo.",
+            "Las credenciales de acceso se almacenan utilizando algoritmos de hash seguros, nunca en texto plano.",
+          ],
+        },
+        {
+          heading: "Infraestructura y alojamiento",
+          paragraphs: [
+            "RUNLY se aloja en infraestructura de proveedores reconocidos por sus estándares de seguridad física y operativa, con controles de acceso y monitoreo continuo del entorno donde corre la plataforma.",
+          ],
+        },
+        {
+          heading: "Control de accesos",
+          paragraphs: ["El acceso a los datos de tu empresa está restringido conforme al principio de menor privilegio."],
+          list: [
+            "Cada empresa opera en un espacio lógicamente aislado dentro de la plataforma multiempresa.",
+            "Los permisos dentro de RUNLY se configuran por módulo y por rol de usuario.",
+            "El acceso interno del equipo de Racoon Devs a datos de clientes está limitado y auditado.",
+            "Recomendamos activar buenas prácticas de contraseñas robustas para todas las cuentas de tu equipo.",
+          ],
+        },
+        {
+          heading: "Respaldos y continuidad",
+          paragraphs: [
+            "Realizamos respaldos periódicos de la información para reducir el riesgo de pérdida de datos y contar con planes de recuperación ante incidentes.",
+          ],
+        },
+        {
+          heading: "Monitoreo y respuesta a incidentes",
+          paragraphs: [
+            "Monitoreamos la operación de la plataforma para detectar comportamientos anómalos y contamos con un proceso interno para atender y resolver incidentes de seguridad cuando se presentan.",
+          ],
+        },
+        {
+          heading: "Proveedores y subencargados",
+          paragraphs: [
+            "Trabajamos con un número limitado de proveedores de infraestructura y servicios para operar RUNLY, seleccionados por sus estándares de seguridad, y solo compartimos con ellos la información estrictamente necesaria.",
+          ],
+        },
+        {
+          heading: "Reporte responsable de vulnerabilidades",
+          paragraphs: [
+            "Si identificas una posible vulnerabilidad de seguridad en RUNLY, te pedimos reportarla de forma responsable escribiéndonos a hola@runly.mx antes de divulgarla públicamente, para que podamos investigarla y corregirla.",
+          ],
+        },
+        {
+          heading: "Contacto de seguridad",
+          paragraphs: ["Para dudas o reportes relacionados con la seguridad de tus datos, contáctanos en hola@runly.mx."],
+        },
+      ],
+    },
+    support: {
+      metaTitle: "Contacto de Soporte | RUNLY",
+      metaDescription: "Canales, horarios y tiempos de respuesta del soporte técnico de RUNLY para clientes activos.",
+      eyebrow: "Legal",
+      title: "Contacto de Soporte",
+      lastUpdated: "Última actualización: 21 de septiembre de 2026",
+      intro:
+        "Este canal es para clientes que ya usan RUNLY y necesitan ayuda técnica. Si aún no eres cliente y quieres una demostración o cotización, usa el formulario de ventas en la página principal.",
+      sections: [
+        {
+          heading: "Canales de soporte",
+          paragraphs: ["Puedes contactar a nuestro equipo de soporte por los siguientes medios:"],
+          list: [
+            "Correo: hola@runly.mx — te respondemos ahí mismo dando seguimiento a tu caso.",
+            "WhatsApp: +52 322 135 8808 — para dudas urgentes o seguimiento rápido.",
+          ],
+        },
+        {
+          heading: "Horario de atención",
+          paragraphs: [
+            "Nuestro equipo de soporte atiende de lunes a viernes, en horario laboral de México. Fuera de este horario, tu mensaje queda registrado y lo atendemos en cuanto reabrimos.",
+          ],
+        },
+        {
+          heading: "¿Qué cubre el soporte técnico?",
+          paragraphs: [
+            "El soporte técnico atiende dudas de uso de los módulos contratados, incidencias de la plataforma y solicitudes de configuración dentro del alcance de tu contrato. Para nuevas cotizaciones, módulos adicionales o demostraciones, usa el formulario de ventas de la página principal en vez de este canal.",
+          ],
+        },
+        {
+          heading: "Tiempos de respuesta",
+          paragraphs: [
+            "Buscamos dar una primera respuesta a los reportes de soporte el mismo día hábil en que se reciben. Los tiempos pueden variar según la complejidad del caso; para incidencias críticas, contáctanos por WhatsApp.",
+          ],
+        },
+        {
+          heading: "Antes de escribirnos",
+          paragraphs: ["Para ayudarte más rápido, incluye en tu mensaje:"],
+          list: [
+            "El nombre de tu empresa y el módulo relacionado con tu duda o incidencia.",
+            "Los pasos exactos que realizaste antes de que ocurriera el problema.",
+            "Capturas de pantalla del error, si aplica.",
+            "El usuario con el que tuviste el problema, si tu cuenta administra varios accesos.",
+          ],
+        },
+      ],
+    },
+  },
 };

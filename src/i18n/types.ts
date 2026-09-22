@@ -191,4 +191,28 @@ export interface SiteDictionary {
     errorMessage: string;
     privacyNotice: string;
   };
+  legal: LegalDictionary;
+}
+
+export interface LegalSection {
+  heading: string;
+  paragraphs: string[];
+  list?: string[];
+}
+
+export interface LegalPageDictionary {
+  metaTitle: string;
+  metaDescription: string;
+  eyebrow: string;
+  title: string;
+  lastUpdated: string;
+  intro: string;
+  sections: LegalSection[];
+}
+
+export interface LegalDictionary {
+  privacy: LegalPageDictionary;
+  terms: LegalPageDictionary;
+  security: LegalPageDictionary;
+  support: LegalPageDictionary;
 }

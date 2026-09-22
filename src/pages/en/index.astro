@@ -22,7 +22,7 @@ const locale = "en" as const;
 const dict = getDictionary(locale);
 ---
 
-<BaseLayout title={dict.meta.title} description={dict.meta.description} locale={locale} path="/en/">
+<BaseLayout title={dict.meta.title} description={dict.meta.description} locale={locale} path="/">
   <Header locale={locale} nav={dict.nav} />
   <main>
     <Hero dict={dict} />

@@ -1,0 +1,22 @@
+---
+// src/pages/en/privacy-notice.astro
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import LegalContent from "../../components/sections/LegalContent.astro";
+import { getDictionary } from "../../i18n";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const dict = getDictionary(locale);
+const page = dict.legal.privacy;
+---
+
+<BaseLayout title={page.metaTitle} description={page.metaDescription} locale={locale} path="/privacy-notice">
+  <Header locale={locale} nav={dict.nav} />
+  <main>
+    <LegalContent page={page} />
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>
