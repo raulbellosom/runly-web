@@ -160,12 +160,16 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
       const turnstile = (window as any).turnstile;
       const turnstileToken = turnstileSiteKey ? (turnstile?.getResponse?.() ?? "") : "";
 
+      // Runly's form field "clave" only accepts /^[a-z_][a-z0-9_]*$/ (no
+      // camelCase) — these keys must match the field names configured in
+      // Growth -> Formularios exactly (fullname/companyname/teamsize, no
+      // underscores, since that's what the editor auto-generated there).
       const values = {
-        fullName: formData.get("fullName"),
-        companyName: formData.get("companyName"),
+        fullname: formData.get("fullName"),
+        companyname: formData.get("companyName"),
         email: formData.get("email"),
         phone: formData.get("phone"),
-        teamSize: formData.get("teamSize"),
+        teamsize: formData.get("teamSize"),
         interest: formData.get("interest"),
         needs: formData.get("needs"),
         consent: formData.get("consent") === "on",
