@@ -64,7 +64,6 @@ export const es: SiteDictionary = {
     paragraphs: [
       "RUNLY es una plataforma de gestión empresarial (ERP) modular, desarrollada por Racoon Devs, que permite a las empresas administrar sus operaciones, proyectos, finanzas, inventarios, empleados y comunicación interna desde un mismo lugar.",
       "La plataforma integra herramientas de colaboración, mensajería, reuniones y gestión de calendarios para organizar el trabajo entre los miembros de una empresa.",
-      "Los usuarios pueden conectar su cuenta de Google para ver sus eventos de Google Calendar dentro de RUNLY.",
     ],
   },
   flexibility: {
