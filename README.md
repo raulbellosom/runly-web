@@ -36,7 +36,7 @@ All of these are `PUBLIC_`-prefixed and non-secret by design (same category as a
 
 ## Content that must be confirmed before launch
 
-- The hero product screenshot (`public/brand/product-dashboard-preview.svg`) and the Open Graph cover image (`public/brand/og-cover.svg`) are placeholder illustrations (the real isotype on a brand-colored background), not real product screenshots. Replace both with real assets before launch — note social platforms (Facebook/Twitter/LinkedIn link previews) generally do not render SVG for `og:image`, so the OG cover in particular should become a real PNG/JPG before going live.
+- The hero product screenshot (`public/brand/product-dashboard-preview.png`) is a real dashboard screenshot but still a placeholder in the sense that a cleaner/updated capture (or a short product video) may replace it later. The Open Graph cover image (`public/brand/og-cover.svg`) is still a placeholder illustration (the isotype on a brand-colored background), not a real product screenshot — replace it before launch. Note social platforms (Facebook/Twitter/LinkedIn link previews) generally do not render SVG for `og:image`, so the OG cover in particular should become a real PNG/JPG before going live.
 - `PUBLIC_RUNLY_COMPANY`, `PUBLIC_RUNLY_SITE_ID`, and `PUBLIC_RUNLY_CONTACT_FORM_ID` must be set to real values (site registered in the Website module, form created in Growth) before launch, or the contact form will not submit.
 
 ## Deploy
