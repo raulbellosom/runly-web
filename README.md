@@ -25,7 +25,7 @@ See `.env.example`.
 | Variable | Purpose |
 |---|---|
 | `PUBLIC_SITE_URL` | Canonical site URL, used in SEO tags and the sitemap |
-| `PUBLIC_RUNLY_ERP_URL` | The Runly ERP instance the contact form submits into (e.g. `https://app.runly.mx`) |
+| `PUBLIC_RUNLY_API_URL` | The Runly ERP instance's API the contact form submits into. Copy the "apiUrl" field verbatim from Growth's "Ver código" (e.g. `https://app.runly.mx/api` — the instance may mount the API under a subpath) |
 | `PUBLIC_RUNLY_COMPANY` | Company slug assigned to this site inside that ERP instance |
 | `PUBLIC_RUNLY_SITE_ID` | This site's UUID inside the ERP's Website module, once `runly.mx` is registered there |
 | `PUBLIC_RUNLY_CONTACT_FORM_ID` | UUID of the "contacto" form created in the Growth module's admin |
@@ -88,7 +88,7 @@ This requires, on the Runly ERP side:
 1. `runly.mx` registered as a site in Growth's "Sitios conectados", giving `PUBLIC_RUNLY_SITE_ID`.
 2. A "contacto" form created in the Growth module's admin, with field keys matching what `ContactSection.astro` submits (`fullName`, `companyName`, `email`, `phone`, `teamSize`, `interest`, `needs`, `consent`, `locale`) — its UUID is `PUBLIC_RUNLY_CONTACT_FORM_ID`.
 
-When `PUBLIC_RUNLY_ERP_URL`/`PUBLIC_RUNLY_COMPANY` are unset, Vite statically resolves `runlySdk` to `null` and tree-shakes the entire SDK (and its bundled `@supabase/supabase-js`) out of the build — confirmed by comparing build output with/without those vars set. Once real values are filled in, the SDK lands in its own shared chunk instead.
+When `PUBLIC_RUNLY_API_URL`/`PUBLIC_RUNLY_COMPANY` are unset, Vite statically resolves `runlySdk` to `null` and tree-shakes the entire SDK (and its bundled `@supabase/supabase-js`) out of the build — confirmed by comparing build output with/without those vars set. Once real values are filled in, the SDK lands in its own shared chunk instead.
 
 ### Analytics
 
@@ -105,7 +105,7 @@ Optional spam protection: set `PUBLIC_TURNSTILE_SITE_KEY` to render a Cloudflare
 A floating chat button (`src/components/ChatWidgetIsland.tsx`, mounted once in `BaseLayout.astro` via `<ChatWidgetIsland client:idle />`) wraps the SDK's own `ChatWidget` React component, wired to the shared `runlySdk` client. This is the **only piece of this site that uses React** — `@astrojs/react` was added solely so this one prebuilt component could be reused instead of hand-rolling a chat UI; everything else stays plain Astro.
 
 It renders nothing (not even an empty button) when:
-- `PUBLIC_RUNLY_ERP_URL`/`PUBLIC_RUNLY_COMPANY` aren't set (`runlySdk` is `null`), or
+- `PUBLIC_RUNLY_API_URL`/`PUBLIC_RUNLY_COMPANY` aren't set (`runlySdk` is `null`), or
 - the ERP reports no chat availability — which is also what happens if the `runly.chat` module isn't installed/enabled on the instance, or no agents are online. `useGuestChat` fails soft on any `getAvailability()` error, so a missing module never breaks the page.
 
 Needs no ERP-side setup beyond `runly.chat` being installed and enabled — no separate form/site registration like the contact form needs.

@@ -3,11 +3,11 @@
 interface ImportMetaEnv {
   readonly PUBLIC_SITE_URL: string;
   // Runly storefront SDK config — the contact form submits straight into the
-  // Growth module of the Runly ERP instance at PUBLIC_RUNLY_ERP_URL (no
+  // Growth module of the Runly ERP instance at PUBLIC_RUNLY_API_URL (no
   // custom backend). All of these are meant to be public (same as a Supabase
   // anon key or a reCAPTCHA site key) — see README's Contact form section
   // and @raulbellosom/runly-sdk's docs.
-  readonly PUBLIC_RUNLY_ERP_URL: string;
+  readonly PUBLIC_RUNLY_API_URL: string;
   readonly PUBLIC_RUNLY_COMPANY: string;
   // This site's UUID inside the ERP's Website module. Scopes form
   // submissions (and future analytics/chat) to runly.mx specifically.

@@ -142,7 +142,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
       success.classList.add("hidden");
       errorBox.classList.add("hidden");
 
-      // PUBLIC_RUNLY_ERP_URL / PUBLIC_RUNLY_COMPANY / PUBLIC_RUNLY_CONTACT_FORM_ID
+      // PUBLIC_RUNLY_API_URL / PUBLIC_RUNLY_COMPANY / PUBLIC_RUNLY_CONTACT_FORM_ID
       // aren't fully configured for this build: no ERP form to submit to yet.
       // Fail loudly instead of pretending to succeed.
       if (!runlySdk || !formId) {
