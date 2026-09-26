@@ -29,10 +29,12 @@ const featured = featuredIds
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading eyebrow={modulesCatalog.eyebrow} title={modulesCatalog.title} description={modulesCatalog.description} />
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mb-10">
-      {featured.map((mod) => (
-        <ModuleFlipCard module={mod} locale={locale} />
-      ))}
+    <div class="rounded-3xl overflow-hidden border border-slate-200 bg-slate-200 mb-10">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px">
+        {featured.map((mod) => (
+          <ModuleFlipCard module={mod} locale={locale} />
+        ))}
+      </div>
     </div>
 
     <div class="flex justify-center">

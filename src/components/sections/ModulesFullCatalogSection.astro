@@ -35,10 +35,12 @@ const { modulesCatalog } = dict;
   })}
 </div>
 
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" id="modulesGrid">
-  {modules.map((mod) => (
-    <ModuleFlipCard module={mod} locale={locale} />
-  ))}
+<div class="rounded-3xl overflow-hidden border border-slate-200 bg-slate-200">
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-px" id="modulesGrid">
+    {modules.map((mod) => (
+      <ModuleFlipCard module={mod} locale={locale} />
+    ))}
+  </div>
 </div>
 
 <div class="mt-16 p-8 rounded-3xl bg-slate-50 border border-dashed border-slate-300">
