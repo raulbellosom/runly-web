@@ -34,6 +34,28 @@ See `.env.example`.
 
 All of these are `PUBLIC_`-prefixed and non-secret by design (same category as a Supabase anon key) — they get inlined into the static build and shipped to the browser. **No SMTP credentials or server secrets exist in this repository or build.** Delivery is owned entirely by the Growth module on the ERP side; see [Contact form](#contact-form) below.
 
+## Module documentation (help content)
+
+`src/content/help/**/*.md` and the pages/endpoints under `/documentacion/modulos/` and `/api/modules/` are **not edited here**. The `runly` ERP monorepo (`../runly` in this dev layout) is the single source of truth — each module's help articles live at `apps/api/src/manifests/official/help/<moduleKey>/{overview.md,views/*.md}`, right next to that module's manifest (navigation, permissions), and are also what powers the in-app help panel inside a live Runly instance.
+
+Whenever that content changes, bring a fresh copy into this repo and redeploy normally:
+
+```bash
+node scripts/sync-help-content.mjs [path-to-runly-repo]   # defaults to ../runly
+pnpm build
+# then the usual deploy: git commit the refreshed src/content/help/, push, pull on the VPS, pnpm build, copy dist/
+```
+
+This is a manual step (no CI automation yet) — run it, review the diff in `src/content/help/`, commit, deploy. The sync script fails loudly if the source path doesn't exist rather than silently producing an empty/stale collection.
+
+Two consumers are generated at build time from that content (static, `output: "static"` — no server involved):
+- Human pages: `/documentacion/modulos` (index) and `/documentacion/modulos/:moduleKey` (one page per module — overview + a section per documented screen). Spanish only for now; the content itself is Spanish-only.
+- JSON: `/api/modules/index.json` and `/api/modules/:moduleKey/resumen.json` — same response shape as `GET /help/modules` / `GET /help/modules/:moduleKey` inside a live Runly instance, so an AI model or another consumer can treat this public source and an instance's own local one the same way.
+
+`src/content.config.ts` defines the `help` collection with a **custom `generateId`** — the default id generator from Astro's `glob()` loader slugifies path segments (stripping dots), which silently turned every `moduleKey` like `runly.core` into `runlycore` (wrong in the URL, in the JSON `moduleKey` field, and when cross-referencing `src/data/modules.ts` by id). The custom `generateId` just strips the `.md` extension and keeps the rest of the relative path as-is.
+
+See `docs/superpowers/specs/2026-09-27-public-help-docs-runly-web-design.md` in the `runly` repo for the full design (why the content stays in `runly`, why this is a manual sync rather than CI, and what's explicitly out of scope for v1: English translations, analytics on which articles get read, and the `runly` ERP side ever falling back to this public API).
+
 ## Content that must be confirmed before launch
 
 - The hero product screenshot (`public/brand/product-dashboard-preview.png`) is a real dashboard screenshot but still a placeholder in the sense that a cleaner/updated capture (or a short product video) may replace it later. The Open Graph cover image (`public/brand/og-cover.svg`) is still a placeholder illustration (the isotype on a brand-colored background), not a real product screenshot — replace it before launch. Note social platforms (Facebook/Twitter/LinkedIn link previews) generally do not render SVG for `og:image`, so the OG cover in particular should become a real PNG/JPG before going live.

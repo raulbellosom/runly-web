@@ -1,0 +1,79 @@
+---
+// src/pages/documentacion/modulos/index.astro
+//
+// Lists every module that has help content synced from the runly monorepo
+// (scripts/sync-help-content.mjs), joined with the existing marketing
+// catalog (src/data/modules.ts) for icon/name/category — see
+// docs/superpowers/specs/2026-09-27-public-help-docs-runly-web-design.md
+// in that repo.
+export const prerender = true;
+
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/layout/Header.astro";
+import Footer from "../../../components/layout/Footer.astro";
+import { getDictionary } from "../../../i18n";
+import { modules as marketingModules } from "../../../data/modules";
+import { resolveIcon } from "../../../lib/icons";
+import { groupHelpEntriesByModule } from "../../../lib/help-content";
+
+const locale = "es" as const;
+const dict = getDictionary(locale);
+
+const helpEntries = await getCollection("help");
+const grouped = groupHelpEntriesByModule(helpEntries);
+
+const rows = [...grouped.values()]
+  .map((mod) => {
+    const marketing = marketingModules.find((m) => m.id === mod.moduleKey);
+    return {
+      moduleKey: mod.moduleKey,
+      name: marketing?.name.es ?? mod.overview?.title ?? mod.moduleKey,
+      summary: mod.overview?.summary ?? "",
+      icon: marketing?.icon ?? "BookOpen",
+      order: marketing?.order ?? 999,
+    };
+  })
+  .sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout
+  title="Documentación de módulos — Runly"
+  description="Qué hace cada módulo de Runly ERP, cómo se usa y sus límites."
+  locale={locale}
+  path="/documentacion/modulos"
+>
+  <Header locale={locale} nav={dict.nav} />
+  <main class="py-20 sm:py-24 bg-white min-h-[60vh]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-xs font-bold text-orange-600 uppercase tracking-widest px-3 py-1 rounded-full bg-orange-100">
+        Documentación
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4">
+        Módulos de Runly
+      </h1>
+      <p class="mt-3 max-w-2xl text-base text-slate-600 leading-relaxed">
+        Qué hace cada módulo, qué puedes hacer en sus pantallas principales, y sus límites y alcances.
+      </p>
+
+      <div class="mt-12 grid gap-4 sm:grid-cols-2">
+        {rows.map((row) => {
+          const Icon = resolveIcon(row.icon);
+          return (
+            <a
+              href={`/documentacion/modulos/${row.moduleKey}`}
+              class="block rounded-2xl border border-slate-200 p-5 hover:border-orange-300 hover:shadow-sm transition"
+            >
+              <div class="flex items-center gap-3">
+                <Icon class="h-5 w-5 text-orange-600" />
+                <span class="font-bold text-slate-900">{row.name}</span>
+              </div>
+              <p class="mt-2 text-sm text-slate-600 leading-relaxed">{row.summary}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>

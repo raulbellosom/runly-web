@@ -1,0 +1,131 @@
+---
+// src/pages/documentacion/modulos/[modulo].astro
+//
+// One page per module: overview + a section per documented view. Renders
+// the markdown body via Astro's built-in content rendering (render()), not
+// a hand-rolled parser — see
+// docs/superpowers/specs/2026-09-27-public-help-docs-runly-web-design.md
+// in the runly repo.
+export const prerender = true;
+
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/layout/Header.astro";
+import Footer from "../../../components/layout/Footer.astro";
+import { getDictionary } from "../../../i18n";
+import { modules as marketingModules } from "../../../data/modules";
+
+interface ViewProps {
+  title: string;
+  summary: string;
+  slug: string;
+  Content: Awaited<ReturnType<typeof render>>["Content"];
+}
+
+export async function getStaticPaths() {
+  const entries = await getCollection("help");
+  const moduleKeys = [...new Set(entries.map((e) => e.id.split("/")[0]))];
+
+  return Promise.all(
+    moduleKeys.map(async (moduleKey) => {
+      const overviewEntry = entries.find((e) => e.id === `${moduleKey}/overview`);
+      const viewEntries = entries.filter((e) => e.id.startsWith(`${moduleKey}/views/`));
+
+      const overview = overviewEntry
+        ? { title: overviewEntry.data.title, summary: overviewEntry.data.summary, ...(await render(overviewEntry)) }
+        : null;
+
+      const views: ViewProps[] = await Promise.all(
+        viewEntries.map(async (entry) => {
+          const rendered = await render(entry);
+          return {
+            title: entry.data.title,
+            summary: entry.data.summary,
+            slug: entry.id.split("/")[2] ?? entry.id,
+            Content: rendered.Content,
+          };
+        }),
+      );
+
+      return { params: { modulo: moduleKey }, props: { moduleKey, overview, views } };
+    }),
+  );
+}
+
+const { moduleKey, overview, views } = Astro.props;
+const marketing = marketingModules.find((m) => m.id === moduleKey);
+const displayName = marketing?.name.es ?? overview?.title ?? moduleKey;
+
+const locale = "es" as const;
+const dict = getDictionary(locale);
+---
+
+<BaseLayout
+  title={`${displayName} — Documentación de Runly`}
+  description={overview?.summary ?? `Documentación del módulo ${displayName}.`}
+  locale={locale}
+  path={`/documentacion/modulos/${moduleKey}`}
+>
+  <Header locale={locale} nav={dict.nav} />
+  <main class="py-20 sm:py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/documentacion/modulos" class="text-sm font-semibold text-orange-600 hover:underline">&larr; Todos los módulos</a>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4">{displayName}</h1>
+      {overview && <p class="mt-2 text-base text-slate-600 leading-relaxed">{overview.summary}</p>}
+
+      {overview && (
+        <div class="mt-10 help-doc-content">
+          <overview.Content />
+        </div>
+      )}
+
+      {views.length > 0 && (
+        <div class="mt-16 space-y-12 border-t border-slate-200 pt-12">
+          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Pestañas de este módulo</h2>
+          {views.map((view) => (
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">{view.title}</h3>
+              <div class="mt-2 help-doc-content">
+                <view.Content />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>
+
+<style>
+  /* Minimal markdown typography — this site has no @tailwindcss/typography
+     plugin installed, so headings/lists/bold from the rendered content
+     need explicit styling rather than a `prose` utility class. */
+  .help-doc-content :global(h1),
+  .help-doc-content :global(h2),
+  .help-doc-content :global(h3) {
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .help-doc-content :global(h3) {
+    font-size: 1.05rem;
+  }
+  .help-doc-content :global(p) {
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .help-doc-content :global(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .help-doc-content :global(strong) {
+    color: #0f172a;
+    font-weight: 700;
+  }
+</style>
