@@ -72,9 +72,18 @@ export interface SiteDictionary {
     eyebrow: string;
     title: string;
     description: string;
+    viewAllCta: string;
     roadmapTitle: string;
     roadmapDescription: string;
     comingSoonLabel: string;
+  };
+  modulesPage: {
+    metaTitle: string;
+    metaDescription: string;
+    eyebrow: string;
+    title: string;
+    description: string;
+    backToHome: string;
   };
   rm3: {
     badge: string;

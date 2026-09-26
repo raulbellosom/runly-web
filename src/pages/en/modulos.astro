@@ -1,0 +1,31 @@
+---
+// src/pages/en/modulos.astro
+// English mirror of ../modulos.astro — same slug across locales, matching
+// this site's existing convention (see privacy-notice.astro / en/privacy-notice.astro).
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import SectionHeading from "../../components/ui/SectionHeading.astro";
+import ModulesFullCatalogSection from "../../components/sections/ModulesFullCatalogSection.astro";
+import { getDictionary } from "../../i18n";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const dict = getDictionary(locale);
+const { modulesPage } = dict;
+---
+
+<BaseLayout title={modulesPage.metaTitle} description={modulesPage.metaDescription} locale={locale} path="/en/modulos">
+  <Header locale={locale} nav={dict.nav} />
+  <main class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="/en/" class="text-sm font-semibold text-orange-600 hover:underline">&larr; {modulesPage.backToHome}</a>
+      <div class="mt-6">
+        <SectionHeading eyebrow={modulesPage.eyebrow} title={modulesPage.title} description={modulesPage.description} />
+      </div>
+      <ModulesFullCatalogSection dict={dict} locale={locale} />
+    </div>
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>

@@ -1,0 +1,120 @@
+---
+// src/components/ui/ModuleFlipCard.astro
+//
+// Continuous-grid module card that flips on hover (desktop, via CSS
+// :hover) or tap (touch, via a JS-toggled .is-flipped class — both paths
+// converge on the same rotateY(180deg) target so they never compound).
+// Front: icon + name. Back: longer description + a link into that
+// module's public docs (src/pages/documentacion/modulos/[modulo].astro).
+import { resolveIcon } from "../../lib/icons";
+import type { RunlyModuleEntry } from "../../data/modules";
+
+interface Props {
+  module: RunlyModuleEntry;
+  locale: "es" | "en";
+}
+
+const { module: mod, locale } = Astro.props;
+const Icon = resolveIcon(mod.icon);
+const docsLabel = locale === "es" ? "Ver documentación" : "View documentation";
+---
+
+<div
+  class="flip-card group relative h-60 sm:h-64 rounded-2xl cursor-pointer outline-none"
+  data-category={mod.category}
+  role="button"
+  tabindex="0"
+  aria-pressed="false"
+  aria-label={`${mod.name[locale]} — ${docsLabel}`}
+>
+  <div class="flip-card-inner relative w-full h-full rounded-2xl">
+    <div class="flip-card-face absolute inset-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm flex flex-col justify-between focus-visible:ring-2 focus-visible:ring-orange-400">
+      <div>
+        <div
+          class="w-12 h-12 rounded-xl text-white flex items-center justify-center mb-3 shadow-sm"
+          style={`background-color:${mod.color}`}
+        >
+          <Icon class="w-5 h-5" />
+        </div>
+        <h3 class="font-bold text-slate-900 text-base leading-tight">{mod.name[locale]}</h3>
+        <p class="text-xs text-slate-400 mt-1">Runly ERP</p>
+      </div>
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+        <span class="text-slate-400 font-mono">v{mod.version}</span>
+        <span class="text-slate-300 group-focus-visible:text-orange-500">{locale === "es" ? "Toca para ver mas" : "Tap to flip"}</span>
+      </div>
+    </div>
+
+    <div
+      class="flip-card-face flip-card-back absolute inset-0 rounded-2xl text-white p-5 shadow-sm flex flex-col justify-between"
+      style={`background-color:${mod.color}`}
+    >
+      <div>
+        <h3 class="font-bold text-base leading-tight mb-2">{mod.name[locale]}</h3>
+        <p class="text-sm leading-relaxed text-white/90">{mod.description[locale]}</p>
+      </div>
+      <a
+        href={`/documentacion/modulos/${mod.id}`}
+        class="doc-link inline-flex items-center gap-1.5 text-sm font-semibold text-white hover:underline w-fit"
+      >
+        {docsLabel}
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .flip-card {
+    perspective: 1200px;
+  }
+
+  .flip-card-inner {
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+  }
+
+  .flip-card.is-flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-face {
+    backface-visibility: hidden;
+  }
+
+  .flip-card-back {
+    transform: rotateY(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flip-card-inner {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>(".flip-card");
+  cards.forEach((card) => {
+    const toggle = () => {
+      const flipped = card.classList.toggle("is-flipped");
+      card.setAttribute("aria-pressed", String(flipped));
+    };
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggle();
+      }
+    });
+    card.querySelector(".doc-link")?.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  });
+</script>

@@ -1,0 +1,83 @@
+---
+// src/components/sections/ModulesFullCatalogSection.astro
+//
+// The full 21-module catalog with category filters, used only by the
+// dedicated /modulos page (src/pages/modulos.astro, src/pages/en/modulos.astro).
+// Moved out of the homepage teaser (ModulesCatalogSection.astro) to keep the
+// landing page from getting overloaded — see that file's header comment.
+import ModuleFlipCard from "../ui/ModuleFlipCard.astro";
+import { resolveIcon } from "../../lib/icons";
+import { modules, moduleCategories, roadmap } from "../../data/modules";
+import type { SiteDictionary } from "../../i18n/types";
+
+interface Props {
+  dict: SiteDictionary;
+  locale: "es" | "en";
+}
+
+const { dict, locale } = Astro.props;
+const { modulesCatalog } = dict;
+---
+
+<div class="flex flex-wrap items-center justify-center gap-2 mb-12" data-purpose="module-filters">
+  {moduleCategories.map((cat, i) => {
+    const Icon = resolveIcon(cat.icon);
+    return (
+      <button
+        class={`filter-btn shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${i === 0 ? "active runly-gradient-btn text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
+        data-filter={cat.id}
+        aria-pressed={i === 0 ? "true" : "false"}
+      >
+        <Icon class="w-3.5 h-3.5" />
+        <span>{cat.label[locale]}{cat.id === "all" ? ` (${modules.length})` : ""}</span>
+      </button>
+    );
+  })}
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" id="modulesGrid">
+  {modules.map((mod) => (
+    <ModuleFlipCard module={mod} locale={locale} />
+  ))}
+</div>
+
+<div class="mt-16 p-8 rounded-3xl bg-slate-50 border border-dashed border-slate-300">
+  <div class="max-w-3xl mb-8">
+    <h3 class="text-xl font-bold text-slate-900 mb-2">{modulesCatalog.roadmapTitle}</h3>
+    <p class="text-sm text-slate-600">{modulesCatalog.roadmapDescription}</p>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    {roadmap.map((item) => {
+      const Icon = resolveIcon(item.icon);
+      return (
+        <div class="p-4 rounded-xl bg-white border border-slate-200 text-center hover:border-orange-300 transition-colors">
+          <Icon class="w-5 h-5 text-orange-500 mb-2 mx-auto" />
+          <p class="text-xs font-bold text-slate-800">{item.name[locale]}</p>
+          <span class="text-[10px] text-slate-400 font-medium">{modulesCatalog.comingSoonLabel}</span>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  const filterBtns = document.querySelectorAll(".filter-btn");
+  const cards = document.querySelectorAll<HTMLElement>("#modulesGrid .flip-card");
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach((b) => {
+        b.classList.remove("runly-gradient-btn", "text-white", "shadow-sm");
+        b.classList.add("bg-slate-100", "text-slate-600");
+        b.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.remove("bg-slate-100", "text-slate-600");
+      btn.classList.add("runly-gradient-btn", "text-white", "shadow-sm");
+      btn.setAttribute("aria-pressed", "true");
+      const category = btn.getAttribute("data-filter");
+      cards.forEach((card) => {
+        const match = category === "all" || card.getAttribute("data-category") === category;
+        card.style.display = match ? "block" : "none";
+      });
+    });
+  });
+</script>

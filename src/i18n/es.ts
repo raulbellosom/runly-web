@@ -107,10 +107,20 @@ export const es: SiteDictionary = {
     title: "Un ecosistema completo para hacer funcionar tu empresa.",
     description:
       "Desde la colaboración de tu equipo hasta la organización de tus recursos y operaciones, RUNLY reúne diferentes herramientas en un mismo lugar.",
+    viewAllCta: "Ver los 21 módulos",
     roadmapTitle: "Y esto es solo el comienzo. RUNLY evoluciona constantemente.",
     roadmapDescription:
       "Nuestro equipo en Racoon Devs despliega nuevos módulos y mejoras mensualmente. Todos los clientes con soporte activo reciben acceso inmediato a las actualizaciones.",
     comingSoonLabel: "Próximamente",
+  },
+  modulesPage: {
+    metaTitle: "Catálogo de módulos — RUNLY ERP",
+    metaDescription: "Explora los 21 módulos de RUNLY ERP: identidad, contactos, finanzas, inventario, punto de venta y más.",
+    eyebrow: "Catálogo completo",
+    title: "Todos los módulos de RUNLY, en un solo lugar.",
+    description:
+      "Filtra por categoría y da clic (o pasa el cursor) sobre cada tarjeta para conocer qué resuelve cada módulo.",
+    backToHome: "Volver al inicio",
   },
   rm3: {
     badge: "Arquitectura de vanguardia",

@@ -1,8 +1,13 @@
 ---
 // src/components/sections/ModulesCatalogSection.astro
+//
+// Condensed homepage teaser: a handful of flip cards (not the full 21) so
+// the landing page doesn't get overloaded, plus a CTA into the dedicated
+// /modulos catalog page (src/pages/modulos.astro), which has the full grid,
+// category filters, and the roadmap section.
 import SectionHeading from "../ui/SectionHeading.astro";
-import { resolveIcon } from "../../lib/icons";
-import { modules, moduleCategories, roadmap } from "../../data/modules";
+import ModuleFlipCard from "../ui/ModuleFlipCard.astro";
+import { modules } from "../../data/modules";
 import type { SiteDictionary } from "../../i18n/types";
 
 interface Props {
@@ -12,103 +17,32 @@ interface Props {
 
 const { dict, locale } = Astro.props;
 const { modulesCatalog } = dict;
+const prefix = locale === "es" ? "" : "/en";
+
+const featuredIds = ["runly.core", "runly.contacts", "runly.pos", "runly.ledger", "runly.projects", "runly.chat"];
+const featured = featuredIds
+  .map((id) => modules.find((m) => m.id === id))
+  .filter((m): m is NonNullable<typeof m> => Boolean(m));
 ---
 
 <section class="py-24 bg-white relative" id="modulos">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading eyebrow={modulesCatalog.eyebrow} title={modulesCatalog.title} description={modulesCatalog.description} />
 
-    <div class="flex flex-nowrap sm:flex-wrap items-center sm:justify-center gap-2 mb-12 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0" data-purpose="module-filters">
-      {moduleCategories.map((cat, i) => {
-        const Icon = resolveIcon(cat.icon);
-        return (
-          <button
-            class={`filter-btn shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${i === 0 ? "active runly-gradient-btn text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}
-            data-filter={cat.id}
-            aria-pressed={i === 0 ? "true" : "false"}
-          >
-            <Icon class="w-3.5 h-3.5" />
-            <span>{cat.label[locale]}{cat.id === "all" ? ` (${modules.length})` : ""}</span>
-          </button>
-        );
-      })}
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mb-10">
+      {featured.map((mod) => (
+        <ModuleFlipCard module={mod} locale={locale} />
+      ))}
     </div>
 
-    <div class="relative -mx-4 px-4 sm:mx-0 sm:px-0">
-      <div class="modules-scroll overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 snap-x snap-mandatory sm:snap-none">
-        <div class="grid grid-flow-col grid-rows-2 auto-cols-[42%] gap-3 sm:grid-flow-row sm:grid-rows-none sm:auto-cols-auto sm:grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] sm:gap-6" id="modulesGrid">
-          {modules.map((mod) => {
-            const Icon = resolveIcon(mod.icon);
-            return (
-              <div class="module-card snap-start rounded-xl sm:rounded-2xl border border-slate-200 bg-white p-3 sm:p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category={mod.category}>
-                <div>
-                  <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl text-white flex items-center justify-center text-xl mb-2 sm:mb-3 shadow-sm" style={`background-color:${mod.color}`}>
-                    <Icon class="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-tight">{mod.name[locale]}</h3>
-                  <p class="text-xs text-slate-400 mb-1 sm:mb-2 hidden sm:block">Runly ERP</p>
-                  <p class="text-xs text-slate-600 leading-relaxed mb-2 sm:mb-4 line-clamp-2 sm:line-clamp-none">{mod.description[locale]}</p>
-                </div>
-                <div class="pt-2 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span class="text-slate-400 font-mono text-[10px] sm:text-xs">v{mod.version}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-transparent sm:hidden" aria-hidden="true"></div>
-    </div>
-
-    <div class="mt-16 p-8 rounded-3xl bg-slate-50 border border-dashed border-slate-300">
-      <div class="max-w-3xl mb-8">
-        <h3 class="text-xl font-bold text-slate-900 mb-2">{modulesCatalog.roadmapTitle}</h3>
-        <p class="text-sm text-slate-600">{modulesCatalog.roadmapDescription}</p>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {roadmap.map((item) => {
-          const Icon = resolveIcon(item.icon);
-          return (
-            <div class="p-4 rounded-xl bg-white border border-slate-200 text-center hover:border-orange-300 transition-colors">
-              <Icon class="w-5 h-5 text-orange-500 mb-2 mx-auto" />
-              <p class="text-xs font-bold text-slate-800">{item.name[locale]}</p>
-              <span class="text-[10px] text-slate-400 font-medium">{modulesCatalog.comingSoonLabel}</span>
-            </div>
-          );
-        })}
-      </div>
+    <div class="flex justify-center">
+      <a
+        href={`${prefix}/modulos`}
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold runly-gradient-btn text-white shadow-sm hover:shadow-md transition-all"
+      >
+        {modulesCatalog.viewAllCta}
+        <span aria-hidden="true">&rarr;</span>
+      </a>
     </div>
   </div>
 </section>
-
-<script>
-  const filterBtns = document.querySelectorAll(".filter-btn");
-  const cards = document.querySelectorAll(".module-card");
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      filterBtns.forEach((b) => {
-        b.classList.remove("runly-gradient-btn", "text-white", "shadow-sm");
-        b.classList.add("bg-slate-100", "text-slate-600");
-        b.setAttribute("aria-pressed", "false");
-      });
-      btn.classList.remove("bg-slate-100", "text-slate-600");
-      btn.classList.add("runly-gradient-btn", "text-white", "shadow-sm");
-      btn.setAttribute("aria-pressed", "true");
-      const category = btn.getAttribute("data-filter");
-      cards.forEach((card) => {
-        const match = category === "all" || card.getAttribute("data-category") === category;
-        (card as HTMLElement).style.display = match ? "flex" : "none";
-      });
-    });
-  });
-</script>
-
-<style>
-  .modules-scroll {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .modules-scroll::-webkit-scrollbar {
-    display: none;
-  }
-</style>
