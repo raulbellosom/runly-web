@@ -60,6 +60,17 @@
   }
 }
 
+/* Gentle floating bob for decorative marks/badges (AboutSection's isotype
+   panel). Kept purely decorative — never used on anything interactive. */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float-y 5s ease-in-out infinite;
+}
+
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(24px);
@@ -170,6 +181,10 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .animate-float {
+    animation: none;
   }
 
   .mobile-nav-panel,

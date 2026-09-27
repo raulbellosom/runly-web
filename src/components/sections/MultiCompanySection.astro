@@ -12,19 +12,20 @@ const { dict } = Astro.props;
 const { multiCompany } = dict;
 
 const iconMap = { Users, Flag, UserCog } as const;
-const colorMap: Record<string, string> = {
-  orange: "bg-orange-100 text-orange-600",
-  blue: "bg-blue-100 text-blue-600",
-  emerald: "bg-emerald-100 text-emerald-600",
+const badgeGradient: Record<string, string> = {
+  orange: "from-orange-500 to-amber-400 shadow-orange-500/30",
+  blue: "from-blue-600 to-sky-400 shadow-blue-500/30",
+  emerald: "from-emerald-500 to-teal-400 shadow-emerald-500/30",
 };
 ---
 
-<section class="py-24 bg-white border-b border-slate-200 relative">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-24 bg-white border-b border-slate-200 relative overflow-hidden">
+  <div class="absolute top-1/3 -left-20 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
     <SectionHeading eyebrow={multiCompany.eyebrow} title={multiCompany.title} description={multiCompany.description} />
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      <div class="lg:col-span-6 order-2 lg:order-1">
-        <div class="relative max-w-md mx-auto rounded-2xl p-6 bg-slate-50 border border-slate-200 shadow-xl">
+      <div class="lg:col-span-6 order-2 lg:order-1 reveal-on-scroll">
+        <div class="relative max-w-md mx-auto rounded-2xl p-6 bg-slate-50 border border-slate-200 shadow-xl transition-transform duration-300 hover:-translate-y-1">
           <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">RD</div>
@@ -77,12 +78,14 @@ const colorMap: Record<string, string> = {
           </div>
         </div>
       </div>
-      <div class="lg:col-span-6 space-y-6 order-1 lg:order-2">
+      <div class="bento-stagger reveal-on-scroll lg:col-span-6 space-y-6 order-1 lg:order-2">
         {multiCompany.pillars.map((pillar) => {
           const Icon = iconMap[pillar.icon as keyof typeof iconMap];
           return (
-            <div class="flex items-start gap-4">
-              <div class={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${colorMap[pillar.color]}`}>
+            <div class="group flex items-start gap-4">
+              <div
+                class={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-white shadow-lg bg-gradient-to-br transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 ${badgeGradient[pillar.color]}`}
+              >
                 <Icon class="w-5 h-5" />
               </div>
               <div>
