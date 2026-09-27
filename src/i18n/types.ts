@@ -58,6 +58,7 @@ export interface SiteDictionary {
     floatingMultiBranchSubtitle: string;
     floatingMiraiTitle: string;
     floatingMiraiSubtitle: string;
+    tourTabs: { label: string; alt: string }[];
   };
   about: {
     eyebrow: string;
@@ -128,12 +129,9 @@ export interface SiteDictionary {
     demoLabel: string;
     demoContext: string;
     demoDisclaimer: string;
-    demoUserMessage: string;
-    demoAssistantIntro: string;
-    demoLineCompanyA: string;
-    demoLineCompanyB: string;
-    demoTotalLabel: string;
-    demoConfirmation: string;
+    // Index 0 is shown by default; indexes 1 and 2 correspond to clicking
+    // demoPrompt1 / demoPrompt2 below (see MiraiSection.astro's click handler).
+    demoScenarios: { userMessage: string; assistantIntro: string; lines: string[]; highlightLine: string; confirmation: string }[];
     demoPromptsLabel: string;
     demoPrompt1: string;
     demoPrompt2: string;

@@ -55,6 +55,44 @@ const { title, description, locale, path } = Astro.props;
       }
     </script>
     <script>
+      // Subtle scroll parallax for decorative background blobs
+      // (data-parallax="<speed>" on the blurred/gradient blobs used across
+      // sections). Offset is relative to each element's distance from the
+      // viewport's vertical center, not raw page scroll — bounded and
+      // self-correcting regardless of how far down the page it sits, and
+      // clipped by each section's own overflow-hidden. Transform/opacity
+      // only, respects prefers-reduced-motion, never touches anything
+      // interactive or text-bearing.
+      try {
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const parallaxEls = Array.from(document.querySelectorAll<HTMLElement>("[data-parallax]"));
+        if (!prefersReducedMotion && parallaxEls.length) {
+          let ticking = false;
+          const update = () => {
+            const viewportCenter = window.innerHeight / 2;
+            parallaxEls.forEach((el) => {
+              const speed = parseFloat(el.dataset.parallax || "0.15");
+              const rect = el.getBoundingClientRect();
+              const distanceFromCenter = rect.top + rect.height / 2 - viewportCenter;
+              el.style.transform = `translateY(${(distanceFromCenter * -speed).toFixed(1)}px)`;
+            });
+            ticking = false;
+          };
+          const requestUpdate = () => {
+            if (!ticking) {
+              ticking = true;
+              window.requestAnimationFrame(update);
+            }
+          };
+          window.addEventListener("scroll", requestUpdate, { passive: true });
+          window.addEventListener("resize", requestUpdate);
+          update();
+        }
+      } catch {
+        // Parallax is decorative only — silently skip on any failure.
+      }
+    </script>
+    <script>
       // Runly Growth analytics — no-ops when PUBLIC_RUNLY_API_URL/COMPANY
       // aren't configured. Respects the site's analyticsMode (off /
       // anonymous / consent_required) as set in Growth → Sitios conectados;

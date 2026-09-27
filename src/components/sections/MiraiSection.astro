@@ -67,10 +67,19 @@ const colorMap: Record<string, string> = {
               </div>
             </div>
           </div>
-          <div class="py-6 space-y-4 text-xs sm:text-sm font-normal">
+          <div
+            id="miraiDemoConversation"
+            class="py-6 space-y-4 text-xs sm:text-sm font-normal"
+            data-default-user={mirai.demoScenarios[0].userMessage}
+            data-default-intro={mirai.demoScenarios[0].assistantIntro}
+            data-default-line1={mirai.demoScenarios[0].lines[0]}
+            data-default-line2={mirai.demoScenarios[0].lines[1]}
+            data-default-highlight={mirai.demoScenarios[0].highlightLine}
+            data-default-confirmation={mirai.demoScenarios[0].confirmation}
+          >
             <div class="flex items-start justify-end gap-2.5">
               <div class="bg-blue-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%]">
-                <p>{mirai.demoUserMessage}</p>
+                <p id="miraiDemoUser">{mirai.demoScenarios[0].userMessage}</p>
               </div>
             </div>
             <div class="flex items-start gap-2.5">
@@ -78,23 +87,85 @@ const colorMap: Record<string, string> = {
                 <Sparkles class="w-3 h-3" />
               </div>
               <div class="bg-slate-800/90 border border-slate-700/80 text-slate-200 p-4 rounded-2xl rounded-tl-none max-w-[90%] space-y-2">
-                <p>{mirai.demoAssistantIntro}</p>
+                <p id="miraiDemoIntro">{mirai.demoScenarios[0].assistantIntro}</p>
                 <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700/50 text-xs font-mono space-y-1">
-                  <div class="flex justify-between text-slate-300"><span>{mirai.demoLineCompanyA}</span></div>
-                  <div class="flex justify-between text-slate-300"><span>{mirai.demoLineCompanyB}</span></div>
-                  <div class="border-t border-slate-700 pt-1 mt-1 flex justify-between text-white font-bold"><span>{mirai.demoTotalLabel}</span></div>
+                  <div class="flex justify-between text-slate-300"><span id="miraiDemoLine1">{mirai.demoScenarios[0].lines[0]}</span></div>
+                  <div class="flex justify-between text-slate-300"><span id="miraiDemoLine2">{mirai.demoScenarios[0].lines[1]}</span></div>
+                  <div class="border-t border-slate-700 pt-1 mt-1 flex justify-between text-white font-bold"><span id="miraiDemoHighlight">{mirai.demoScenarios[0].highlightLine}</span></div>
                 </div>
-                <p class="text-slate-300 text-xs"><CircleCheck class="w-3.5 h-3.5 text-emerald-400 inline mr-1" /> {mirai.demoConfirmation}</p>
+                <p class="text-slate-300 text-xs"><CircleCheck class="w-3.5 h-3.5 text-emerald-400 inline mr-1" /> <span id="miraiDemoConfirmation">{mirai.demoScenarios[0].confirmation}</span></p>
               </div>
             </div>
           </div>
           <div class="pt-3 border-t border-slate-800 flex flex-wrap gap-2 text-xs">
             <span class="text-slate-400 text-[11px] self-center">{mirai.demoPromptsLabel}</span>
-            <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" type="button" aria-disabled="true">{mirai.demoPrompt1}</button>
-            <button class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700" type="button" aria-disabled="true">{mirai.demoPrompt2}</button>
+            {[mirai.demoPrompt1, mirai.demoPrompt2].map((label, i) => (
+              <button
+                class="mirai-demo-prompt px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 data-[active=true]:bg-purple-600 data-[active=true]:text-white data-[active=true]:border-purple-500 transition-colors"
+                type="button"
+                data-scenario={i + 1}
+                data-user={mirai.demoScenarios[i + 1].userMessage}
+                data-intro={mirai.demoScenarios[i + 1].assistantIntro}
+                data-line1={mirai.demoScenarios[i + 1].lines[0]}
+                data-line2={mirai.demoScenarios[i + 1].lines[1]}
+                data-highlight={mirai.demoScenarios[i + 1].highlightLine}
+                data-confirmation={mirai.demoScenarios[i + 1].confirmation}
+                data-active="false"
+                aria-pressed="false"
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Clicking a suggested prompt swaps the demo conversation to that
+  // scenario's canned Q&A (see mirai.demoScenarios in the i18n dicts) —
+  // these buttons used to be aria-disabled decoration that looked
+  // clickable but did nothing.
+  const prompts = document.querySelectorAll<HTMLButtonElement>(".mirai-demo-prompt");
+  const conversation = document.getElementById("miraiDemoConversation");
+  const fields = {
+    user: document.getElementById("miraiDemoUser"),
+    intro: document.getElementById("miraiDemoIntro"),
+    line1: document.getElementById("miraiDemoLine1"),
+    line2: document.getElementById("miraiDemoLine2"),
+    highlight: document.getElementById("miraiDemoHighlight"),
+    confirmation: document.getElementById("miraiDemoConfirmation"),
+  };
+
+  if (prompts.length && conversation && Object.values(fields).every(Boolean)) {
+    const applyScenario = (source: DOMStringMap) => {
+      fields.user!.textContent = source.user ?? source.defaultUser ?? "";
+      fields.intro!.textContent = source.intro ?? source.defaultIntro ?? "";
+      fields.line1!.textContent = source.line1 ?? source.defaultLine1 ?? "";
+      fields.line2!.textContent = source.line2 ?? source.defaultLine2 ?? "";
+      fields.highlight!.textContent = source.highlight ?? source.defaultHighlight ?? "";
+      fields.confirmation!.textContent = source.confirmation ?? source.defaultConfirmation ?? "";
+    };
+
+    prompts.forEach((button) => {
+      button.addEventListener("click", () => {
+        const isActive = button.dataset.active === "true";
+        prompts.forEach((b) => {
+          b.dataset.active = "false";
+          b.setAttribute("aria-pressed", "false");
+        });
+
+        if (isActive) {
+          applyScenario(conversation.dataset); // back to the default scenario
+          return;
+        }
+
+        button.dataset.active = "true";
+        button.setAttribute("aria-pressed", "true");
+        applyScenario(button.dataset);
+      });
+    });
+  }
+</script>
