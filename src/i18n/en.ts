@@ -9,9 +9,11 @@ export const en: SiteDictionary = {
   },
   nav: {
     platform: "Platform",
+    product: "Product",
     modules: "Modules",
     rm3: "RM3 Architecture",
     mirai: "MirAI",
+    docs: "Documentation",
     implementation: "Implementation",
     contact: "Contact",
     requestDemo: "Request a demo",

@@ -1,9 +1,11 @@
 // src/i18n/types.ts
 export interface NavDictionary {
   platform: string;
+  product: string;
   modules: string;
   rm3: string;
   mirai: string;
+  docs: string;
   implementation: string;
   contact: string;
   requestDemo: string;
