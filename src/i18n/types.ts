@@ -137,6 +137,8 @@ export interface SiteDictionary {
     demoPromptsLabel: string;
     demoPrompt1: string;
     demoPrompt2: string;
+    teaserCta: string;
+    previewAlt: string;
   };
   multiCompany: {
     eyebrow: string;

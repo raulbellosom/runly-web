@@ -260,6 +260,8 @@ export const es: SiteDictionary = {
     demoPromptsLabel: "Prueba preguntar:",
     demoPrompt1: "Resumen de tareas pendientes de la semana",
     demoPrompt2: "Leer ticket de combustible adjunto",
+    teaserCta: "Conoce a MirAI a fondo",
+    previewAlt: "MirAI respondiendo dentro de una conversación de Chat en RUNLY",
   },
   multiCompany: {
     eyebrow: "Multitenancy Nativo",

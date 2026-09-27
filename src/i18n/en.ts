@@ -259,6 +259,8 @@ export const en: SiteDictionary = {
     demoPromptsLabel: "Try asking:",
     demoPrompt1: "Summary of this week pending tasks",
     demoPrompt2: "Read the attached fuel receipt",
+    teaserCta: "See MirAI in depth",
+    previewAlt: "MirAI answering inside a Chat conversation in RUNLY",
   },
   multiCompany: {
     eyebrow: "Native Multi-tenancy",
