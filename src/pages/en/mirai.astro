@@ -1,0 +1,29 @@
+---
+// src/pages/en/mirai.astro
+// English mirror of ../mirai.astro — same slug across locales, matching
+// this site's existing convention (see privacy-notice.astro).
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import MiraiSection from "../../components/sections/MiraiSection.astro";
+import { getDictionary } from "../../i18n";
+
+export const prerender = true;
+
+const locale = "en" as const;
+const dict = getDictionary(locale);
+const { miraiPage } = dict;
+---
+
+<BaseLayout title={miraiPage.metaTitle} description={miraiPage.metaDescription} locale={locale} path="/en/mirai">
+  <Header locale={locale} nav={dict.nav} />
+  <main>
+    <div class="bg-runly-navy pt-8 pb-2">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <a href="/en/" class="text-sm font-semibold text-orange-400 hover:underline">&larr; {miraiPage.backToHome}</a>
+      </div>
+    </div>
+    <MiraiSection dict={dict} />
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>

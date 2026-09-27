@@ -85,6 +85,16 @@ export interface SiteDictionary {
     description: string;
     backToHome: string;
   };
+  architecturePage: {
+    metaTitle: string;
+    metaDescription: string;
+    backToHome: string;
+  };
+  miraiPage: {
+    metaTitle: string;
+    metaDescription: string;
+    backToHome: string;
+  };
   rm3: {
     badge: string;
     title: string;

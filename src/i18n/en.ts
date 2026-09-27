@@ -121,6 +121,16 @@ export const en: SiteDictionary = {
     description: "Filter by category and click (or hover) any card to see what each module solves.",
     backToHome: "Back to home",
   },
+  architecturePage: {
+    metaTitle: "RM3 Architecture — RUNLY ERP",
+    metaDescription: "How RUNLY's RM3 modular engine works: core, official modules, custom development, and community modules.",
+    backToHome: "Back to home",
+  },
+  miraiPage: {
+    metaTitle: "MirAI — RUNLY ERP's AI assistant",
+    metaDescription: "MirAI, the AI assistant built into RUNLY ERP: what it can do and how it helps you day to day.",
+    backToHome: "Back to home",
+  },
   rm3: {
     badge: "Cutting-edge architecture",
     title: "One platform. Infinite ways to adapt.",
