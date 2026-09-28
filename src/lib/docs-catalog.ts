@@ -69,6 +69,8 @@ const DEVELOPER_PAGE_ICONS: Record<string, string> = {
   relaciones: "Link2",
   campos: "TextCursorInput",
   librerias: "Package",
+  ia: "Bot",
+  "solucion-problemas": "LifeBuoy",
 };
 
 export function developerPageIcon(id: string): string {
