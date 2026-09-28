@@ -1,0 +1,63 @@
+---
+// src/components/docs/DocGuideCard.astro
+//
+// A curated reading path (src/data/doc-guides.ts) on the docs home: which
+// modules it walks through (their colored tiles) and its first steps.
+import { ArrowRight } from "@lucide/astro";
+import { resolveIcon } from "../../lib/icons";
+import { guideHref, type ResolvedGuide } from "../../lib/docs-content";
+
+interface Props {
+  guide: ResolvedGuide;
+}
+
+const PREVIEW_STEPS = 4;
+const { guide } = Astro.props;
+const Icon = resolveIcon(guide.icon);
+const modulesInGuide = [...new Map(guide.resolvedSteps.map((s) => [s.module.moduleKey, s.module])).values()];
+const preview = guide.resolvedSteps.slice(0, PREVIEW_STEPS);
+const remaining = guide.resolvedSteps.length - preview.length;
+---
+
+<article class="doc-card group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-5" style="--mod:#ff5e14">
+  <div class="flex items-center justify-between gap-3">
+    <span class="runly-gradient-btn flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-glow-orange">
+      <Icon class="h-5 w-5" />
+    </span>
+    <div class="flex -space-x-2">
+      {modulesInGuide.map((mod) => {
+        const ModIcon = resolveIcon(mod.icon);
+        return (
+          <span
+            class="mod-tile flex h-7 w-7 items-center justify-center rounded-lg ring-2 ring-white"
+            style={`--mod:${mod.color}`}
+            title={mod.name}
+          >
+            <ModIcon class="h-3.5 w-3.5" />
+          </span>
+        );
+      })}
+    </div>
+  </div>
+
+  <p class="mt-4 text-[11px] font-bold uppercase tracking-widest text-orange-600">{guide.audience}</p>
+  <h3 class="mt-1 text-lg font-extrabold leading-tight text-slate-900">
+    <a href={guideHref(guide.slug)} class="outline-none after:absolute after:inset-0 after:content-['']">{guide.title}</a>
+  </h3>
+  <p class="mt-1.5 text-sm leading-relaxed text-slate-600">{guide.description}</p>
+
+  <ol class="mt-4 space-y-1.5">
+    {preview.map((step, i) => (
+      <li class="flex items-center gap-2.5 text-xs text-slate-600" style={`--mod:${step.module.color}`}>
+        <span class="mod-soft flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold">{i + 1}</span>
+        <span class="truncate"><span class="font-semibold text-slate-800">{step.view.title}</span> · {step.module.name}</span>
+      </li>
+    ))}
+    {remaining > 0 && <li class="pl-7 text-xs text-slate-400">y {remaining} paso{remaining === 1 ? "" : "s"} más</li>}
+  </ol>
+
+  <span class="mt-auto inline-flex items-center gap-1 pt-5 text-xs font-bold text-orange-600">
+    Empezar guía
+    <ArrowRight class="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+  </span>
+</article>

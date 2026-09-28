@@ -1,0 +1,80 @@
+---
+// src/components/docs/DocsToc.astro
+//
+// "On this page" index for a docs page: one link per section id, each with
+// its icon. Highlights the section currently being read (scrollspy); the
+// highlight takes the tint of the nearest `--mod` color (or the item's own
+// `color`, used by guides whose steps span modules).
+import { resolveIcon } from "../../lib/icons";
+
+interface TocItem {
+  id: string;
+  title: string;
+  icon: string;
+  color?: string;
+  label?: string;
+}
+
+interface Props {
+  items: TocItem[];
+  heading?: string;
+  class?: string;
+}
+
+const { items, heading = "En esta página", class: className = "" } = Astro.props;
+---
+
+<nav class={className} aria-label={heading} data-doc-toc>
+  <p class="text-[11px] font-bold uppercase tracking-widest text-slate-400">{heading}</p>
+  <ol class="mt-2 space-y-0.5">
+    {items.map((item) => {
+      const ItemIcon = resolveIcon(item.icon);
+      return (
+        <li style={item.color ? `--mod:${item.color}` : undefined}>
+          <a
+            href={`#${item.id}`}
+            data-toc-target={item.id}
+            class="doc-toc-link flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+          >
+            {item.label ? (
+              <span class="doc-toc-icon flex h-4 w-4 shrink-0 items-center justify-center text-[11px] font-bold text-slate-400">{item.label}</span>
+            ) : (
+              <ItemIcon class="doc-toc-icon h-4 w-4 shrink-0 text-slate-400" />
+            )}
+            <span class="truncate">{item.title}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-doc-toc]").forEach((toc) => {
+    const links = [...toc.querySelectorAll<HTMLAnchorElement>("[data-toc-target]")];
+    const sections = links
+      .map((link) => document.getElementById(link.dataset.tocTarget ?? ""))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!sections.length || !("IntersectionObserver" in window)) return;
+
+    const visible = new Set<string>();
+    const highlight = () => {
+      // The first section (in document order) that's on screen wins.
+      const current = sections.find((s) => visible.has(s.id))?.id;
+      if (!current) return;
+      links.forEach((link) => link.setAttribute("aria-current", String(link.dataset.tocTarget === current)));
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) visible.add(entry.target.id);
+          else visible.delete(entry.target.id);
+        });
+        highlight();
+      },
+      { rootMargin: "-96px 0px -55% 0px" },
+    );
+    sections.forEach((section) => observer.observe(section));
+  });
+</script>

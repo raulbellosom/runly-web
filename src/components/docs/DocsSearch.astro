@@ -1,0 +1,309 @@
+---
+// src/components/docs/DocsSearch.astro
+//
+// Documentation search: a modal <dialog> that filters every module, module
+// view, guide and developer page client-side. Render it ONCE per page; open
+// it from any <DocsSearchTrigger /> or with Ctrl/⌘+K or "/".
+//
+// Results are server-rendered (so each keeps its module icon and color) and
+// the script only shows/hides and reorders them. Each result carries
+// accent-free text in data attributes: title (t), summary + context (s) and
+// the distinct words of its article (b), weighted in that order.
+import { getCollection } from "astro:content";
+import { Search, CornerDownLeft, ArrowUp, ArrowDown } from "@lucide/astro";
+import { resolveIcon } from "../../lib/icons";
+import { developerPageIcon, normalizeSearchText, searchKeywords } from "../../lib/docs-catalog";
+import {
+  getDocsCatalog,
+  resolveGuides,
+  moduleDocHref,
+  viewDocHref,
+  guideHref,
+  developerDocHref,
+} from "../../lib/docs-content";
+
+interface SearchItem {
+  kind: string;
+  title: string;
+  context: string;
+  summary: string;
+  href: string;
+  icon: string;
+  color: string;
+  body: string;
+  suggested: boolean;
+}
+
+const catalog = await getDocsCatalog();
+const guides = resolveGuides(catalog);
+const developerPages = (await getCollection("developers")).sort((a, b) => a.data.order - b.data.order);
+
+const items: SearchItem[] = [
+  ...guides.map((guide) => ({
+    kind: "Guía",
+    title: guide.title,
+    context: `${guide.resolvedSteps.length} pasos · ${guide.audience}`,
+    summary: guide.description,
+    href: guideHref(guide.slug),
+    icon: guide.icon,
+    color: "#ff5e14",
+    body: guide.resolvedSteps.map((s) => `${s.module.name} ${s.view.title}`).join(" "),
+    suggested: true,
+  })),
+  ...catalog.flatMap((mod) => [
+    {
+      kind: "Módulo",
+      title: mod.name,
+      context: `${mod.views.length} pestañas`,
+      summary: mod.summary,
+      href: moduleDocHref(mod.moduleKey),
+      icon: mod.icon,
+      color: mod.color,
+      body: `${mod.moduleKey} ${mod.views.map((v) => v.title).join(" ")}`,
+      suggested: true,
+    },
+    ...mod.views.map((view) => ({
+      kind: "Pestaña",
+      title: view.title,
+      context: mod.name,
+      summary: view.summary,
+      href: viewDocHref(mod.moduleKey, view.slug),
+      icon: view.icon,
+      color: mod.color,
+      body: view.body,
+      suggested: false,
+    })),
+  ]),
+  ...developerPages.map((page) => ({
+    kind: "Desarrolladores",
+    title: page.data.title,
+    context: "Documentación técnica",
+    summary: page.data.summary,
+    href: developerDocHref(page.id),
+    icon: developerPageIcon(page.id),
+    color: "#0b132b",
+    body: page.body ?? "",
+    suggested: false,
+  })),
+];
+---
+
+<dialog
+  id="docs-search"
+  class="docs-search m-auto mt-[8vh] w-[calc(100%-2rem)] max-w-2xl rounded-2xl border border-slate-200 bg-white p-0 shadow-2xl backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm"
+  aria-label="Buscar en la documentación"
+>
+  <div class="flex items-center gap-3 border-b border-slate-200 px-4">
+    <Search class="h-5 w-5 shrink-0 text-slate-400" />
+    <input
+      type="search"
+      class="docs-search-input h-14 w-full bg-transparent text-base text-slate-900 placeholder:text-slate-400 outline-none"
+      placeholder="Busca módulos, pestañas, guías o temas…"
+      autocomplete="off"
+      spellcheck="false"
+      role="combobox"
+      aria-expanded="true"
+      aria-controls="docs-search-results"
+      aria-autocomplete="list"
+    />
+    <kbd class="hidden sm:inline-flex rounded-md border border-slate-200 px-1.5 py-0.5 text-[11px] font-semibold text-slate-500">Esc</kbd>
+  </div>
+
+  <p class="docs-search-label px-4 pt-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">Sugerencias</p>
+  <ul id="docs-search-results" role="listbox" class="max-h-[60vh] overflow-y-auto p-2">
+    {items.map((item) => {
+      const Icon = resolveIcon(item.icon);
+      return (
+        <li
+          role="option"
+          aria-selected="false"
+          data-search-item
+          data-suggested={String(item.suggested)}
+          data-t={normalizeSearchText(item.title)}
+          data-s={normalizeSearchText(`${item.summary} ${item.context} ${item.kind}`)}
+          data-b={searchKeywords(item.body)}
+          hidden={!item.suggested}
+        >
+          <a
+            href={item.href}
+            class="docs-search-link flex items-center gap-3 rounded-xl px-3 py-2.5 outline-none"
+            style={`--mod:${item.color}`}
+            tabindex="-1"
+          >
+            <span class="mod-tile flex h-9 w-9 shrink-0 items-center justify-center rounded-lg">
+              <Icon class="h-4 w-4" />
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="flex items-center gap-2">
+                <span class="truncate text-sm font-bold text-slate-900">{item.title}</span>
+                <span class="mod-soft shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">{item.kind}</span>
+              </span>
+              <span class="block truncate text-xs text-slate-500">
+                <span class="font-semibold text-slate-600">{item.context}</span> · {item.summary}
+              </span>
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+  <p class="docs-search-empty hidden px-6 pb-8 pt-4 text-center text-sm text-slate-500">
+    Sin resultados para “<span class="docs-search-query font-semibold text-slate-700"></span>”. Prueba con otra palabra.
+  </p>
+
+  <div class="flex items-center gap-4 border-t border-slate-200 bg-slate-50 px-4 py-2.5 text-[11px] text-slate-500">
+    <span class="inline-flex items-center gap-1"><ArrowUp class="h-3 w-3" /><ArrowDown class="h-3 w-3" /> navegar</span>
+    <span class="inline-flex items-center gap-1"><CornerDownLeft class="h-3 w-3" /> abrir</span>
+    <span class="ml-auto">{items.length} artículos</span>
+  </div>
+</dialog>
+
+<style>
+  .docs-search[open] {
+    animation: docs-search-in 0.18s ease-out;
+  }
+  .docs-search input::-webkit-search-cancel-button {
+    display: none;
+  }
+  li[aria-selected="true"] .docs-search-link {
+    background: color-mix(in srgb, var(--mod) 9%, white);
+  }
+  @keyframes docs-search-in {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .docs-search[open] { animation: none; }
+  }
+</style>
+
+<script>
+  const MAX_RESULTS = 40;
+  const dialog = document.getElementById("docs-search") as HTMLDialogElement | null;
+
+  if (dialog) {
+    const input = dialog.querySelector<HTMLInputElement>(".docs-search-input")!;
+    const list = dialog.querySelector<HTMLUListElement>("#docs-search-results")!;
+    const label = dialog.querySelector<HTMLElement>(".docs-search-label")!;
+    const empty = dialog.querySelector<HTMLElement>(".docs-search-empty")!;
+    const queryEcho = dialog.querySelector<HTMLElement>(".docs-search-query")!;
+    const items = [...list.querySelectorAll<HTMLLIElement>("[data-search-item]")].map((el, index) => ({
+      el,
+      index,
+      title: el.dataset.t ?? "",
+      summary: el.dataset.s ?? "",
+      body: el.dataset.b ?? "",
+      suggested: el.dataset.suggested === "true",
+    }));
+    let visible: HTMLLIElement[] = [];
+    let active = 0;
+
+    const normalize = (text: string) =>
+      text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+
+    function score(item: (typeof items)[number], tokens: string[]) {
+      let total = 0;
+      for (const token of tokens) {
+        if (item.title.startsWith(token)) total += 10;
+        else if (item.title.includes(token)) total += 6;
+        else if (item.summary.includes(token)) total += 3;
+        else if (item.body.includes(token)) total += 1;
+        else return 0;
+      }
+      return total;
+    }
+
+    function setActive(next: number) {
+      visible[active]?.setAttribute("aria-selected", "false");
+      active = Math.max(0, Math.min(next, visible.length - 1));
+      const current = visible[active];
+      if (!current) return;
+      current.setAttribute("aria-selected", "true");
+      current.scrollIntoView({ block: "nearest" });
+    }
+
+    function render() {
+      const query = normalize(input.value);
+      const tokens = query.split(/\s+/).filter(Boolean);
+      const ranked = tokens.length
+        ? items
+            .map((item) => ({ item, score: score(item, tokens) }))
+            .filter((r) => r.score > 0)
+            .sort((a, b) => b.score - a.score || a.item.index - b.item.index)
+            .slice(0, MAX_RESULTS)
+            .map((r) => r.item)
+        : items.filter((item) => item.suggested);
+
+      items.forEach(({ el }) => {
+        el.hidden = true;
+        el.setAttribute("aria-selected", "false");
+      });
+      ranked.forEach(({ el }) => {
+        el.hidden = false;
+        list.appendChild(el);
+      });
+      visible = ranked.map((r) => r.el);
+      label.textContent = tokens.length ? `${ranked.length} resultado${ranked.length === 1 ? "" : "s"}` : "Sugerencias";
+      queryEcho.textContent = input.value.trim();
+      empty.classList.toggle("hidden", ranked.length > 0);
+      active = 0;
+      setActive(0);
+    }
+
+    function open() {
+      if (dialog!.open) return;
+      dialog!.showModal();
+      input.select();
+      render();
+    }
+
+    document.querySelectorAll("[data-docs-search-open]").forEach((trigger) => {
+      trigger.addEventListener("click", open);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const target = event.target as HTMLElement;
+      const typing = target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+      if ((event.key === "k" && (event.metaKey || event.ctrlKey)) || (event.key === "/" && !typing)) {
+        event.preventDefault();
+        open();
+      }
+    });
+
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setActive(active + 1);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setActive(active - 1);
+      } else if (event.key === "Enter") {
+        const link = visible[active]?.querySelector("a");
+        if (link) {
+          event.preventDefault();
+          dialog!.close();
+          link.click();
+        }
+      }
+    });
+
+    list.addEventListener("mousemove", (event) => {
+      const li = (event.target as HTMLElement).closest<HTMLLIElement>("[data-search-item]");
+      const index = li ? visible.indexOf(li) : -1;
+      if (index >= 0 && index !== active) setActive(index);
+    });
+    list.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("a")) dialog.close();
+    });
+    // Clicking the backdrop (the dialog element itself, outside its content) closes it.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    // Show ⌘ instead of Ctrl in trigger hints on Apple platforms.
+    if (/Mac|iPhone|iPad/.test(navigator.platform)) {
+      document.querySelectorAll<HTMLElement>("[data-docs-search-mod]").forEach((el) => (el.textContent = "⌘"));
+    }
+  }
+</script>

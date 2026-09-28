@@ -1,84 +1,230 @@
 ---
 // src/pages/documentacion/modulos/index.astro
 //
-// Lists every module that has help content synced from the runly monorepo
-// (scripts/sync-help-content.mjs), joined with the existing marketing
-// catalog (src/data/modules.ts) for icon/name/category — see
+// Documentation home: search, curated guides (src/data/doc-guides.ts), every
+// module with help content synced from the runly monorepo
+// (scripts/sync-help-content.mjs) tinted with its own icon/color, and a
+// pointer to the developer docs — see
 // docs/superpowers/specs/2026-09-27-public-help-docs-runly-web-design.md
 // in that repo.
 export const prerender = true;
 
 import { getCollection } from "astro:content";
+import { ArrowRight, Bot, CodeXml } from "@lucide/astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Header from "../../../components/layout/Header.astro";
 import Footer from "../../../components/layout/Footer.astro";
+import DocsSearch from "../../../components/docs/DocsSearch.astro";
+import DocsSearchTrigger from "../../../components/docs/DocsSearchTrigger.astro";
+import DocModuleCard from "../../../components/docs/DocModuleCard.astro";
+import DocGuideCard from "../../../components/docs/DocGuideCard.astro";
 import { getDictionary } from "../../../i18n";
-import { modules as marketingModules } from "../../../data/modules";
+import { moduleCategories } from "../../../data/modules";
 import { resolveIcon } from "../../../lib/icons";
-import { groupHelpEntriesByModule } from "../../../lib/help-content";
+import { developerPageIcon } from "../../../lib/docs-catalog";
+import { getDocsCatalog, resolveGuides, viewDocHref, developerDocHref } from "../../../lib/docs-content";
 
 const locale = "es" as const;
 const dict = getDictionary(locale);
 
-const helpEntries = await getCollection("help");
-const grouped = groupHelpEntriesByModule(helpEntries);
+const catalog = await getDocsCatalog();
+const guides = resolveGuides(catalog);
+const developerPages = (await getCollection("developers"))
+  .filter((page) => page.id !== "index")
+  .sort((a, b) => a.data.order - b.data.order);
 
-const rows = [...grouped.values()]
-  .map((mod) => {
-    const marketing = marketingModules.find((m) => m.id === mod.moduleKey);
-    return {
-      moduleKey: mod.moduleKey,
-      name: marketing?.name.es ?? mod.overview?.title ?? mod.moduleKey,
-      summary: mod.overview?.summary ?? "",
-      icon: marketing?.icon ?? "BookOpen",
-      order: marketing?.order ?? 999,
-    };
-  })
-  .sort((a, b) => a.order - b.order);
+const viewCount = catalog.reduce((total, mod) => total + mod.views.length, 0);
+const categories = moduleCategories.filter(
+  (cat) => cat.id === "all" || catalog.some((mod) => mod.category === cat.id),
+);
+
+// Frequent entry points, shown under the search bar.
+const popular = [
+  ["runly.core", "constructor-de-modulos"],
+  ["runly.pos", "caja"],
+  ["runly.identity", "roles"],
+  ["runly.pfm", "presupuestos"],
+  ["runly.inventory", "registro-ia"],
+].flatMap(([moduleKey, slug]) => {
+  const mod = catalog.find((m) => m.moduleKey === moduleKey);
+  const view = mod?.views.find((v) => v.slug === slug);
+  return mod && view ? [{ mod, view }] : [];
+});
+
+const stats = [
+  { value: catalog.length, label: "módulos" },
+  { value: viewCount, label: "pantallas documentadas" },
+  { value: guides.length, label: "guías paso a paso" },
+];
 ---
 
 <BaseLayout
-  title="Documentación de módulos — Runly"
-  description="Qué hace cada módulo de Runly ERP, cómo se usa y sus límites."
+  title="Documentación — Runly"
+  description="Guías, módulos y pantallas de Runly ERP: qué hace cada uno, cómo se usa y sus límites."
   locale={locale}
   path="/documentacion/modulos"
 >
   <Header locale={locale} nav={dict.nav} />
-  <main class="py-20 sm:py-24 bg-white min-h-[60vh]">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <span class="text-xs font-bold text-orange-600 uppercase tracking-widest px-3 py-1 rounded-full bg-orange-100">
-        Documentación
-      </span>
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4">
-        Módulos de Runly
-      </h1>
-      <p class="mt-3 max-w-2xl text-base text-slate-600 leading-relaxed">
-        Qué hace cada módulo, qué puedes hacer en sus pantallas principales, y sus límites y alcances.
-      </p>
-      <p class="mt-4 text-sm text-slate-600">
-        ¿Vas a extender un módulo con código?
-        <a href="/documentacion/desarrolladores" class="font-semibold text-orange-600 hover:underline">Documentación para desarrolladores</a>
-        (también para asistentes de IA en <a href="/llms.txt" class="text-orange-600 hover:underline">llms.txt</a>).
-      </p>
+  <main class="bg-white">
+    <!-- Hero + search -->
+    <section class="relative overflow-hidden border-b border-slate-100 bg-gradient-to-b from-orange-50/60 via-white to-white pb-14 pt-24 sm:pt-28">
+      <div class="bg-grid-pattern absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+        <span class="rounded-full bg-orange-100 px-3 py-1 text-xs font-bold uppercase tracking-widest text-orange-600">
+          Centro de documentación
+        </span>
+        <h1 class="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+          Aprende a usar <span class="text-gradient-orange">Runly</span>
+        </h1>
+        <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
+          Qué hace cada módulo, cómo se usa cada pantalla y sus límites. Empieza por una guía o busca lo que necesitas.
+        </p>
 
-      <div class="mt-12 grid gap-4 sm:grid-cols-2">
-        {rows.map((row) => {
-          const Icon = resolveIcon(row.icon);
-          return (
-            <a
-              href={`/documentacion/modulos/${row.moduleKey}`}
-              class="block rounded-2xl border border-slate-200 p-5 hover:border-orange-300 hover:shadow-sm transition"
-            >
-              <div class="flex items-center gap-3">
-                <Icon class="h-5 w-5 text-orange-600" />
-                <span class="font-bold text-slate-900">{row.name}</span>
-              </div>
-              <p class="mt-2 text-sm text-slate-600 leading-relaxed">{row.summary}</p>
-            </a>
-          );
-        })}
+        <DocsSearchTrigger variant="hero" class="mx-auto mt-8 max-w-xl" />
+
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span class="font-semibold text-slate-400">Populares:</span>
+          {popular.map(({ mod, view }) => {
+            const ViewIcon = resolveIcon(view.icon);
+            return (
+              <a
+                href={viewDocHref(mod.moduleKey, view.slug)}
+                class="mod-soft inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-semibold transition hover:brightness-95"
+                style={`--mod:${mod.color}`}
+              >
+                <ViewIcon class="h-3 w-3" />
+                {view.title}
+              </a>
+            );
+          })}
+        </div>
+
+        <dl class="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-4">
+          {stats.map((stat) => (
+            <div>
+              <dt class="sr-only">{stat.label}</dt>
+              <dd class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{stat.value}</dd>
+              <dd class="text-xs text-slate-500">{stat.label}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
-    </div>
+    </section>
+
+    <!-- Guides -->
+    <section class="py-16 sm:py-20" aria-labelledby="guias">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <h2 id="guias" class="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Guías paso a paso</h2>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+            Recorridos por varias pantallas y módulos, en el orden en que los usarías, para lograr algo concreto.
+          </p>
+        </div>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {guides.map((guide) => <DocGuideCard guide={guide} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Modules -->
+    <section class="border-y border-slate-100 bg-slate-50/70 py-16 sm:py-20" aria-labelledby="modulos">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div class="max-w-2xl">
+            <h2 id="modulos" class="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Módulos</h2>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+              Cada módulo con sus pestañas: entra a uno o salta directo a una pantalla.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría" data-doc-filters>
+            {categories.map((cat, i) => {
+              const CatIcon = resolveIcon(cat.icon);
+              const count = cat.id === "all" ? catalog.length : catalog.filter((m) => m.category === cat.id).length;
+              return (
+                <button
+                  type="button"
+                  data-filter={cat.id}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                  class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 aria-pressed:border-slate-900 aria-pressed:bg-slate-900 aria-pressed:text-white"
+                >
+                  <CatIcon class="h-3.5 w-3.5" />
+                  {cat.label.es}
+                  <span class="opacity-60">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-doc-modules>
+          {catalog.map((mod) => <DocModuleCard module={mod} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Developers -->
+    <section class="py-16 sm:py-20" aria-labelledby="desarrolladores">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-3xl bg-runly-midnight p-8 text-white sm:p-10">
+          <div class="bg-grid-pattern-dark absolute inset-0" aria-hidden="true"></div>
+          <div class="relative grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+            <div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/10">
+                <CodeXml class="h-5 w-5 text-orange-400" />
+              </span>
+              <h2 id="desarrolladores" class="mt-4 text-2xl font-extrabold tracking-tight sm:text-3xl">¿Vas a extender un módulo con código?</h2>
+              <p class="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">
+                Pantallas React, la API que genera el Constructor, relaciones, campos y librerías disponibles.
+              </p>
+              <div class="mt-6 flex flex-wrap gap-3">
+                <a href={developerDocHref("index")} class="runly-gradient-btn inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white">
+                  Documentación para desarrolladores
+                  <ArrowRight class="h-4 w-4" />
+                </a>
+                <a href="/llms.txt" class="inline-flex items-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10">
+                  <Bot class="h-4 w-4" />
+                  llms.txt para IA
+                </a>
+              </div>
+            </div>
+            <ul class="grid gap-2 sm:grid-cols-2">
+              {developerPages.map((page) => {
+                const PageIcon = resolveIcon(developerPageIcon(page.id));
+                return (
+                  <li>
+                    <a
+                      href={developerDocHref(page.id)}
+                      class="flex h-full gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-orange-400/40 hover:bg-white/10"
+                    >
+                      <PageIcon class="mt-0.5 h-4 w-4 shrink-0 text-orange-400" />
+                      <span>
+                        <span class="block text-sm font-bold">{page.data.title}</span>
+                        <span class="mt-0.5 line-clamp-2 block text-xs leading-relaxed text-slate-400">{page.data.summary}</span>
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
   <Footer locale={locale} footer={dict.footer} />
+  <DocsSearch />
 </BaseLayout>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>("[data-doc-filters] [data-filter]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-doc-modules] > [data-category]");
+  filters.forEach((button) => {
+    button.addEventListener("click", () => {
+      const category = button.dataset.filter;
+      filters.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+      cards.forEach((card) => {
+        card.hidden = category !== "all" && card.dataset.category !== category;
+      });
+    });
+  });
+</script>

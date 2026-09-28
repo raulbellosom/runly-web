@@ -1,0 +1,328 @@
+{
+  "runly.core": [
+    {
+      "path": "/modules",
+      "icon": "Puzzle"
+    },
+    {
+      "path": "/module-builder",
+      "icon": "Hammer"
+    },
+    {
+      "path": "/settings",
+      "icon": "Settings"
+    },
+    {
+      "path": "/app/help",
+      "icon": "BookOpen"
+    }
+  ],
+  "runly.identity": [
+    {
+      "path": "/identity/users",
+      "icon": "Users"
+    },
+    {
+      "path": "/identity/roles",
+      "icon": "Shield"
+    },
+    {
+      "path": "/identity/chat-reports",
+      "icon": "Flag"
+    }
+  ],
+  "runly.files": [
+    {
+      "path": "/files",
+      "icon": "FolderOpen"
+    }
+  ],
+  "runly.company": [
+    {
+      "path": "/",
+      "icon": "LayoutDashboard"
+    },
+    {
+      "path": "/company",
+      "icon": "Building2"
+    },
+    {
+      "path": "/company/address",
+      "icon": "MapPin"
+    },
+    {
+      "path": "/company/branding",
+      "icon": "Palette"
+    },
+    {
+      "path": "/company/members",
+      "icon": "Users"
+    }
+  ],
+  "runly.ledger": [
+    {
+      "path": "/app/m/runly.ledger/accounts",
+      "icon": "Landmark"
+    },
+    {
+      "path": "/app/m/runly.ledger/groups",
+      "icon": "FolderOpen"
+    },
+    {
+      "path": "/app/m/runly.ledger/categories",
+      "icon": "Tag"
+    },
+    {
+      "path": "/app/m/runly.ledger/types",
+      "icon": "Hash"
+    },
+    {
+      "path": "/app/m/runly.ledger/memberships",
+      "icon": "Users"
+    }
+  ],
+  "runly.fleet": [
+    {
+      "path": "/app/m/runly.fleet/vehicles",
+      "icon": "Truck"
+    },
+    {
+      "path": "/app/m/runly.fleet/insurance",
+      "icon": "ShieldCheck"
+    },
+    {
+      "path": "/app/m/runly.fleet/reports",
+      "icon": "ClipboardList"
+    },
+    {
+      "path": "/app/m/runly.fleet/drivers",
+      "icon": "UserCheck"
+    },
+    {
+      "path": "/app/m/runly.fleet/catalogs",
+      "icon": "Layers"
+    }
+  ],
+  "runly.calendar": [
+    {
+      "path": "/app/m/runly.calendar/calendar",
+      "icon": "Calendar"
+    }
+  ],
+  "runly.catalog": [
+    {
+      "path": "/app/m/runly.catalog",
+      "icon": "ShoppingCart"
+    },
+    {
+      "path": "/app/m/runly.catalog/categories",
+      "icon": "Tag"
+    },
+    {
+      "path": "/app/m/runly.catalog/inventory",
+      "icon": "BarChart3"
+    }
+  ],
+  "runly.pos": [
+    {
+      "path": "/app/m/runly.pos/pos/caja",
+      "icon": "BadgeDollarSign"
+    },
+    {
+      "path": "/app/m/runly.pos/pos/comandero",
+      "icon": "Armchair"
+    },
+    {
+      "path": "/app/m/runly.pos/pos/cocina",
+      "icon": "ChefHat"
+    },
+    {
+      "path": "/app/m/runly.pos/pos/orders",
+      "icon": "ReceiptText"
+    },
+    {
+      "path": "/app/m/runly.pos/pos/admin",
+      "icon": "Settings"
+    }
+  ],
+  "runly.inventory": [
+    {
+      "path": "/inventory",
+      "icon": "Boxes"
+    },
+    {
+      "path": "/inventory/intake",
+      "icon": "Sparkles"
+    },
+    {
+      "path": "/inventory/assignments",
+      "icon": "UserCheck"
+    },
+    {
+      "path": "/inventory/catalogs",
+      "icon": "FolderOpen"
+    }
+  ],
+  "runly.notes": [
+    {
+      "path": "/notes",
+      "icon": "NotebookPen"
+    },
+    {
+      "path": "/notes/recent",
+      "icon": "Clock"
+    },
+    {
+      "path": "/notes/shared",
+      "icon": "Users"
+    },
+    {
+      "path": "/notes/trash",
+      "icon": "Trash2"
+    }
+  ],
+  "runly.pfm": [
+    {
+      "path": "/app/m/runly.pfm/overview",
+      "icon": "LayoutDashboard"
+    },
+    {
+      "path": "/app/m/runly.pfm/wallets",
+      "icon": "Wallet"
+    },
+    {
+      "path": "/app/m/runly.pfm/recurring",
+      "icon": "Repeat"
+    },
+    {
+      "path": "/app/m/runly.pfm/categories",
+      "icon": "Tag"
+    },
+    {
+      "path": "/app/m/runly.pfm/budgets",
+      "icon": "Target"
+    },
+    {
+      "path": "/app/m/runly.pfm/receipts",
+      "icon": "ReceiptText"
+    }
+  ],
+  "runly.contacts": [
+    {
+      "path": "/contacts",
+      "icon": "Contact"
+    }
+  ],
+  "runly.hr": [
+    {
+      "path": "/hr/employees",
+      "icon": "Users"
+    },
+    {
+      "path": "/hr/org-chart",
+      "icon": "Network"
+    },
+    {
+      "path": "/hr/catalogs",
+      "icon": "BookOpen"
+    }
+  ],
+  "runly.website": [
+    {
+      "path": "/",
+      "icon": "Globe"
+    },
+    {
+      "path": "/pages",
+      "icon": "FileText"
+    },
+    {
+      "path": "/blog",
+      "icon": "BookOpen"
+    },
+    {
+      "path": "/theme",
+      "icon": "Palette"
+    },
+    {
+      "path": "/templates",
+      "icon": "LayoutTemplate"
+    },
+    {
+      "path": "/forms",
+      "icon": "FormInput"
+    },
+    {
+      "path": "/payments",
+      "icon": "CreditCard"
+    },
+    {
+      "path": "/settings",
+      "icon": "Settings"
+    }
+  ],
+  "runly.growth": [
+    {
+      "path": "/",
+      "icon": "TrendingUp"
+    },
+    {
+      "path": "/leads",
+      "icon": "UserRoundSearch"
+    },
+    {
+      "path": "/sites",
+      "icon": "Globe"
+    },
+    {
+      "path": "/forms",
+      "icon": "FileText"
+    }
+  ],
+  "runly.documents": [
+    {
+      "path": "/templates",
+      "icon": "LayoutTemplate"
+    },
+    {
+      "path": "/generated",
+      "icon": "Files"
+    }
+  ],
+  "runly.activity": [
+    {
+      "path": "/",
+      "icon": "Activity"
+    }
+  ],
+  "runly.notifications": [
+    {
+      "path": "/app/m/runly.notifications",
+      "icon": "Bell"
+    },
+    {
+      "path": "/app/m/runly.notifications/settings",
+      "icon": "Settings"
+    }
+  ],
+  "runly.projects": [
+    {
+      "path": "/",
+      "icon": "SquareKanban"
+    }
+  ],
+  "runly.chat": [
+    {
+      "path": "/chat/inbox",
+      "icon": "MessageSquare"
+    },
+    {
+      "path": "/chat/external",
+      "icon": "Inbox"
+    },
+    {
+      "path": "/chat/templates",
+      "icon": "LayoutTemplate"
+    }
+  ]
+}

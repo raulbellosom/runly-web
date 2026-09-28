@@ -16,6 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseHelpRelativePath } from "./lib/help-content-paths.mjs";
+import { extractModuleNavigation } from "./lib/help-navigation.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(here, "..");
@@ -79,7 +80,24 @@ function main() {
   console.log(`[sync-help-content] Origen: ${sourceDir}`);
   console.log(`[sync-help-content] Destino: ${destDir}`);
 
+  syncNavigation();
   syncDeveloperDocs();
+}
+
+// Sidebar navigation (path + icon, in order) of every official module, so the
+// docs pages show each view with its in-app icon and in sidebar order.
+function syncNavigation() {
+  const manifestsDir = path.join(runlyRepoPath, "apps/api/src/manifests/official");
+  const source = fs
+    .readdirSync(manifestsDir)
+    .filter((name) => name.endsWith(".js"))
+    .sort()
+    .map((name) => fs.readFileSync(path.join(manifestsDir, name), "utf8"))
+    .join("\n");
+  const navigation = extractModuleNavigation(source);
+  const navDest = path.join(repoRoot, "src/data/help-navigation.json");
+  fs.writeFileSync(navDest, `${JSON.stringify(navigation, null, 2)}\n`);
+  console.log(`[sync-help-content] Navegación de ${Object.keys(navigation).length} módulos escrita en ${navDest}`);
 }
 
 // Developer documentation (docs/developers/*.md in the runly repo): published

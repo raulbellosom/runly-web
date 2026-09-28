@@ -1,0 +1,84 @@
+---
+// src/components/docs/DocModuleCard.astro
+//
+// A module on the docs home: tinted with the module's own color and icon
+// (same as its tile inside Runly), with a chip per documented view that
+// deep-links to that view's section. The whole card is clickable through a
+// stretched link; the chips sit above it (relative z-10) so they stay
+// separately clickable without nesting <a> elements.
+import { ArrowRight } from "@lucide/astro";
+import { resolveIcon } from "../../lib/icons";
+import { moduleCategories } from "../../data/modules";
+import type { DocModule } from "../../lib/docs-catalog";
+import { moduleDocHref, viewDocHref } from "../../lib/docs-content";
+
+interface Props {
+  module: DocModule;
+}
+
+const MAX_CHIPS = 5;
+const { module: mod } = Astro.props;
+const Icon = resolveIcon(mod.icon);
+const categoryLabel = moduleCategories.find((c) => c.id === mod.category)?.label.es;
+const chips = mod.views.slice(0, MAX_CHIPS);
+const hiddenCount = mod.views.length - chips.length;
+---
+
+<article
+  class="doc-card group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5"
+  style={`--mod:${mod.color}`}
+  data-category={mod.category ?? ""}
+>
+  <div class="doc-card-glow pointer-events-none absolute inset-0 opacity-70 transition-opacity group-hover:opacity-100" aria-hidden="true"></div>
+  <div class="mod-bar absolute inset-x-0 top-0 h-1" aria-hidden="true"></div>
+
+  <div class="relative flex items-start gap-3.5">
+    <span class="mod-tile flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
+      <Icon class="h-6 w-6" />
+    </span>
+    <div class="min-w-0 flex-1">
+      <h3 class="text-base font-extrabold leading-tight text-slate-900">
+        <a href={moduleDocHref(mod.moduleKey)} class="outline-none after:absolute after:inset-0 after:content-['']">
+          {mod.name}
+        </a>
+      </h3>
+      <p class="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-slate-500">
+        {categoryLabel && <span class="mod-text font-semibold">{categoryLabel}</span>}
+        {categoryLabel && <span aria-hidden="true">·</span>}
+        <span>{mod.views.length} {mod.views.length === 1 ? "pestaña" : "pestañas"}</span>
+      </p>
+    </div>
+  </div>
+
+  <p class="relative mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600">{mod.summary}</p>
+
+  {chips.length > 0 && (
+    <ul class="relative z-10 mt-4 flex flex-wrap gap-1.5">
+      {chips.map((view) => {
+        const ViewIcon = resolveIcon(view.icon);
+        return (
+          <li>
+            <a
+              href={viewDocHref(mod.moduleKey, view.slug)}
+              class="mod-soft inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold transition hover:brightness-95"
+              title={view.summary}
+            >
+              <ViewIcon class="h-3 w-3" />
+              {view.title}
+            </a>
+          </li>
+        );
+      })}
+      {hiddenCount > 0 && (
+        <li class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
+          +{hiddenCount}
+        </li>
+      )}
+    </ul>
+  )}
+
+  <span class="mod-text relative mt-auto inline-flex items-center gap-1 pt-5 text-xs font-bold">
+    Ver documentación
+    <ArrowRight class="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+  </span>
+</article>

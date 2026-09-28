@@ -195,3 +195,55 @@
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Documentation (/documentacion/**). No @tailwindcss/typography on this site,
+   so rendered markdown is styled through .doc-prose. Anything tinted with a
+   module's color reads it from a `--mod` custom property set inline on an
+   ancestor (style="--mod:#0A7BFF"), so one class works for all 21 modules.
+   --------------------------------------------------------------------------- */
+.doc-prose { color: #475569; line-height: 1.75; font-size: 0.975rem; }
+.doc-prose h1, .doc-prose h2, .doc-prose h3, .doc-prose h4 { color: #0f172a; font-weight: 800; letter-spacing: -0.01em; scroll-margin-top: 6rem; }
+.doc-prose h2 { font-size: 1.35rem; margin: 2.25rem 0 0.75rem; }
+.doc-prose h3 { font-size: 1.075rem; margin: 1.75rem 0 0.5rem; }
+.doc-prose h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+.doc-prose > :first-child { margin-top: 0; }
+.doc-prose p { margin-bottom: 0.85rem; }
+.doc-prose ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.85rem; }
+.doc-prose ol { list-style: decimal; padding-left: 1.25rem; margin-bottom: 0.85rem; }
+.doc-prose li { margin: 0.2rem 0; }
+.doc-prose li::marker { color: var(--mod, #ff5e14); }
+.doc-prose li > ul, .doc-prose li > ol { margin: 0.25rem 0 0.25rem; }
+.doc-prose strong { color: #0f172a; font-weight: 700; }
+.doc-prose a { color: #ea580c; text-decoration: underline; text-underline-offset: 2px; }
+.doc-prose code { font-size: 0.85em; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 0.35rem; padding: 0.05rem 0.3rem; color: #0f172a; }
+.doc-prose pre { background: #0b132b; border-radius: 0.85rem; padding: 1rem 1.1rem; overflow-x: auto; margin: 0.85rem 0 1.1rem; font-size: 0.85rem; line-height: 1.6; }
+.doc-prose pre code { background: transparent; border: 0; padding: 0; color: #e2e8f0; }
+.doc-prose blockquote { border-left: 3px solid var(--mod, #ff5e14); background: #f8fafc; padding: 0.6rem 1rem; border-radius: 0 0.6rem 0.6rem 0; margin: 1rem 0; }
+.doc-prose table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 0.85rem 0 1.25rem; font-size: 0.875rem; display: block; overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 0.75rem; }
+.doc-prose th, .doc-prose td { border-bottom: 1px solid #e2e8f0; padding: 0.55rem 0.75rem; text-align: left; vertical-align: top; }
+.doc-prose tr:last-child td { border-bottom: 0; }
+.doc-prose th { background: #f8fafc; color: #0f172a; font-weight: 700; white-space: nowrap; }
+.doc-prose hr { border: 0; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
+
+.mod-tile { background: var(--mod); color: #fff; box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--mod) 70%, transparent); }
+.mod-soft { background: color-mix(in srgb, var(--mod) 9%, white); color: color-mix(in srgb, var(--mod) 80%, #0f172a); }
+.mod-text { color: color-mix(in srgb, var(--mod) 85%, #0f172a); }
+.mod-border { border-color: color-mix(in srgb, var(--mod) 30%, white); }
+.mod-bar { background: var(--mod); }
+
+.doc-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+.doc-card:hover, .doc-card:focus-within {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--mod, #ff5e14) 45%, white);
+  box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--mod, #ff5e14) 55%, transparent);
+}
+.doc-card-glow { background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--mod, #ff5e14) 16%, transparent), transparent 60%); }
+
+.doc-toc-link[aria-current="true"] { background: color-mix(in srgb, var(--mod, #ff5e14) 10%, white); color: color-mix(in srgb, var(--mod, #ff5e14) 85%, #0f172a); font-weight: 600; }
+.doc-toc-link[aria-current="true"] .doc-toc-icon { color: var(--mod, #ff5e14); }
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-card { transition: none; }
+  .doc-card:hover, .doc-card:focus-within { transform: none; }
+}

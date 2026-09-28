@@ -1,0 +1,148 @@
+---
+// src/pages/documentacion/guias/[guia].astro
+//
+// One page per curated guide (src/data/doc-guides.ts): its steps' help
+// articles, which may span several modules, rendered in order on one page,
+// each tinted with its own module's color.
+export const prerender = true;
+
+import { getCollection, render } from "astro:content";
+import { ArrowLeft, ArrowRight, ChevronRight } from "@lucide/astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/layout/Header.astro";
+import Footer from "../../../components/layout/Footer.astro";
+import DocsSearch from "../../../components/docs/DocsSearch.astro";
+import DocsSearchTrigger from "../../../components/docs/DocsSearchTrigger.astro";
+import DocsToc from "../../../components/docs/DocsToc.astro";
+import { getDictionary } from "../../../i18n";
+import { resolveIcon } from "../../../lib/icons";
+import { getDocsCatalog, resolveGuides, guideHref, moduleDocHref, viewDocHref } from "../../../lib/docs-content";
+import { docGuides } from "../../../data/doc-guides";
+
+export function getStaticPaths() {
+  return docGuides.map((guide) => ({ params: { guia: guide.slug }, props: { slug: guide.slug } }));
+}
+
+const { slug } = Astro.props;
+const guides = resolveGuides(await getDocsCatalog());
+const index = guides.findIndex((g) => g.slug === slug);
+const guide = guides[index];
+const prev = guides[index - 1];
+const next = guides[index + 1];
+
+const entries = await getCollection("help");
+const steps = await Promise.all(
+  guide.resolvedSteps.map(async (step, i) => {
+    const entry = entries.find((e) => e.id === `${step.module.moduleKey}/views/${step.view.slug}`)!;
+    return { ...step, id: `paso-${i + 1}`, Content: (await render(entry)).Content };
+  }),
+);
+const modulesInGuide = [...new Map(steps.map((s) => [s.module.moduleKey, s.module])).values()];
+const Icon = resolveIcon(guide.icon);
+
+const locale = "es" as const;
+const dict = getDictionary(locale);
+---
+
+<BaseLayout
+  title={`${guide.title} — Guías de Runly`}
+  description={guide.description}
+  locale={locale}
+  path={guideHref(guide.slug)}
+>
+  <Header locale={locale} nav={dict.nav} />
+  <main class="bg-white" style="--mod:#ff5e14">
+    <header class="relative overflow-hidden border-b border-slate-100 bg-gradient-to-b from-orange-50/70 to-white pb-10 pt-24 sm:pt-28">
+      <div class="bg-grid-pattern absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent)]" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <nav aria-label="Ruta" class="flex flex-wrap items-center gap-1 text-xs font-semibold text-slate-500">
+          <a href="/documentacion/modulos" class="hover:text-slate-900">Documentación</a>
+          <ChevronRight class="h-3.5 w-3.5" />
+          <a href="/documentacion/modulos#guias" class="hover:text-slate-900">Guías</a>
+          <ChevronRight class="h-3.5 w-3.5" />
+          <span class="text-orange-600">{guide.title}</span>
+        </nav>
+        <div class="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center">
+          <span class="runly-gradient-btn flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-white shadow-glow-orange">
+            <Icon class="h-8 w-8" />
+          </span>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-orange-600">Guía · {guide.audience}</p>
+            <h1 class="mt-1 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">{guide.title}</h1>
+            <p class="mt-2 max-w-3xl text-base leading-relaxed text-slate-600">{guide.description}</p>
+          </div>
+        </div>
+        <div class="mt-6 flex flex-wrap items-center gap-2 text-xs font-semibold">
+          <span class="rounded-full bg-white px-3 py-1 text-slate-600 ring-1 ring-slate-200">{steps.length} pasos</span>
+          {modulesInGuide.map((mod) => {
+            const ModIcon = resolveIcon(mod.icon);
+            return (
+              <a href={moduleDocHref(mod.moduleKey)} class="mod-soft inline-flex items-center gap-1 rounded-full px-3 py-1" style={`--mod:${mod.color}`}>
+                <ModIcon class="h-3.5 w-3.5" />
+                {mod.name}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:px-8">
+      <aside class="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:self-start lg:overflow-y-auto">
+        <DocsSearchTrigger />
+        <DocsToc
+          heading="Pasos"
+          class="mt-6 hidden lg:block"
+          items={steps.map((s, i) => ({ id: s.id, title: s.view.title, icon: s.view.icon, color: s.module.color, label: String(i + 1) }))}
+        />
+      </aside>
+
+      <article class="min-w-0">
+        <ol class="space-y-14">
+          {steps.map((step, i) => {
+            const ViewIcon = resolveIcon(step.view.icon);
+            return (
+              <li id={step.id} class="scroll-mt-24" style={`--mod:${step.module.color}`}>
+                <div class="flex items-start gap-4">
+                  <div class="flex flex-col items-center">
+                    <span class="mod-tile flex h-11 w-11 items-center justify-center rounded-xl">
+                      <ViewIcon class="h-5 w-5" />
+                    </span>
+                    <span class="mt-2 text-[11px] font-bold text-slate-400">Paso {i + 1}</span>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <a href={viewDocHref(step.module.moduleKey, step.view.slug)} class="mod-text text-xs font-bold hover:underline">
+                      {step.module.name}
+                    </a>
+                    <h2 class="text-xl font-extrabold tracking-tight text-slate-900">{step.view.title}</h2>
+                    <p class="mt-0.5 text-sm text-slate-500">{step.view.summary}</p>
+                    <div class="doc-prose mt-5">
+                      <step.Content />
+                    </div>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+
+        <nav aria-label="Otras guías" class="mt-16 grid gap-3 border-t border-slate-100 pt-8 sm:grid-cols-2">
+          {prev ? (
+            <a href={guideHref(prev.slug)} class="doc-card rounded-xl border border-slate-200 p-4">
+              <span class="flex items-center gap-1 text-xs font-semibold text-slate-400"><ArrowLeft class="h-3.5 w-3.5" /> Guía anterior</span>
+              <span class="mt-1 block font-bold text-slate-900">{prev.title}</span>
+            </a>
+          ) : <span />}
+          {next && (
+            <a href={guideHref(next.slug)} class="doc-card rounded-xl border border-slate-200 p-4 text-right">
+              <span class="flex items-center justify-end gap-1 text-xs font-semibold text-slate-400">Siguiente guía <ArrowRight class="h-3.5 w-3.5" /></span>
+              <span class="mt-1 block font-bold text-slate-900">{next.title}</span>
+            </a>
+          )}
+        </nav>
+      </article>
+    </div>
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+  <DocsSearch />
+</BaseLayout>
