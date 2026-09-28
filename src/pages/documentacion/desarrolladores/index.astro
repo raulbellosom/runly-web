@@ -1,0 +1,15 @@
+---
+// /documentacion/desarrolladores — developer docs home (docs/developers/index.md in runly).
+export const prerender = true;
+
+import { getEntry, render } from "astro:content";
+import DeveloperDocLayout from "../../../components/docs/DeveloperDocLayout.astro";
+
+const entry = await getEntry("developers", "index");
+if (!entry) throw new Error("Falta src/content/developers/index.md: ejecuta scripts/sync-help-content.mjs");
+const { Content } = await render(entry);
+---
+
+<DeveloperDocLayout title={entry.data.title} summary={entry.data.summary} slug="index">
+  <Content />
+</DeveloperDocLayout>

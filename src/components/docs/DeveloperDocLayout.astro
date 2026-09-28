@@ -1,0 +1,77 @@
+---
+// Shared shell for /documentacion/desarrolladores pages: header, sidebar
+// with every developer page (by `order`), the rendered markdown and a link to
+// the page's Markdown version for AI assistants.
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../layout/Header.astro";
+import Footer from "../layout/Footer.astro";
+import { getDictionary } from "../../i18n";
+
+interface Props {
+  title: string;
+  summary: string;
+  slug: string;
+}
+
+const { title, summary, slug } = Astro.props;
+const locale = "es" as const;
+const dict = getDictionary(locale);
+const pages = (await getCollection("developers")).sort((a, b) => a.data.order - b.data.order);
+const hrefOf = (id: string) => (id === "index" ? "/documentacion/desarrolladores" : `/documentacion/desarrolladores/${id}`);
+---
+
+<BaseLayout title={`${title} — Desarrolladores Runly`} description={summary} locale={locale} path={hrefOf(slug)}>
+  <Header locale={locale} nav={dict.nav} />
+  <main class="py-16 sm:py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10 lg:grid-cols-[14rem_minmax(0,1fr)]">
+      <nav class="lg:sticky lg:top-24 lg:self-start" aria-label="Documentación de desarrolladores">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Desarrolladores</p>
+        <ul class="mt-3 space-y-1">
+          {pages.map((page) => (
+            <li>
+              <a
+                href={hrefOf(page.id)}
+                class={`block rounded-lg px-3 py-1.5 text-sm ${page.id === slug ? "bg-orange-50 font-semibold text-orange-700" : "text-slate-600 hover:bg-slate-50"}`}
+              >
+                {page.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-6 text-xs text-slate-500">
+          Para asistentes de IA: <a class="text-orange-600 hover:underline" href="/llms.txt">llms.txt</a> ·
+          <a class="text-orange-600 hover:underline" href={`/documentacion/desarrolladores/${slug}.md`}>esta página en Markdown</a>
+        </p>
+      </nav>
+      <article class="min-w-0">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{title}</h1>
+        <p class="mt-2 text-base text-slate-600 leading-relaxed">{summary}</p>
+        <div class="mt-8 dev-doc-content">
+          <slot />
+        </div>
+      </article>
+    </div>
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>
+
+<style>
+  /* No @tailwindcss/typography on this site: style the rendered markdown. */
+  .dev-doc-content :global(h2) { font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 2rem 0 0.75rem; }
+  .dev-doc-content :global(h3) { font-size: 1.05rem; font-weight: 800; color: #0f172a; margin: 1.5rem 0 0.5rem; }
+  .dev-doc-content :global(p),
+  .dev-doc-content :global(li) { color: #475569; line-height: 1.7; }
+  .dev-doc-content :global(p) { margin-bottom: 0.75rem; }
+  .dev-doc-content :global(ul) { list-style: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+  .dev-doc-content :global(ol) { list-style: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+  .dev-doc-content :global(strong) { color: #0f172a; font-weight: 700; }
+  .dev-doc-content :global(a) { color: #ea580c; text-decoration: underline; }
+  .dev-doc-content :global(code) { font-size: 0.85em; background: #f1f5f9; border-radius: 0.3rem; padding: 0.1rem 0.3rem; color: #0f172a; }
+  .dev-doc-content :global(pre) { background: #0f172a; border-radius: 0.75rem; padding: 1rem; overflow-x: auto; margin: 0.75rem 0 1rem; font-size: 0.85rem; }
+  .dev-doc-content :global(pre code) { background: transparent; padding: 0; color: #e2e8f0; }
+  .dev-doc-content :global(table) { width: 100%; border-collapse: collapse; margin: 0.75rem 0 1.25rem; font-size: 0.9rem; display: block; overflow-x: auto; }
+  .dev-doc-content :global(th),
+  .dev-doc-content :global(td) { border: 1px solid #e2e8f0; padding: 0.45rem 0.6rem; text-align: left; vertical-align: top; color: #475569; }
+  .dev-doc-content :global(th) { background: #f8fafc; color: #0f172a; font-weight: 700; }
+</style>

@@ -1,7 +1,11 @@
 ---
 // src/components/sections/Hero.astro
 import { Boxes, BuildingComplex, SlidersHorizontal, Lock, Network, Sparkles } from "@lucide/astro";
+import { Image } from "astro:assets";
 import type { SiteDictionary } from "../../i18n/types";
+import tourInicio from "../../assets/tour/inicio.png";
+import tourCalendario from "../../assets/tour/calendario.png";
+import tourEmpresa from "../../assets/tour/empresa.png";
 
 interface Props {
   dict: SiteDictionary;
@@ -11,8 +15,11 @@ const { dict } = Astro.props;
 const { hero } = dict;
 
 // Paired by index with hero.tourTabs (label/alt come from the dict so they
-// stay bilingual; the image paths are a code concern, not a translation one).
-const tourImages = ["/brand/product-dashboard-preview.png", "/brand/tour-calendario.png", "/brand/tour-empresa.png"];
+// stay bilingual; the images are a code concern, not a translation one).
+// Imported through astro:assets so they ship as responsive WebP instead of
+// full-size PNGs, and all three render up front so switching tabs is instant.
+const tourImages = [tourInicio, tourCalendario, tourEmpresa];
+const tourSizes = "(min-width: 1024px) 1000px, 100vw";
 ---
 
 <section class="relative pt-12 pb-24 lg:pt-20 lg:pb-32 overflow-hidden bg-grid-pattern" id="hero">
@@ -39,20 +46,24 @@ const tourImages = ["/brand/product-dashboard-preview.png", "/brand/tour-calenda
       <span class="flex items-center gap-1.5"><SlidersHorizontal class="w-4 h-4 text-emerald-500" /> {hero.badgeCustomizable}</span>
     </div>
     <div class="relative max-w-5xl mx-auto mt-6">
-      <div class="flex items-center justify-center gap-2 mb-4" role="tablist" aria-label={hero.imageAlt}>
-        {hero.tourTabs.map((tab, i) => (
-          <button
-            type="button"
-            class="hero-tour-tab px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all data-[active=true]:runly-gradient-btn data-[active=true]:text-white data-[active=true]:shadow-sm data-[active=false]:bg-slate-100 data-[active=false]:text-slate-600 data-[active=false]:hover:bg-slate-200"
-            data-active={i === 0 ? "true" : "false"}
-            data-image={tourImages[i]}
-            data-alt={tab.alt}
-            role="tab"
-            aria-selected={i === 0 ? "true" : "false"}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div class="flex justify-center mb-5">
+        <div id="heroTourTabs" class="relative inline-flex items-center gap-1 p-1 rounded-full bg-slate-100/90 border border-slate-200 backdrop-blur" role="tablist" aria-label={hero.imageAlt}>
+          <span id="heroTourIndicator" aria-hidden="true" class="absolute top-1 bottom-1 left-0 rounded-full bg-gradient-to-br from-[#ff5e14] to-[#ff9f1c] shadow-md shadow-orange-500/30 transition-[transform,width] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)]"></span>
+          {hero.tourTabs.map((tab, i) => (
+            <button
+              type="button"
+              class="hero-tour-tab relative z-10 overflow-hidden px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-300 data-[active=true]:text-white data-[active=false]:text-slate-600 data-[active=false]:hover:text-slate-900"
+              data-active={i === 0 ? "true" : "false"}
+              data-index={i}
+              role="tab"
+              aria-selected={i === 0 ? "true" : "false"}
+              aria-controls={`heroTourPanel-${i}`}
+            >
+              {tab.label}
+              <span aria-hidden="true" class="hero-tour-progress absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-white/80 origin-left scale-x-0"></span>
+            </button>
+          ))}
+        </div>
       </div>
       <div class="relative rounded-2xl p-2 sm:p-3 bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200/50 shadow-2xl border border-slate-300/60">
         <div class="bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
@@ -68,16 +79,25 @@ const tourImages = ["/brand/product-dashboard-preview.png", "/brand/tour-calenda
             </div>
             <div class="w-10"></div>
           </div>
-          <div class="relative">
-            <img
-              id="heroTourImage"
-              alt={hero.imageAlt}
-              class="w-full h-auto object-cover select-none transition-opacity duration-200"
-              src="/brand/product-dashboard-preview.png"
-              width="1912"
-              height="942"
-              loading="eager"
-            />
+          <div id="heroTourStage" class="relative overflow-hidden bg-slate-50" style={`aspect-ratio: ${tourInicio.width} / ${tourInicio.height}`}>
+            {tourImages.map((img, i) => (
+              <Image
+                id={`heroTourPanel-${i}`}
+                src={img}
+                alt={hero.tourTabs[i]?.alt ?? hero.imageAlt}
+                widths={[640, 1000, 1500, 1912]}
+                sizes={tourSizes}
+                format="webp"
+                quality={80}
+                loading="eager"
+                fetchpriority={i === 0 ? "high" : "low"}
+                decoding="async"
+                role="tabpanel"
+                aria-hidden={i === 0 ? "false" : "true"}
+                data-active={i === 0 ? "true" : "false"}
+                class="hero-tour-image absolute inset-0 w-full h-full object-cover object-top select-none transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] data-[active=true]:opacity-100 data-[active=true]:scale-100 data-[active=true]:blur-0 data-[active=false]:opacity-0 data-[active=false]:scale-[1.03] data-[active=false]:blur-sm motion-reduce:transition-none"
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -104,36 +124,99 @@ const tourImages = ["/brand/product-dashboard-preview.png", "/brand/tour-calenda
 </section>
 
 <script>
-  const tabs = document.querySelectorAll<HTMLButtonElement>(".hero-tour-tab");
-  const image = document.getElementById("heroTourImage") as HTMLImageElement | null;
+  const INTERVAL_MS = 5000;
+
+  const tabList = document.getElementById("heroTourTabs");
+  const indicator = document.getElementById("heroTourIndicator");
+  const stage = document.getElementById("heroTourStage");
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>(".hero-tour-tab"));
+  const images = Array.from(document.querySelectorAll<HTMLImageElement>(".hero-tour-image"));
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (image && tabs.length) {
-    tabs.forEach((tab) => {
+  if (tabList && indicator && stage && tabs.length && tabs.length === images.length) {
+    let current = 0;
+    let progressAnim: Animation | null = null;
+    let hovered = false;
+    let visible = true;
+    let stopped = prefersReducedMotion;
+
+    const moveIndicator = () => {
+      const tab = tabs[current];
+      indicator.style.width = `${tab.offsetWidth}px`;
+      indicator.style.transform = `translateX(${tab.offsetLeft}px)`;
+    };
+
+    // Drives autoplay: when the progress bar under the active tab finishes
+    // filling, advance. Pausing the animation pauses the carousel with it.
+    const startProgress = () => {
+      progressAnim?.cancel();
+      progressAnim = null;
+      if (stopped) return;
+      const bar = tabs[current].querySelector<HTMLElement>(".hero-tour-progress");
+      if (!bar) return;
+      progressAnim = bar.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], {
+        duration: INTERVAL_MS,
+        easing: "linear",
+      });
+      progressAnim.onfinish = () => show((current + 1) % tabs.length);
+      syncPlayState();
+    };
+
+    const syncPlayState = () => {
+      if (!progressAnim) return;
+      if (hovered || !visible || document.hidden) progressAnim.pause();
+      else progressAnim.play();
+    };
+
+    const show = (index: number) => {
+      current = index;
+      tabs.forEach((t, i) => {
+        const active = i === index;
+        t.dataset.active = String(active);
+        t.setAttribute("aria-selected", String(active));
+        t.tabIndex = active ? 0 : -1;
+      });
+      images.forEach((img, i) => {
+        const active = i === index;
+        img.dataset.active = String(active);
+        img.setAttribute("aria-hidden", String(!active));
+      });
+      moveIndicator();
+      startProgress();
+    };
+
+    tabs.forEach((tab, i) => {
       tab.addEventListener("click", () => {
-        if (tab.dataset.active === "true") return;
-        tabs.forEach((t) => {
-          t.dataset.active = "false";
-          t.setAttribute("aria-selected", "false");
-        });
-        tab.dataset.active = "true";
-        tab.setAttribute("aria-selected", "true");
-
-        const swap = () => {
-          image.src = tab.dataset.image ?? image.src;
-          image.alt = tab.dataset.alt ?? image.alt;
-        };
-
-        if (prefersReducedMotion) {
-          swap();
-          return;
-        }
-        image.style.opacity = "0";
-        window.setTimeout(() => {
-          swap();
-          image.style.opacity = "1";
-        }, 200);
+        // A deliberate choice by the visitor ends autoplay for good.
+        stopped = true;
+        show(i);
+      });
+      tab.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        e.preventDefault();
+        const next = (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+        stopped = true;
+        show(next);
+        tabs[next].focus();
       });
     });
+
+    for (const el of [tabList, stage]) {
+      el.addEventListener("mouseenter", () => { hovered = true; syncPlayState(); });
+      el.addEventListener("mouseleave", () => { hovered = false; syncPlayState(); });
+    }
+    document.addEventListener("visibilitychange", syncPlayState);
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      syncPlayState();
+    }, { threshold: 0.25 }).observe(stage);
+
+    window.addEventListener("resize", moveIndicator);
+    // Tab widths depend on the webfont; re-measure once it has loaded.
+    document.fonts?.ready.then(moveIndicator);
+    // Place the indicator without sliding it in from the left on first paint.
+    indicator.style.transition = "none";
+    show(0);
+    requestAnimationFrame(() => requestAnimationFrame(() => indicator.style.removeProperty("transition")));
   }
 </script>

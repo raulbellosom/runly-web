@@ -78,6 +78,25 @@ function main() {
   );
   console.log(`[sync-help-content] Origen: ${sourceDir}`);
   console.log(`[sync-help-content] Destino: ${destDir}`);
+
+  syncDeveloperDocs();
+}
+
+// Developer documentation (docs/developers/*.md in the runly repo): published
+// at /documentacion/desarrolladores, plus /llms.txt and Markdown copies for AI
+// assistants. Same one-way copy as the help content.
+function syncDeveloperDocs() {
+  const devSource = path.join(runlyRepoPath, "docs/developers");
+  const devDest = path.join(repoRoot, "src/content/developers");
+  if (!fs.existsSync(devSource)) {
+    console.warn(`[sync-help-content] No existe ${devSource}; se omite la documentación de desarrolladores.`);
+    return;
+  }
+  fs.rmSync(devDest, { recursive: true, force: true });
+  fs.mkdirSync(devDest, { recursive: true });
+  const files = fs.readdirSync(devSource).filter((name) => name.endsWith(".md"));
+  for (const name of files) fs.copyFileSync(path.join(devSource, name), path.join(devDest, name));
+  console.log(`[sync-help-content] ${files.length} páginas de desarrolladores copiadas a ${devDest}`);
 }
 
 main();

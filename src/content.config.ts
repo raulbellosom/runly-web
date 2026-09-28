@@ -30,4 +30,19 @@ const help = defineCollection({
   }),
 });
 
-export const collections = { help };
+// Developer documentation, synced from the runly repo's docs/developers/ by
+// scripts/sync-help-content.mjs. Id = file name without extension (the slug).
+const developers = defineCollection({
+  loader: glob({
+    pattern: "*.md",
+    base: "./src/content/developers",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { help, developers };
