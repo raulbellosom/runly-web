@@ -6,6 +6,11 @@ export interface NavDictionary {
   rm3: string;
   mirai: string;
   docs: string;
+  docsHome: string;
+  docsGuides: string;
+  docsModules: string;
+  docsDevelopers: string;
+  docsApi: string;
   implementation: string;
   contact: string;
   requestDemo: string;
@@ -26,7 +31,8 @@ export interface FooterDictionary {
     customImplementation: string;
     officialModules: string;
     customDevelopment: string;
-    communityPartners: string;
+    docsHome: string;
+    guides: string;
     apiDocs: string;
     privacyNotice: string;
     termsOfService: string;

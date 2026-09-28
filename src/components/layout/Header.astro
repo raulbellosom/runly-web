@@ -17,16 +17,29 @@ const langSwitcher = [
 
 // Módulos / Arquitectura / MirAI are grouped under a "Producto" dropdown on
 // desktop so the top-level nav doesn't grow past what fits the lg breakpoint
-// as more standalone pages get added — see docs link below, the newest one.
+// as more standalone pages get added.
 const productLinks = [
   { href: `${prefix}/modulos`, label: nav.modules },
   { href: `${prefix}/arquitectura`, label: nav.rm3 },
   { href: `${prefix}/mirai`, label: nav.mirai, badge: "IA" },
 ];
 
+// Documentation is Spanish-only for now, so these hrefs carry no locale prefix.
+// The docs home (/documentacion/modulos) hosts the guides and modules sections.
+const docsLinks = [
+  { href: "/documentacion/modulos", label: nav.docsHome },
+  { href: "/documentacion/modulos#guias", label: nav.docsGuides },
+  { href: "/documentacion/modulos#modulos", label: nav.docsModules },
+  { href: "/documentacion/desarrolladores", label: nav.docsDevelopers },
+  { href: "/documentacion/desarrolladores/api-modulos", label: nav.docsApi },
+];
+
+const dropdowns = [
+  { label: nav.product, items: productLinks },
+  { label: nav.docs, items: docsLinks },
+];
+
 const links = [
-  { href: `${prefix}/#hero`, label: nav.platform },
-  { href: "/documentacion/modulos", label: nav.docs },
   { href: `${prefix}/#implementacion`, label: nav.implementation },
   { href: `${prefix}/#contacto`, label: nav.contact },
 ];
@@ -37,8 +50,8 @@ const mobileLinks = [
   { href: `${prefix}/#hero`, label: nav.platform },
   ...productLinks,
   { href: "/documentacion/modulos", label: nav.docs },
-  { href: `${prefix}/#implementacion`, label: nav.implementation },
-  { href: `${prefix}/#contacto`, label: nav.contact },
+  { href: "/documentacion/desarrolladores", label: nav.docsDevelopers },
+  ...links,
 ];
 ---
 
@@ -48,26 +61,28 @@ const mobileLinks = [
       <img alt="RUNLY - Business in motion" class="h-9 w-auto object-contain" src="/brand/runly-logo-light.png" width="140" height="36" />
     </a>
     <nav class="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold text-slate-600">
-      <a class="hover:text-runly-orange transition-colors whitespace-nowrap" href={links[0].href}>{links[0].label}</a>
-      <div class="relative group">
-        <button class="hover:text-runly-orange transition-colors flex items-center gap-1 whitespace-nowrap" aria-haspopup="true" aria-expanded="false" type="button">
-          <span>{nav.product}</span>
-          <ChevronDown class="w-3.5 h-3.5 transition-transform group-focus-within:rotate-180 group-hover:rotate-180" />
-        </button>
-        <div class="dropdown-panel absolute left-0 top-full pt-3 w-56 opacity-0 invisible -translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0">
-          <div class="rounded-xl border border-slate-200 bg-white shadow-lg py-2">
-            {productLinks.map((link) => (
-              <a class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-runly-orange hover:bg-slate-50 transition-colors" href={link.href}>
-                <span>{link.label}</span>
-                {link.badge && (
-                  <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
-                )}
-              </a>
-            ))}
+      <a class="hover:text-runly-orange transition-colors whitespace-nowrap" href={`${prefix}/#hero`}>{nav.platform}</a>
+      {dropdowns.map((dropdown) => (
+        <div class="relative group">
+          <button class="hover:text-runly-orange transition-colors flex items-center gap-1 whitespace-nowrap" aria-haspopup="true" aria-expanded="false" type="button">
+            <span>{dropdown.label}</span>
+            <ChevronDown class="w-3.5 h-3.5 transition-transform group-focus-within:rotate-180 group-hover:rotate-180" />
+          </button>
+          <div class="dropdown-panel absolute left-0 top-full pt-3 w-60 opacity-0 invisible -translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0">
+            <div class="rounded-xl border border-slate-200 bg-white shadow-lg py-2">
+              {dropdown.items.map((link) => (
+                <a class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-runly-orange hover:bg-slate-50 transition-colors" href={link.href}>
+                  <span>{link.label}</span>
+                  {"badge" in link && link.badge && (
+                    <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
+                  )}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      {links.slice(1).map((link) => (
+      ))}
+      {links.map((link) => (
         <a class="hover:text-runly-orange transition-colors whitespace-nowrap" href={link.href}>{link.label}</a>
       ))}
     </nav>
@@ -97,7 +112,7 @@ const mobileLinks = [
     {mobileLinks.map((link) => (
       <a class="flex items-center gap-2 py-2 text-sm font-medium text-slate-700 hover:text-runly-orange" href={link.href}>
         <span>{link.label}</span>
-        {link.badge && (
+        {"badge" in link && link.badge && (
           <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
         )}
       </a>

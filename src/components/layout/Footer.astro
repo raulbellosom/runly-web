@@ -36,10 +36,12 @@ const prefix = locale === "es" ? "" : "/en";
       <div>
         <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">{footer.ecosystemHeading}</h4>
         <ul class="space-y-2.5 text-xs text-slate-400">
-          <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/arquitectura`}>{footer.links.officialModules}</a></li>
-          <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/arquitectura`}>{footer.links.customDevelopment}</a></li>
-          <li><span class="cursor-default">{footer.links.communityPartners}</span></li>
-          <li><span class="cursor-default">{footer.links.apiDocs}</span></li>
+          {/* Documentation is Spanish-only for now, so these hrefs carry no locale prefix. */}
+          <li><a class="hover:text-orange-400 transition-colors" href="/documentacion/modulos">{footer.links.docsHome}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/documentacion/modulos#guias">{footer.links.guides}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/documentacion/modulos#modulos">{footer.links.officialModules}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/documentacion/desarrolladores">{footer.links.customDevelopment}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/documentacion/desarrolladores/api-modulos">{footer.links.apiDocs}</a></li>
         </ul>
       </div>
       <div>
