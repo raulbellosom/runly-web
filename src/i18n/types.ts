@@ -11,9 +11,22 @@ export interface NavDictionary {
   docsModules: string;
   docsDevelopers: string;
   docsApi: string;
+  /** One-line blurbs shown under each link in the desktop dropdown panels. */
+  descriptions: {
+    modules: string;
+    rm3: string;
+    mirai: string;
+    docsHome: string;
+    docsGuides: string;
+    docsModules: string;
+    docsDevelopers: string;
+    docsApi: string;
+  };
   implementation: string;
   contact: string;
   requestDemo: string;
+  /** Back button label in the mobile drill-down submenus. */
+  back: string;
 }
 
 export interface FooterDictionary {

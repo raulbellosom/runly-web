@@ -19,9 +19,20 @@ export const es: SiteDictionary = {
     docsModules: "Módulos",
     docsDevelopers: "Desarrolladores",
     docsApi: "API de los módulos",
+    descriptions: {
+      modules: "Elige solo los módulos que tu negocio necesita.",
+      rm3: "Cómo se construye y escala la plataforma.",
+      mirai: "Inteligencia artificial integrada en tu operación.",
+      docsHome: "Todo lo que necesitas para empezar a usar RUNLY.",
+      docsGuides: "Tutoriales para tareas del día a día.",
+      docsModules: "Referencia funcional de cada módulo.",
+      docsDevelopers: "Flujos, integración y buenas prácticas.",
+      docsApi: "Endpoints y contratos de los módulos.",
+    },
     implementation: "Implementación",
     contact: "Contacto",
     requestDemo: "Solicitar una demostración",
+    back: "Volver",
   },
   footer: {
     tagline:

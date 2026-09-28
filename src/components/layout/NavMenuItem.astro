@@ -1,0 +1,33 @@
+---
+// src/components/layout/NavMenuItem.astro
+// Icon + label + one-line description row, shared by the desktop dropdown
+// panels and the mobile drill-down submenus in Header.astro.
+interface Props {
+  href: string;
+  label: string;
+  description: string;
+  icon: (props: { class?: string }) => unknown;
+  badge?: string;
+  featured?: boolean;
+}
+
+const { href, label, description, icon: Icon, badge, featured = false } = Astro.props;
+---
+
+<a
+  class={`nav-item group flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none ${featured ? "bg-gradient-to-r from-orange-50/80 to-transparent" : ""}`}
+  href={href}
+>
+  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm transition-colors group-hover:border-orange-200 group-hover:text-runly-orange">
+    <Icon class="w-[18px] h-[18px]" />
+  </span>
+  <span class="flex min-w-0 flex-col gap-0.5">
+    <span class="flex items-center gap-2 text-sm font-semibold text-slate-800 transition-colors group-hover:text-runly-orange">
+      {label}
+      {badge && (
+        <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{badge}</span>
+      )}
+    </span>
+    <span class="text-xs font-medium leading-snug text-slate-500">{description}</span>
+  </span>
+</a>

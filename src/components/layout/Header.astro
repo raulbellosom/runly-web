@@ -1,7 +1,23 @@
 ---
 // src/components/layout/Header.astro
-import { Menu, X, ArrowRight, ChevronDown } from "@lucide/astro";
+import {
+  Menu,
+  X,
+  ArrowRight,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Blocks,
+  Layers,
+  Sparkles,
+  BookOpen,
+  ListChecks,
+  LayoutGrid,
+  CodeXml,
+  Braces,
+} from "@lucide/astro";
 import type { NavDictionary } from "../../i18n/types";
+import NavMenuItem from "./NavMenuItem.astro";
 
 interface Props {
   locale: "es" | "en";
@@ -19,24 +35,28 @@ const langSwitcher = [
 // desktop so the top-level nav doesn't grow past what fits the lg breakpoint
 // as more standalone pages get added.
 const productLinks = [
-  { href: `${prefix}/modulos`, label: nav.modules },
-  { href: `${prefix}/arquitectura`, label: nav.rm3 },
-  { href: `${prefix}/mirai`, label: nav.mirai, badge: "IA" },
+  { href: `${prefix}/modulos`, label: nav.modules, description: nav.descriptions.modules, icon: Blocks },
+  { href: `${prefix}/arquitectura`, label: nav.rm3, description: nav.descriptions.rm3, icon: Layers },
+  { href: `${prefix}/mirai`, label: nav.mirai, description: nav.descriptions.mirai, icon: Sparkles, badge: "IA" },
 ];
 
 // Documentation is Spanish-only for now, so these hrefs carry no locale prefix.
 // The docs home (/documentacion/modulos) hosts the guides and modules sections.
 const docsLinks = [
-  { href: "/documentacion/modulos", label: nav.docsHome },
-  { href: "/documentacion/modulos#guias", label: nav.docsGuides },
-  { href: "/documentacion/modulos#modulos", label: nav.docsModules },
-  { href: "/documentacion/desarrolladores", label: nav.docsDevelopers },
-  { href: "/documentacion/desarrolladores/api-modulos", label: nav.docsApi },
+  { href: "/documentacion/modulos", label: nav.docsHome, description: nav.descriptions.docsHome, icon: BookOpen },
+  { href: "/documentacion/modulos#guias", label: nav.docsGuides, description: nav.descriptions.docsGuides, icon: ListChecks },
+  { href: "/documentacion/modulos#modulos", label: nav.docsModules, description: nav.descriptions.docsModules, icon: LayoutGrid },
+  { href: "/documentacion/desarrolladores", label: nav.docsDevelopers, description: nav.descriptions.docsDevelopers, icon: CodeXml },
+  { href: "/documentacion/desarrolladores/api-modulos", label: nav.docsApi, description: nav.descriptions.docsApi, icon: Braces },
 ];
 
+// All dropdowns share one viewport that morphs (position + size) between
+// panels, so switching menus slides the card instead of stacking popovers.
+// `columns` sets each panel's grid; the docs home spans the full row as a
+// featured entry.
 const dropdowns = [
-  { label: nav.product, items: productLinks },
-  { label: nav.docs, items: docsLinks },
+  { id: "product", label: nav.product, items: productLinks, columns: 1 },
+  { id: "docs", label: nav.docs, items: docsLinks, columns: 2 },
 ];
 
 const links = [
@@ -44,14 +64,12 @@ const links = [
   { href: `${prefix}/#contacto`, label: nav.contact },
 ];
 
-// Flat list for the mobile drawer, where vertical space isn't at a premium
-// the way horizontal desktop nav space is — no need for the dropdown there.
-const mobileLinks = [
-  { href: `${prefix}/#hero`, label: nav.platform },
-  ...productLinks,
-  { href: "/documentacion/modulos", label: nav.docs },
-  { href: "/documentacion/desarrolladores", label: nav.docsDevelopers },
-  ...links,
+// Mobile drawer root: plain links plus one drill-down entry per dropdown,
+// kept in the same order as the desktop nav.
+const mobileRoot = [
+  { kind: "link" as const, href: `${prefix}/#hero`, label: nav.platform },
+  ...dropdowns.map((d) => ({ kind: "submenu" as const, id: d.id, label: d.label, count: d.items.length })),
+  ...links.map((l) => ({ kind: "link" as const, ...l })),
 ];
 ---
 
@@ -60,31 +78,47 @@ const mobileLinks = [
     <a aria-label="RUNLY" class="flex items-center gap-2" href={`${prefix}/`}>
       <img alt="RUNLY - Business in motion" class="h-9 w-auto object-contain" src="/brand/runly-logo-light.png" width="140" height="36" />
     </a>
-    <nav class="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold text-slate-600">
-      <a class="hover:text-runly-orange transition-colors whitespace-nowrap" href={`${prefix}/#hero`}>{nav.platform}</a>
+    <nav class="relative hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold text-slate-600" id="desktopNav">
+      <a class="nav-plain-link hover:text-runly-orange transition-colors whitespace-nowrap" href={`${prefix}/#hero`}>{nav.platform}</a>
       {dropdowns.map((dropdown) => (
-        <div class="relative group">
-          <button class="hover:text-runly-orange transition-colors flex items-center gap-1 whitespace-nowrap" aria-haspopup="true" aria-expanded="false" type="button">
-            <span>{dropdown.label}</span>
-            <ChevronDown class="w-3.5 h-3.5 transition-transform group-focus-within:rotate-180 group-hover:rotate-180" />
-          </button>
-          <div class="dropdown-panel absolute left-0 top-full pt-3 w-60 opacity-0 invisible -translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0">
-            <div class="rounded-xl border border-slate-200 bg-white shadow-lg py-2">
-              {dropdown.items.map((link) => (
-                <a class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-runly-orange hover:bg-slate-50 transition-colors" href={link.href}>
-                  <span>{link.label}</span>
-                  {"badge" in link && link.badge && (
-                    <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
-                  )}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
+        <button
+          class="nav-trigger hover:text-runly-orange transition-colors flex items-center gap-1 whitespace-nowrap"
+          aria-expanded="false"
+          aria-controls={`nav-panel-${dropdown.id}`}
+          data-menu={dropdown.id}
+          type="button"
+        >
+          <span>{dropdown.label}</span>
+          <ChevronDown class="nav-trigger-chevron w-3.5 h-3.5" />
+        </button>
       ))}
       {links.map((link) => (
-        <a class="hover:text-runly-orange transition-colors whitespace-nowrap" href={link.href}>{link.label}</a>
+        <a class="nav-plain-link hover:text-runly-orange transition-colors whitespace-nowrap" href={link.href}>{link.label}</a>
       ))}
+      <div class="nav-viewport" id="navViewport" data-state="closed">
+        <div class="nav-viewport-card">
+          {dropdowns.map((dropdown) => (
+            <div
+              class="nav-panel"
+              id={`nav-panel-${dropdown.id}`}
+              data-panel={dropdown.id}
+              aria-label={dropdown.label}
+              role="region"
+            >
+              <ul class={`grid gap-1 p-2 ${dropdown.columns === 2 ? "w-[34rem] grid-cols-2" : "w-[21rem] grid-cols-1"}`}>
+                {dropdown.items.map((link, i) => {
+                  const featured = dropdown.columns === 2 && i === 0;
+                  return (
+                    <li class={featured ? "col-span-2" : undefined}>
+                      <NavMenuItem {...link} featured={featured} />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
     </nav>
     <div class="flex items-center gap-3 sm:gap-4">
       <div class="hidden sm:flex items-center gap-0.5 text-xs font-bold rounded-full border border-slate-200 p-0.5" aria-label="Language">
@@ -98,7 +132,7 @@ const mobileLinks = [
           </a>
         ))}
       </div>
-      <a class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm whitespace-nowrap" href={`${prefix}/#contacto`}>
+      <a class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm runly-gradient-btn shadow-sm whitespace-nowrap" href={`${prefix}/#contacto`}>
         <span>{nav.requestDemo}</span>
         <ArrowRight class="w-3.5 h-3.5" />
       </a>
@@ -108,44 +142,268 @@ const mobileLinks = [
       </button>
     </div>
   </div>
-  <div class="mobile-nav-panel lg:hidden absolute inset-x-0 top-full z-40 border-t border-slate-200 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-6 space-y-3 shadow-lg" id="mobileMenu">
-    {mobileLinks.map((link) => (
-      <a class="flex items-center gap-2 py-2 text-sm font-medium text-slate-700 hover:text-runly-orange" href={link.href}>
-        <span>{link.label}</span>
-        {"badge" in link && link.badge && (
-          <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">{link.badge}</span>
-        )}
-      </a>
-    ))}
-    <div class="flex items-center gap-1 text-xs font-bold rounded-full border border-slate-200 p-0.5 w-fit" aria-label="Language">
-      {langSwitcher.map((item) => (
-        <a
-          href={item.href}
-          class={`px-3 py-1 rounded-full transition-colors ${locale === item.code ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-900"}`}
-          aria-current={locale === item.code ? "page" : undefined}
-        >
-          {item.label}
-        </a>
+  <!-- Mobile drawer: fills the screen below the header. Submenus slide in over
+       the root list (drill-down) with a back button instead of nesting. -->
+  <div class="mobile-nav-panel lg:hidden absolute inset-x-0 top-full z-40 flex flex-col border-t border-slate-200 bg-white" id="mobileMenu">
+    <div class="mobile-nav-levels relative flex-1 overflow-hidden" data-active="root">
+      <div class="mobile-nav-level" data-level="root">
+        <ul class="px-2 py-3 sm:px-4">
+          {mobileRoot.map((item) => (
+            <li class="mobile-nav-root-item">
+              {item.kind === "link" ? (
+                <a class="flex items-center rounded-xl px-3 py-3.5 text-base font-semibold text-slate-800 transition-colors hover:bg-slate-50 hover:text-runly-orange" href={item.href}>
+                  {item.label}
+                </a>
+              ) : (
+                <button
+                  class="flex w-full items-center justify-between rounded-xl px-3 py-3.5 text-left text-base font-semibold text-slate-800 transition-colors hover:bg-slate-50 hover:text-runly-orange"
+                  data-open-level={item.id}
+                  aria-controls={`mobile-level-${item.id}`}
+                  aria-expanded="false"
+                  type="button"
+                >
+                  <span>{item.label}</span>
+                  <span class="flex items-center gap-2 text-slate-400">
+                    <span class="text-xs font-bold rounded-full bg-slate-100 px-2 py-0.5 text-slate-500">{item.count}</span>
+                    <ChevronRight class="w-5 h-5" />
+                  </span>
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {dropdowns.map((dropdown) => (
+        <div class="mobile-nav-level" data-level={dropdown.id} id={`mobile-level-${dropdown.id}`} aria-label={dropdown.label} role="region" inert>
+          <div class="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-100 bg-white px-2 py-2 sm:px-4">
+            <button class="flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-semibold text-slate-500 transition-colors hover:text-runly-orange" data-close-level type="button">
+              <ChevronLeft class="w-5 h-5" />
+              <span>{nav.back}</span>
+            </button>
+            <span class="ml-auto pr-3 text-sm font-bold text-slate-900">{dropdown.label}</span>
+          </div>
+          <ul class="grid gap-1 px-2 py-3 sm:grid-cols-2 sm:px-4">
+            {dropdown.items.map((link) => (
+              <li><NavMenuItem {...link} /></li>
+            ))}
+          </ul>
+        </div>
       ))}
     </div>
-    <a class="w-full text-center py-3 rounded-xl text-white font-medium text-sm runly-gradient-btn block mt-2" href={`${prefix}/#contacto`}>
-      {nav.requestDemo}
-    </a>
+    <div class="flex items-center gap-3 border-t border-slate-200 bg-white px-4 py-4 sm:px-6 md:hidden">
+      <div class="flex items-center gap-1 text-xs font-bold rounded-full border border-slate-200 p-0.5 sm:hidden" aria-label="Language">
+        {langSwitcher.map((item) => (
+          <a
+            href={item.href}
+            class={`px-3 py-1.5 rounded-full transition-colors ${locale === item.code ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-900"}`}
+            aria-current={locale === item.code ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+      <a class="flex-1 text-center py-3 rounded-xl text-white font-medium text-sm runly-gradient-btn md:hidden" href={`${prefix}/#contacto`}>
+        {nav.requestDemo}
+      </a>
+    </div>
   </div>
 </header>
 
 <script>
+  // Desktop dropdowns: one shared viewport that moves/resizes to the active
+  // panel. Only one menu can be open at a time; it opens on hover (mouse) or
+  // click, and closes on pointer leave, outside click, Escape or focus loss.
+  const desktopNav = document.getElementById("desktopNav");
+  const viewport = document.getElementById("navViewport");
+  if (desktopNav && viewport) {
+    const triggers = Array.from(desktopNav.querySelectorAll<HTMLButtonElement>(".nav-trigger"));
+    const panels = Array.from(viewport.querySelectorAll<HTMLElement>(".nav-panel"));
+    const order = triggers.map((t) => t.dataset.menu!);
+    const EDGE = 16;
+    let current: string | null = null;
+    let closeTimer: number | undefined;
+    let hoverOpenedAt = 0;
+
+    const cancelClose = () => window.clearTimeout(closeTimer);
+    const scheduleClose = () => {
+      cancelClose();
+      closeTimer = window.setTimeout(close, 180);
+    };
+
+    const position = (id: string) => {
+      const trigger = triggers.find((t) => t.dataset.menu === id)!;
+      const panel = panels.find((p) => p.dataset.panel === id)!;
+      const navRect = desktopNav.getBoundingClientRect();
+      const triggerRect = trigger.getBoundingClientRect();
+      const w = panel.offsetWidth;
+      const h = panel.offsetHeight;
+      // Center under the trigger, then clamp so the card never leaves the window.
+      let left = triggerRect.left + triggerRect.width / 2 - w / 2;
+      left = Math.max(EDGE, Math.min(left, window.innerWidth - EDGE - w));
+      viewport.style.setProperty("--nav-x", `${left - navRect.left}px`);
+      viewport.style.setProperty("--nav-w", `${w}px`);
+      viewport.style.setProperty("--nav-h", `${h}px`);
+    };
+
+    const open = (id: string) => {
+      cancelClose();
+      if (current === id) return;
+      const wasClosed = current === null;
+      const prevIndex = current ? order.indexOf(current) : -1;
+      const nextIndex = order.indexOf(id);
+
+      // Direction must be set before panel states flip so the CSS picks the right slide.
+      viewport.dataset.direction = prevIndex === -1 ? "none" : nextIndex > prevIndex ? "right" : "left";
+      panels.forEach((panel) => {
+        const idx = order.indexOf(panel.dataset.panel!);
+        panel.dataset.state = idx === nextIndex ? "active" : idx < nextIndex ? "before" : "after";
+      });
+      // Opening fresh: jump the card into place without morphing from the old spot.
+      if (wasClosed) viewport.classList.add("no-morph");
+      position(id);
+      if (wasClosed) {
+        void viewport.offsetWidth;
+        viewport.classList.remove("no-morph");
+      }
+      viewport.dataset.state = "open";
+      triggers.forEach((t) => t.setAttribute("aria-expanded", String(t.dataset.menu === id)));
+      current = id;
+    };
+
+    function close() {
+      cancelClose();
+      if (current === null) return;
+      viewport!.dataset.state = "closed";
+      triggers.forEach((t) => t.setAttribute("aria-expanded", "false"));
+      current = null;
+    }
+
+    const firstItem = (id: string) =>
+      panels.find((p) => p.dataset.panel === id)?.querySelector<HTMLAnchorElement>("a");
+
+    triggers.forEach((trigger) => {
+      const id = trigger.dataset.menu!;
+      trigger.addEventListener("pointerenter", (e) => {
+        if (e.pointerType !== "mouse") return;
+        if (current !== id) hoverOpenedAt = Date.now();
+        open(id);
+      });
+      trigger.addEventListener("click", () => {
+        // Hovering usually opens the menu right before the click lands; don't
+        // let that same click immediately toggle it shut.
+        if (current === id && Date.now() - hoverOpenedAt > 400) close();
+        else open(id);
+      });
+      trigger.addEventListener("keydown", (e) => {
+        const intoPanel = e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey && current === id);
+        if (!intoPanel) return;
+        e.preventDefault();
+        open(id);
+        firstItem(id)?.focus();
+      });
+    });
+
+    // Tabbing inside the panel: Shift+Tab off the first item returns to the
+    // trigger; Tab off the last item continues after the trigger.
+    panels.forEach((panel) => {
+      const items = Array.from(panel.querySelectorAll<HTMLAnchorElement>("a"));
+      const trigger = triggers.find((t) => t.dataset.menu === panel.dataset.panel)!;
+      items.forEach((item, i) => {
+        item.addEventListener("keydown", (e) => {
+          if (e.key === "Tab" && e.shiftKey && i === 0) {
+            e.preventDefault();
+            trigger.focus();
+          } else if (e.key === "Tab" && !e.shiftKey && i === items.length - 1) {
+            e.preventDefault();
+            close();
+            const focusables = Array.from(desktopNav.querySelectorAll<HTMLElement>(".nav-trigger, .nav-plain-link"));
+            focusables[focusables.indexOf(trigger) + 1]?.focus();
+          }
+        });
+        item.addEventListener("click", close);
+      });
+    });
+
+    desktopNav.querySelectorAll<HTMLElement>(".nav-plain-link").forEach((link) => {
+      link.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "mouse") close();
+      });
+      link.addEventListener("focus", close);
+    });
+
+    viewport.addEventListener("pointerenter", cancelClose);
+    viewport.addEventListener("pointerleave", (e) => {
+      if (e.pointerType === "mouse") scheduleClose();
+    });
+    triggers.forEach((t) =>
+      t.addEventListener("pointerleave", (e) => {
+        if (e.pointerType === "mouse") scheduleClose();
+      })
+    );
+
+    desktopNav.addEventListener("focusout", (e) => {
+      if (!desktopNav.contains(e.relatedTarget as Node | null)) close();
+    });
+    document.addEventListener("click", (e) => {
+      if (!desktopNav.contains(e.target as Node)) close();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape" || current === null) return;
+      const trigger = triggers.find((t) => t.dataset.menu === current);
+      close();
+      trigger?.focus();
+    });
+    window.addEventListener("resize", () => {
+      if (current) position(current);
+    });
+  }
+
   const mobileBtn = document.getElementById("mobileMenuBtn");
   const mobileMenu = document.getElementById("mobileMenu");
-  if (mobileBtn && mobileMenu) {
-    const closeMenu = () => {
-      mobileMenu.classList.remove("is-open");
-      mobileBtn.setAttribute("aria-expanded", "false");
+  const levelsEl = mobileMenu?.querySelector<HTMLElement>(".mobile-nav-levels");
+  if (mobileBtn && mobileMenu && levelsEl) {
+    const levels = Array.from(levelsEl.querySelectorAll<HTMLElement>(".mobile-nav-level"));
+    const openers = Array.from(levelsEl.querySelectorAll<HTMLButtonElement>("[data-open-level]"));
+    const lg = window.matchMedia("(min-width: 1024px)");
+
+    // Only the visible level is interactive, so Tab never lands on an off-screen link.
+    const showLevel = (id: string) => {
+      levelsEl.dataset.active = id;
+      levels.forEach((level) => {
+        const active = level.dataset.level === id;
+        level.dataset.state = active ? "active" : "hidden";
+        level.inert = !active;
+        if (active && id !== "root") level.scrollTop = 0;
+      });
+      openers.forEach((b) => b.setAttribute("aria-expanded", String(b.dataset.openLevel === id)));
     };
+
+    const setOpen = (open: boolean) => {
+      mobileMenu.classList.toggle("is-open", open);
+      mobileBtn.setAttribute("aria-expanded", String(open));
+      // Lock page scroll behind the full-height drawer.
+      document.documentElement.classList.toggle("overflow-hidden", open);
+      if (!open) window.setTimeout(() => showLevel("root"), 250);
+    };
+    const closeMenu = () => setOpen(false);
+
     mobileBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isOpen = mobileMenu.classList.toggle("is-open");
-      mobileBtn.setAttribute("aria-expanded", String(isOpen));
+      setOpen(!mobileMenu.classList.contains("is-open"));
+    });
+    openers.forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = button.dataset.openLevel!;
+        showLevel(id);
+        levels.find((l) => l.dataset.level === id)?.querySelector<HTMLElement>("[data-close-level]")?.focus({ preventScroll: true });
+      });
+    });
+    levelsEl.querySelectorAll<HTMLButtonElement>("[data-close-level]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const from = levelsEl.dataset.active;
+        showLevel("root");
+        openers.find((b) => b.dataset.openLevel === from)?.focus({ preventScroll: true });
+      });
     });
     mobileMenu.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", closeMenu);
@@ -156,7 +414,17 @@ const mobileLinks = [
       }
     });
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
+      if (e.key !== "Escape" || !mobileMenu.classList.contains("is-open")) return;
+      // Escape steps back out of a submenu first, then closes the drawer.
+      if (levelsEl.dataset.active !== "root") {
+        levelsEl.querySelector<HTMLButtonElement>(`[data-level="${levelsEl.dataset.active}"] [data-close-level]`)?.click();
+      } else {
+        closeMenu();
+        mobileBtn.focus();
+      }
+    });
+    lg.addEventListener("change", (e) => {
+      if (e.matches) closeMenu();
     });
   }
 </script>
