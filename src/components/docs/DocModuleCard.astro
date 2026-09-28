@@ -3,8 +3,8 @@
 //
 // A module on the docs home: tinted with the module's own color and icon
 // (same as its tile inside Runly), with a chip per documented view that
-// deep-links to that view's section. The whole card is clickable through a
-// stretched link; the chips sit above it (relative z-10) so they stay
+// deep-links to that view's section. The whole card is clickable through an
+// overlay link (z-5); the chips sit above it (relative z-10) so they stay
 // separately clickable without nesting <a> elements.
 import { ArrowRight } from "@lucide/astro";
 import { resolveIcon } from "../../lib/icons";
@@ -31,17 +31,21 @@ const hiddenCount = mod.views.length - chips.length;
 >
   <div class="doc-card-glow pointer-events-none absolute inset-0 opacity-70 transition-opacity group-hover:opacity-100" aria-hidden="true"></div>
   <div class="mod-bar absolute inset-x-0 top-0 h-1" aria-hidden="true"></div>
+  <!-- Whole-card link: a direct child of the article (so it spans the full
+       card, not just the header) stacked above the text (z-5), with only the
+       view chips above it (z-10). -->
+  <a
+    href={moduleDocHref(mod.moduleKey)}
+    class="absolute inset-0 z-[5] rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-400"
+    aria-label={`Ver documentación de ${mod.name}`}
+  ></a>
 
   <div class="relative flex items-start gap-3.5">
     <span class="mod-tile flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
       <Icon class="h-6 w-6" />
     </span>
     <div class="min-w-0 flex-1">
-      <h3 class="text-base font-extrabold leading-tight text-slate-900">
-        <a href={moduleDocHref(mod.moduleKey)} class="outline-none after:absolute after:inset-0 after:content-['']">
-          {mod.name}
-        </a>
-      </h3>
+      <h3 class="text-base font-extrabold leading-tight text-slate-900">{mod.name}</h3>
       <p class="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-slate-500">
         {categoryLabel && <span class="mod-text font-semibold">{categoryLabel}</span>}
         {categoryLabel && <span aria-hidden="true">·</span>}

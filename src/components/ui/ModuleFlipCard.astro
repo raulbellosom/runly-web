@@ -92,6 +92,17 @@ const docsLabel = locale === "es" ? "Ver documentación" : "View documentation";
     transform: rotateY(180deg);
   }
 
+  /* Hidden backfaces can still be hit-tested (notably iOS Safari), so once
+     flipped the front face must stop taking taps meant for the back's link. */
+  .flip-card.is-flipped .flip-card-face:not(.flip-card-back) {
+    pointer-events: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .flip-card:hover .flip-card-face:not(.flip-card-back) {
+      pointer-events: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .flip-card-inner {
       transition: none;
