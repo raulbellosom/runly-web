@@ -17,6 +17,8 @@ describe("developer docs for AI assistants", () => {
     const text = llmsTxt(entries, [{ moduleKey: "runly.core", title: "Runly Core", summary: "Núcleo." }]);
     expect(text.indexOf("desarrolladores/index.md")).toBeLessThan(text.indexOf("desarrolladores/relaciones.md"));
     expect(text).toContain("- [Runly Core](https://runly.mx/documentacion/modulos/runly.core): Núcleo.");
+    expect(text).toContain("ERP modular en español. Los módulos");
+    expect(text).not.toMatch(/[ÃÂ]|â[-¿]/u);
   });
 
   it("concatenates every page in llms-full.txt", () => {

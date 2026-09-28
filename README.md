@@ -92,6 +92,11 @@ server {
     root /var/www/runly.mx;
     index index.html;
 
+    # Astro prerenders llms.txt and the Markdown endpoints as static files.
+    # Preserve Spanish text as UTF-8 when Nginx serves those files directly.
+    charset utf-8;
+    charset_types text/plain text/markdown;
+
     location / {
         try_files $uri $uri/ $uri.html =404;
     }
@@ -99,6 +104,11 @@ server {
     error_page 404 /404.html;
 }
 ```
+
+The `charset` directives are required for `/llms.txt`, `/llms-full.txt`, and
+the raw `.md` documentation. Without them, Nginx serves valid UTF-8 bytes as
+`text/plain` without a declared charset and browsers can display text such as
+`español` as `espaÃ±ol`.
 
 No `proxy_pass`, no upstream — this block only serves files from disk.
 

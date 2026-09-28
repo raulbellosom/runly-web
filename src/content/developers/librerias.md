@@ -18,10 +18,12 @@ Estas son las librerías que un componente de `components/` puede importar. Las 
 | `sonner` | 2.0.7 | Incluida en la app (no pesa en tu módulo) | toast |
 | `lucide-react` | 1.48.0 | Incluida en la app (no pesa en tu módulo) | Iconos: Plus, Pencil, Trash2, Search, Calendar ... |
 | `recharts` | 3.8.1 | Incluida en la app (no pesa en tu módulo) | ResponsiveContainer, BarChart, LineChart, PieChart, AreaChart, Tooltip, Legend |
+| `qrcode` | 1.5.4 | Incluida en la app (no pesa en tu módulo) | QRCode (default), create, toCanvas, toDataURL, toString para generar códigos QR |
+| `@zxing/browser` | 0.2.1 | Incluida en la app (no pesa en tu módulo) | BrowserQRCodeReader, BrowserMultiFormatReader para leer códigos QR desde cámara, imagen o video |
 | `react-hook-form` | 7.75.0 | Se empaqueta en tu módulo (agrega peso) | useForm, Controller (prefiere los campos de @runly/ui) |
 | `motion` | 12.38.0 | Se empaqueta en tu módulo (agrega peso) | motion, AnimatePresence (~280 KB, usar con moderacion) |
 | `tailwindcss` | 4.3.1 | Estilos | Clases utilitarias en className (sin importar nada) |
 
-También puedes importar librerías del navegador desde `https://esm.sh/<paquete>`, pero prefiere las de la tabla. No hay APIs de Node (`fs`, `path`, `crypto`) en el navegador.
+También puedes importar librerías ESM del navegador mediante una URL HTTPS completa, por ejemplo `https://esm.sh/<paquete>@<versión>`. El import se conserva en el bundle y el navegador lo descarga en tiempo de ejecución. Fija siempre la versión, usa sólo proveedores confiables y prefiere las librerías compartidas de la tabla para evitar depender de la red. No hay APIs de Node (`fs`, `path`, `crypto`) en el navegador.
 
 *Página generada por `scripts/generate-module-runtime-catalog.mjs` a partir de las versiones instaladas en Runly.*
