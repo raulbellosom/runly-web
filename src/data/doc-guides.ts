@@ -65,6 +65,7 @@ export const docGuides: DocGuide[] = [
       { moduleKey: "runly.core", view: "constructor-condiciones" },
       { moduleKey: "runly.core", view: "constructor-archivos" },
       { moduleKey: "runly.core", view: "constructor-vistas" },
+      { moduleKey: "runly.core", view: "constructor-enlaces-publicos" },
       { moduleKey: "runly.core", view: "constructor-publicar" },
     ],
   },

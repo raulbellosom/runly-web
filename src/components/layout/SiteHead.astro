@@ -15,8 +15,12 @@ if (!path.startsWith("/")) {
   throw new Error(`SiteHead "path" prop must start with "/", received: "${path}"`);
 }
 
-const esPath = path;
-const enPath = path === "/" ? "/en/" : `/en${path}`;
+// Pages are built as directories (/foo/index.html) and nginx 301s "/foo" to "/foo/",
+// so canonical/hreflang/og:url must carry the trailing slash to match the sitemap.
+const esPath = path.endsWith("/") ? path : `${path}/`;
+const enPath = `/en${esPath}`;
+// Documentation is Spanish-only: no /en/documentacion/* pages exist, so advertising them would point crawlers at 404s.
+const hasEnglish = !esPath.startsWith("/documentacion/");
 const canonicalPath = locale === "es" ? esPath : enPath;
 const canonicalUrl = new URL(canonicalPath, SITE_URL).toString();
 const esUrl = new URL(esPath, SITE_URL).toString();
@@ -50,9 +54,13 @@ const jsonLd = {
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalUrl} />
-<link rel="alternate" hreflang="es-MX" href={esUrl} />
-<link rel="alternate" hreflang="en-US" href={enUrl} />
-<link rel="alternate" hreflang="x-default" href={esUrl} />
+{hasEnglish && (
+  <>
+    <link rel="alternate" hreflang="es-MX" href={esUrl} />
+    <link rel="alternate" hreflang="en-US" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={esUrl} />
+  </>
+)}
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />

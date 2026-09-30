@@ -89,7 +89,7 @@ describe("synced help content", () => {
     const names = [
       ...Object.values(navigation as Record<string, { icon: string }[]>).flatMap((items) => items.map((i) => i.icon)),
       ...docGuides.map((g) => g.icon),
-      "House", "Database", "Link2", "LayoutPanelLeft", "GitBranch", "Paperclip", "LayoutGrid", "Rocket", "FileText",
+      "House", "Database", "Link2", "LayoutPanelLeft", "GitBranch", "Paperclip", "LayoutGrid", "Share2", "Rocket", "FileText",
       ...fs.readdirSync(path.join(process.cwd(), "src/content/developers")).map((f) => developerPageIcon(f.replace(/\.md$/, ""))),
     ];
     for (const name of names) expect(iconMap[name], `unknown icon "${name}"`).toBeDefined();

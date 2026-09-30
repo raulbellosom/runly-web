@@ -54,6 +54,7 @@ const UNLISTED_VIEWS: Record<string, NavigationItem[]> = {
     { path: "/module-builder/condiciones", icon: "GitBranch" },
     { path: "/module-builder/archivos", icon: "Paperclip" },
     { path: "/module-builder/vistas", icon: "LayoutGrid" },
+    { path: "/module-builder/enlaces", icon: "Share2" },
     { path: "/module-builder/publicar", icon: "Rocket" },
   ],
 };
@@ -67,6 +68,7 @@ const DEVELOPER_PAGE_ICONS: Record<string, string> = {
   "pantallas-react": "Component",
   "api-modulos": "Webhook",
   relaciones: "Link2",
+  "enlaces-publicos": "Share2",
   campos: "TextCursorInput",
   librerias: "Package",
   ia: "Bot",
