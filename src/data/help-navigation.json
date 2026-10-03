@@ -147,6 +147,10 @@
   ],
   "runly.inventory": [
     {
+      "path": "/inventory/summary",
+      "icon": "LayoutDashboard"
+    },
+    {
       "path": "/inventory",
       "icon": "Boxes"
     },
@@ -161,6 +165,52 @@
     {
       "path": "/inventory/catalogs",
       "icon": "FolderOpen"
+    },
+    {
+      "path": "/inventory/connections",
+      "icon": "Plug"
+    }
+  ],
+  "runly.purchases": [
+    {
+      "path": "/purchases",
+      "icon": "LayoutDashboard"
+    },
+    {
+      "path": "/purchases/cases",
+      "icon": "FolderKanban"
+    },
+    {
+      "path": "/purchases/requests",
+      "icon": "FilePlus2"
+    },
+    {
+      "path": "/purchases/approvals",
+      "icon": "BadgeCheck"
+    },
+    {
+      "path": "/purchases/orders",
+      "icon": "ClipboardList"
+    },
+    {
+      "path": "/purchases/receipts",
+      "icon": "PackageCheck"
+    },
+    {
+      "path": "/purchases/invoices",
+      "icon": "ReceiptText"
+    },
+    {
+      "path": "/purchases/payments",
+      "icon": "Wallet"
+    },
+    {
+      "path": "/purchases/suppliers",
+      "icon": "Building2"
+    },
+    {
+      "path": "/purchases/settings",
+      "icon": "Settings2"
     }
   ],
   "runly.notes": [
@@ -211,6 +261,10 @@
     {
       "path": "/contacts",
       "icon": "Contact"
+    },
+    {
+      "path": "/contacts/connections",
+      "icon": "Plug"
     }
   ],
   "runly.hr": [
@@ -225,6 +279,10 @@
     {
       "path": "/hr/catalogs",
       "icon": "BookOpen"
+    },
+    {
+      "path": "/hr/connections",
+      "icon": "Plug"
     }
   ],
   "runly.website": [
@@ -309,6 +367,16 @@
     {
       "path": "/",
       "icon": "SquareKanban"
+    },
+    {
+      "path": "/connections",
+      "icon": "Plug"
+    }
+  ],
+  "runly.canvas": [
+    {
+      "path": "/",
+      "icon": "Map"
     }
   ],
   "runly.chat": [

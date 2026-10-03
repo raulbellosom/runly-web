@@ -3,6 +3,11 @@ title: Pantallas React
 summary: Cómo crear una vista CUSTOM con un componente React, registrarla, agregarla al menú, llamar a la API y respetar el diseño de Runly.
 order: 2
 ---
+## Atajo: el kit y las pantallas de ejemplo
+
+- El ZIP que descargas del Constructor trae `docs/ejemplos/` con cuatro pantallas completas para tu primera entidad (listado, ficha, formulario por secciones y tablero). Copia la que necesites a `components/` y regístrala como se explica abajo.
+- Con el **kit de pantallas** (`ModulePage`, `EntityTable`, `EntityForm`, `EntityDetail`, `FormSection`, `useEntityList`…) no tienes que pasar `token`, `companyId` ni `apiBaseUrl`, y las tablas y formularios usan las vistas que diseñaste en el Constructor. Referencia: [Componentes de @runly/ui](/documentacion/desarrolladores/componentes).
+
 ## Receta (cuatro cambios)
 
 **1. El componente** — `components/Panel.jsx`
@@ -87,13 +92,16 @@ Usa siempre `buildApiHeaders(token, companyId)` en tus `fetch`: sin el encabezad
 
 ## Reglas de diseño de Runly
 
-- Primero `@runly/ui`: `SelectField`/`ComboboxField` en lugar de `<select>`, `TextField`/`TextareaField` en lugar de inputs, `CheckboxField`/`SwitchField`, `DatePickerField`, `DataTable`/`RunlyTable`, `Dialog`/`Sheet`, y `ConfirmDialog` en lugar de `window.confirm/alert/prompt` (prohibidos).
+- Primero `@runly/ui`: props y ejemplos de cada componente en **[Componentes de @runly/ui](/documentacion/desarrolladores/componentes)**. `SelectField`/`ComboboxField` en lugar de `<select>`, `TextField`/`TextareaField` en lugar de inputs, `CheckboxField`/`SwitchField`, `DatePickerField`, `DataTable`/`RunlyTable`, `Dialog`/`Sheet`, y `ConfirmDialog` en lugar de `window.confirm/alert/prompt` (prohibidos).
 - Toda pantalla empieza con `PageHeader`; `Skeleton` al cargar, `EmptyState` si no hay datos, `ErrorState` si algo falla.
-- Textos en español y sin emojis.
-- Tailwind con los tokens del tema, para modo claro y oscuro: `bg-[hsl(var(--card))]`, `text-[hsl(var(--muted-foreground))]`, `border-[hsl(var(--border))]`; color de marca `var(--brand-primary)`. Evita colores fijos como `bg-white`.
-- Pensado primero para celular (`grid-cols-1 md:grid-cols-3`), sin desplazamiento horizontal.
+- Iconos de `lucide-react` en títulos de sección, botones, indicadores y estados vacíos: lista por uso en **[Iconos](/documentacion/desarrolladores/iconos)**. Textos en español y sin emojis.
+- **Cualquier clase de Tailwind funciona**: al instalar el módulo Runly genera el CSS de las clases que usan tus componentes, con el tema de Runly. Usa los tokens del tema para que funcione en modo claro y oscuro: `bg-card`, `bg-background`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-primary`, `text-primary`. Evita colores fijos como `bg-white` o `bg-[#fff]`.
+- Pensado primero para celular: formularios en `grid grid-cols-1 gap-4 md:grid-cols-2`, indicadores en `grid gap-4 sm:grid-cols-2 lg:grid-cols-4`, sin desplazamiento horizontal.
+- Formularios por secciones (`Card` con título e icono), no una lista de campos uno debajo de otro.
+- **Nunca muestres un id (UUID) como título**, encabezado o texto principal de un registro: usa un campo con nombre (`nombre`, `folio`, `certificado`…) o `resolveRecordLabel`. En el Constructor, pon como primer campo de texto de cada entidad el que mejor la identifique: Runly lo usa como título del registro.
 - En modales y hojas laterales el encabezado y el pie quedan fijos; solo el contenido se desplaza.
 - Notificaciones con `toast` de `sonner`.
+- Al subir el ZIP, la **Revisión de diseño** del reporte lista archivo y línea de lo que no cumple estas reglas; con **Copiar para la IA** se lo pasas a tu asistente para que lo corrija.
 
 ## Problemas frecuentes
 

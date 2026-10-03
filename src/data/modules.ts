@@ -316,6 +316,34 @@ export const modules: RunlyModuleEntry[] = [
     version: "0.2.0",
     order: 21,
   },
+  {
+    id: "runly.canvas",
+    name: { es: "Canvas", en: "Canvas" },
+    description: {
+      es: "Pizarras técnicas colaborativas: planos con escala, PDFs, mapas, DXF y figuras conectadas con datos de Runly.",
+      en: "Collaborative technical boards: scaled plans, PDFs, maps, DXF and shapes linked to live Runly data.",
+    },
+    category: "productividad",
+    status: "disponible",
+    icon: "Map",
+    color: "#2563eb",
+    version: "0.1.0",
+    order: 22,
+  },
+  {
+    id: "runly.purchases",
+    name: { es: "Compras", en: "Purchases" },
+    description: {
+      es: "Expedientes de compra con solicitudes, proveedores, órdenes y facturas, con folios por empresa.",
+      en: "Purchase cases with requests, suppliers, orders and invoices, numbered per company.",
+    },
+    category: "operaciones",
+    status: "disponible",
+    icon: "ShoppingCart",
+    color: "#0f766e",
+    version: "1.0.0",
+    order: 23,
+  },
 ];
 
 export const moduleCategories: { id: ModuleCategory | "all"; label: { es: string; en: string }; icon: string }[] = [

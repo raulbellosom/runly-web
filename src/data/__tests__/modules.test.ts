@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { modules, moduleCategories } from "../modules";
 
 describe("modules catalog", () => {
-  it("has exactly 21 real Runly modules", () => {
-    expect(modules).toHaveLength(21);
+  it("has exactly 23 real Runly modules", () => {
+    expect(modules).toHaveLength(23);
   });
 
   it("every module has an ES and EN name and description", () => {
