@@ -6,6 +6,12 @@ This is a **fully static site**: `pnpm build` emits plain HTML/CSS/JS into `dist
 
 ## Development
 
+Catalog v1 is prepared locally by `pnpm catalog:prepare --from <ledger-export>`.
+The source index under public/catalog/v1 is empty; generated ZIPs stay outside
+Git. Preparation verifies size, SHA-256 and the pinned Ed25519 key, copies no
+keys/receipts, and does not deploy. TEST keys require `--fixture-key <file>` and
+output under .artifacts/.
+
 Requirements: Node 20+, pnpm.
 
 ```bash
