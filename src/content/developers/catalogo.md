@@ -16,7 +16,7 @@ El administrador revisa servicios, eventos, Connections, capacidades y grants re
 4. Un publisher oficial confirma expresamente los bytes aprobados. El build no firma ni publica automáticamente.
 5. Un publicador separado revalida, llama al signer aislado, registra ledger y exporta ZIPs inmutables e índice v1.
 
-La clave privada oficial permanece fuera de API, worker, frontend, Supabase y repositorios. La firma Ed25519 sigue cubriendo exactamente el payload UTF-8 `<key>@<version>:<sha256>`. El digest corresponde al ZIP completo. El JSON del índice no está firmado; v1 no garantiza frescura u omisión de entradas por un host comprometido. No se introduce protocolo v2.
+La clave privada oficial permanece fuera de API, worker, frontend, Supabase y repositorios. La firma Ed25519 sigue cubriendo exactamente el payload UTF-8 `<key>@<version>:<sha256>`. El digest corresponde al ZIP completo. El JSON del índice no está firmado; v1 no garantiza frescura u omisión de entradas por un host comprometido. El catálogo v2, paralelo y opcional, añade snapshots firmados y secuenciados, comunidad y revocaciones sin cambiar el v1: ver [Marketplace comunitario y catálogo v2](catalogo-comunitario.md).
 
 ## Schema y descargas
 
