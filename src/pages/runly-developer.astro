@@ -1,0 +1,8 @@
+---
+import PublicInfoLayout from "../layouts/PublicInfoLayout.astro";
+import { developerPage } from "../data/public-policies";
+
+export const prerender = true;
+---
+
+<PublicInfoLayout page={developerPage} path="/runly-developer" />

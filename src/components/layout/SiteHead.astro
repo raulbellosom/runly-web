@@ -7,6 +7,7 @@ interface Props {
   description: string;
   locale: "es" | "en";
   path: string; // must start with "/", e.g. "/" or "/modulos" — without locale prefix
+  hasEnglish?: boolean;
 }
 
 const { title, description, locale, path } = Astro.props;
@@ -20,7 +21,7 @@ if (!path.startsWith("/")) {
 const esPath = path.endsWith("/") ? path : `${path}/`;
 const enPath = `/en${esPath}`;
 // Documentation is Spanish-only: no /en/documentacion/* pages exist, so advertising them would point crawlers at 404s.
-const hasEnglish = !esPath.startsWith("/documentacion/");
+const hasEnglish = Astro.props.hasEnglish ?? !esPath.startsWith("/documentacion/");
 const canonicalPath = locale === "es" ? esPath : enPath;
 const canonicalUrl = new URL(canonicalPath, SITE_URL).toString();
 const esUrl = new URL(esPath, SITE_URL).toString();

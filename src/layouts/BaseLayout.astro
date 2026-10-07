@@ -14,15 +14,16 @@ interface Props {
   description: string;
   locale: "es" | "en";
   path: string;
+  hasEnglish?: boolean;
 }
 
-const { title, description, locale, path } = Astro.props;
+const { title, description, locale, path, hasEnglish } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={locale} class="scroll-smooth">
   <head>
-    <SiteHead title={title} description={description} locale={locale} path={path} />
+    <SiteHead title={title} description={description} locale={locale} path={path} hasEnglish={hasEnglish} />
   </head>
   <body class="bg-[#FCFDFF] text-slate-800 font-sans antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden">
     <slot />

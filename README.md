@@ -24,6 +24,25 @@ Site runs at `http://localhost:4321` (Spanish) and `http://localhost:4321/en/` (
 
 Run tests: `pnpm test`. Typecheck: `pnpm astro check`. Production build: `pnpm build`.
 
+## Runly Developer public pages
+
+The Spanish public pages share the existing site layout and legal content component.
+Their content is maintained in `src/data/public-policies.ts`:
+
+- Product: `https://runly.mx/runly-developer/`
+- Support: `https://runly.mx/support/`
+- Privacy policy: `https://runly.mx/privacy/`
+- Terms of service: `https://runly.mx/terms/`
+
+The previous `/privacy-notice`, `/terms-of-service` and `/support-contact` URLs,
+including their `/en/` variants, remain accessible with the current Spanish
+content and the corresponding new canonical URL. These pages do not advertise
+an English translation. Footer links point to the current public pages.
+
+The build generates static HTML and includes the new routes in the sitemap.
+Local preparation does not publish these URLs; public access must be checked
+after the normal authorized deployment before using them for submission.
+
 ## Environment variables
 
 See `.env.example`.

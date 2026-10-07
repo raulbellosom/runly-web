@@ -6,9 +6,10 @@ import { COMPANY_NAME, COMPANY_URL } from "../../consts";
 interface Props {
   locale: "es" | "en";
   footer: FooterDictionary;
+  showStatus?: boolean;
 }
 
-const { locale, footer } = Astro.props;
+const { locale, footer, showStatus = true } = Astro.props;
 const year = new Date().getFullYear();
 const prefix = locale === "es" ? "" : "/en";
 ---
@@ -19,10 +20,10 @@ const prefix = locale === "es" ? "" : "/en";
       <div class="lg:col-span-2 space-y-4">
         <img alt="RUNLY" class="h-9 w-auto object-contain" src="/brand/runly-logo-dark.png" width="140" height="36" />
         <p class="text-sm text-slate-400 max-w-sm">{footer.tagline}</p>
-        <div class="pt-2 text-xs text-slate-400">
+        {showStatus && <div class="pt-2 text-xs text-slate-400">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
           <span>{footer.uptime}</span>
-        </div>
+        </div>}
       </div>
       <div>
         <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">{footer.platformHeading}</h4>
@@ -30,6 +31,7 @@ const prefix = locale === "es" ? "" : "/en";
           <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/modulos`}>{footer.links.modulesCatalog}</a></li>
           <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/arquitectura`}>{footer.links.rm3Architecture}</a></li>
           <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/mirai`}>{footer.links.mirai}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/runly-developer">Runly Developer</a></li>
           <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/#implementacion`}>{footer.links.customImplementation}</a></li>
         </ul>
       </div>
@@ -47,10 +49,10 @@ const prefix = locale === "es" ? "" : "/en";
       <div>
         <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">{footer.legalHeading}</h4>
         <ul class="space-y-2.5 text-xs text-slate-400">
-          <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/privacy-notice`}>{footer.links.privacyNotice}</a></li>
-          <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/terms-of-service`}>{footer.links.termsOfService}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/privacy">{footer.links.privacyNotice}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/terms">{footer.links.termsOfService}</a></li>
           <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/data-security`}>{footer.links.dataSecurity}</a></li>
-          <li><a class="hover:text-orange-400 transition-colors" href={`${prefix}/support-contact`}>{footer.links.supportContact}</a></li>
+          <li><a class="hover:text-orange-400 transition-colors" href="/support">{footer.links.supportContact}</a></li>
         </ul>
       </div>
     </div>

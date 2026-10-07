@@ -1,0 +1,45 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import LegalContent from "../components/sections/LegalContent.astro";
+import { getDictionary, type LegalPageDictionary } from "../i18n";
+import { CONTACT_SUPPORT_EMAIL } from "../consts";
+
+interface Props {
+  page: LegalPageDictionary;
+  path: string;
+}
+
+const { page, path } = Astro.props;
+const dict = getDictionary("es");
+const links = [
+  { href: "/runly-developer", label: "Runly Developer" },
+  { href: "/support", label: "Soporte" },
+  { href: "/privacy", label: "Privacidad" },
+  { href: "/terms", label: "Términos" },
+];
+---
+
+<BaseLayout title={page.metaTitle} description={page.metaDescription} locale="es" path={path} hasEnglish={false}>
+  <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:p-4 focus:rounded-xl focus:outline-2 focus:outline-runly-blue">Saltar al contenido</a>
+  <Header locale="es" nav={dict.nav} />
+  <main id="contenido" tabindex="-1">
+    <LegalContent page={page}>
+      <div class="mt-12 border-t border-slate-200 pt-8 space-y-5 text-sm text-slate-600">
+        <p>Contacto: <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href={`mailto:${CONTACT_SUPPORT_EMAIL}`}>{CONTACT_SUPPORT_EMAIL}</a></p>
+        {path === "/runly-developer" && (
+          <div class="flex flex-wrap gap-x-6 gap-y-4">
+            <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="https://devs.runly.mx">Portal de Runly Developer</a>
+            <a class="text-runly-blue underline underline-offset-4 break-all focus-visible:outline-2 focus-visible:outline-offset-4" href="https://mcp.devs.runly.mx/">Endpoint MCP</a>
+            <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="/documentacion/desarrolladores">Documentación para desarrolladores</a>
+          </div>
+        )}
+        <nav aria-label="Información de Runly Developer" class="flex flex-wrap gap-x-6 gap-y-4">
+          {links.map((link) => <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href={link.href} aria-current={path === link.href ? "page" : undefined}>{link.label}</a>)}
+        </nav>
+      </div>
+    </LegalContent>
+  </main>
+  <Footer locale="es" footer={dict.footer} showStatus={false} />
+</BaseLayout>
