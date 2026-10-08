@@ -488,7 +488,7 @@ export const en: SiteDictionary = {
           heading: "Purposes of the processing",
           paragraphs: [
             "Primary purposes, necessary for our relationship with you: responding to your request for information or a demo, providing and supporting the RUNLY platform, managing your account, and complying with legal and contractual obligations.",
-            "Secondary purposes, not essential: sending you commercial communications about new modules or features. You may object to these secondary purposes at any time by writing to hola@runly.mx, without affecting the services you already contracted.",
+            "Secondary purposes, not essential: sending you commercial communications about new modules or features. You may object to these secondary purposes at any time by writing to privacy@runly.mx, without affecting the services you already contracted.",
           ],
         },
         {
@@ -505,7 +505,7 @@ export const en: SiteDictionary = {
         {
           heading: "ARCO rights and how to exercise them",
           paragraphs: [
-            "You have the right to Access, Rectify, and Cancel your personal data, and to Object to its processing (ARCO rights), as well as to revoke any consent you may have given us. To exercise any of these rights, write to hola@runly.mx stating your full name and the right you wish to exercise; we will respond within a maximum of 20 business days.",
+            "You have the right to Access, Rectify, and Cancel your personal data, and to Object to its processing (ARCO rights), as well as to revoke any consent you may have given us. To exercise any of these rights, write to privacy@runly.mx stating your full name and the right you wish to exercise; we will respond within a maximum of 20 business days.",
           ],
         },
         {
@@ -528,7 +528,7 @@ export const en: SiteDictionary = {
         },
         {
           heading: "Contact",
-          paragraphs: ["If you have questions about this privacy notice or how we process your data, contact us at hola@runly.mx."],
+          paragraphs: ["If you have questions about this privacy notice or how we process your data, contact us at privacy@runly.mx."],
         },
       ],
     },
@@ -683,12 +683,12 @@ export const en: SiteDictionary = {
         {
           heading: "Responsible vulnerability disclosure",
           paragraphs: [
-            "If you identify a potential security vulnerability in RUNLY, please report it responsibly by writing to hola@runly.mx before disclosing it publicly, so we can investigate and fix it.",
+            "If you identify a potential security vulnerability in RUNLY, please report it responsibly by writing to support@runly.mx before disclosing it publicly, so we can investigate and fix it.",
           ],
         },
         {
           heading: "Security contact",
-          paragraphs: ["For questions or reports related to the security of your data, contact us at hola@runly.mx."],
+          paragraphs: ["For questions or reports related to the security of your data, contact us at support@runly.mx."],
         },
       ],
     },
@@ -705,7 +705,7 @@ export const en: SiteDictionary = {
           heading: "Support channels",
           paragraphs: ["You can reach our support team through the following channels:"],
           list: [
-            "Email: hola@runly.mx — we follow up on your case right there.",
+            "Email: support@runly.mx — we follow up on your case right there.",
             "WhatsApp: +52 322 135 8808 — for urgent questions or quick follow-up.",
           ],
         },

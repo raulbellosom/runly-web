@@ -25,18 +25,18 @@ export const developerPage: LegalPageDictionary = {
     },
     {
       heading: "Datos y ayuda",
-      paragraphs: ["Runly Developer opera con un backend self-hosted. Se minimizan los datos utilizados para sus funciones y se aplican políticas técnicas de ciclo de vida, borrado, respaldos cifrados y recuperación.", "Consulta la política de privacidad y los términos de servicio antes de conectar tu cuenta. Para ayuda con OAuth, MCP, módulos o acceso, escribe a hola@runly.mx."],
+      paragraphs: ["Runly Developer opera con un backend self-hosted. Se minimizan los datos utilizados para sus funciones y se aplican políticas técnicas de ciclo de vida, borrado, respaldos cifrados y recuperación.", "Consulta la política de privacidad y los términos de servicio antes de conectar tu cuenta. Para ayuda con OAuth, MCP, módulos o acceso, escribe a developers@runly.mx."],
     },
   ],
 };
 
 export const supportPage: LegalPageDictionary = {
   metaTitle: "Soporte de Runly y Runly Developer",
-  metaDescription: "Obtén ayuda con Runly Developer, conexión OAuth, MCP, módulos RME3 y tu cuenta. Contacto de soporte: hola@runly.mx.",
+  metaDescription: "Obtén ayuda con Runly Developer, conexión OAuth, MCP, módulos RME3 y tu cuenta. Contacto de soporte: support@runly.mx.",
   eyebrow: "Ayuda",
   title: "Soporte de Runly y Runly Developer",
   lastUpdated,
-  intro: "Escribe a hola@runly.mx para recibir ayuda con Runly y Runly Developer, reportar un problema o consultar sobre tu cuenta. Usa este mismo contacto para dudas de privacidad o seguridad.",
+  intro: "Escribe a support@runly.mx para recibir ayuda con Runly y Runly Developer, reportar un problema o consultar sobre tu cuenta. Usa este mismo contacto para dudas de privacidad o seguridad.",
   sections: [
     {
       heading: "Conexión y autenticación OAuth",
@@ -57,7 +57,7 @@ export const supportPage: LegalPageDictionary = {
     {
       heading: "Qué incluir y qué proteger",
       paragraphs: ["Describe qué esperabas, qué ocurrió y cómo reproducirlo. Comparte únicamente la información necesaria para investigar el caso."],
-      list: ["Oculta datos personales o confidenciales en capturas y archivos.", "No envíes contraseñas, tokens OAuth, claves API ni credenciales de terceros.", "Si sospechas una exposición de credenciales, revócalas o rótalas con su proveedor y reporta el incidente a hola@runly.mx."],
+      list: ["Oculta datos personales o confidenciales en capturas y archivos.", "No envíes contraseñas, tokens OAuth, claves API ni credenciales de terceros.", "Si sospechas una exposición de credenciales, revócalas o rótalas con su proveedor y reporta el incidente a support@runly.mx."],
     },
   ],
 };
@@ -88,11 +88,11 @@ export const privacyPage: LegalPageDictionary = {
     },
     {
       heading: "Infraestructura, proveedores y terceros",
-      paragraphs: ["Runly Developer utiliza un backend self-hosted. Cuando corresponda, proveedores de infraestructura, almacenamiento, comunicaciones o servicios técnicos pueden procesar los datos necesarios para operar y mantener el servicio. Puedes consultar información sobre los proveedores aplicables a tu uso escribiendo a hola@runly.mx.", "Si utilizas Runly Developer desde un cliente de terceros, como ChatGPT, ese cliente trata la información que le compartes conforme a sus propias políticas. Esta política describe el tratamiento en Runly; no sustituye las políticas del cliente ni de otros servicios conectados.", "Los datos también pueden ponerse a disposición de usuarios autorizados de tu organización según sus permisos, o comunicarse cuando sea necesario atender un requerimiento legal aplicable."],
+      paragraphs: ["Runly Developer utiliza un backend self-hosted. Cuando corresponda, proveedores de infraestructura, almacenamiento, comunicaciones o servicios técnicos pueden procesar los datos necesarios para operar y mantener el servicio. Puedes consultar información sobre los proveedores aplicables a tu uso escribiendo a privacy@runly.mx.", "Si utilizas Runly Developer desde un cliente de terceros, como ChatGPT, ese cliente trata la información que le compartes conforme a sus propias políticas. Esta política describe el tratamiento en Runly; no sustituye las políticas del cliente ni de otros servicios conectados.", "Los datos también pueden ponerse a disposición de usuarios autorizados de tu organización según sus permisos, o comunicarse cuando sea necesario atender un requerimiento legal aplicable."],
     },
     {
       heading: "Retención, eliminación y respaldos",
-      paragraphs: ["Aplicamos políticas técnicas de ciclo de vida y borrado. La retención depende del tipo de dato, del estado del proyecto y de las necesidades de operación, seguridad y recuperación. Los proyectos y sus revisiones se conservan mientras sean necesarios para el trabajo autorizado; los registros técnicos y artefactos siguen el ciclo de vida aplicable a su función.", "Puedes solicitar la eliminación de datos o consultar la retención aplicable a tu cuenta en hola@runly.mx. Verificamos tu identidad y autorización sobre el espacio afectado antes de tramitar solicitudes. Ciertos registros pueden requerir conservación por motivos de seguridad u obligaciones aplicables; si eso afecta tu solicitud, te explicaremos el alcance.", "Existen respaldos cifrados y mecanismos de recuperación. El borrado en los sistemas activos no implica la eliminación inmediata de todas las copias de respaldo: estas siguen su ciclo de retención y eliminación. No se establece aquí un plazo uniforme de conservación o recuperación."],
+      paragraphs: ["Aplicamos políticas técnicas de ciclo de vida y borrado. La retención depende del tipo de dato, del estado del proyecto y de las necesidades de operación, seguridad y recuperación. Los proyectos y sus revisiones se conservan mientras sean necesarios para el trabajo autorizado; los registros técnicos y artefactos siguen el ciclo de vida aplicable a su función.", "Puedes solicitar la eliminación de datos o consultar la retención aplicable a tu cuenta en privacy@runly.mx. Verificamos tu identidad y autorización sobre el espacio afectado antes de tramitar solicitudes. Ciertos registros pueden requerir conservación por motivos de seguridad u obligaciones aplicables; si eso afecta tu solicitud, te explicaremos el alcance.", "Existen respaldos cifrados y mecanismos de recuperación. El borrado en los sistemas activos no implica la eliminación inmediata de todas las copias de respaldo: estas siguen su ciclo de retención y eliminación. No se establece aquí un plazo uniforme de conservación o recuperación."],
     },
     {
       heading: "OAuth, revocación y controles",
@@ -104,7 +104,7 @@ export const privacyPage: LegalPageDictionary = {
     },
     {
       heading: "Solicitudes, contacto y cambios",
-      paragraphs: ["Para consultar, corregir o solicitar la eliminación de tu información, revocar autorizaciones o plantear dudas sobre privacidad, escribe a hola@runly.mx. Indica tu cuenta y la solicitud, sin enviar credenciales.", "Las actualizaciones de esta política se publicarán en esta página con su fecha. Puedes consultar al equipo si un cambio afecta al tratamiento de tu información."],
+      paragraphs: ["Para consultar, corregir o solicitar la eliminación de tu información, revocar autorizaciones o plantear dudas sobre privacidad, escribe a privacy@runly.mx. Indica tu cuenta y la solicitud, sin enviar credenciales.", "Las actualizaciones de esta política se publicarán en esta página con su fecha. Puedes consultar al equipo si un cambio afecta al tratamiento de tu información."],
     },
   ],
 };

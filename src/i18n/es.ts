@@ -489,7 +489,7 @@ export const es: SiteDictionary = {
           heading: "Finalidades del tratamiento",
           paragraphs: [
             "Finalidades primarias, necesarias para la relación contigo: responder tu solicitud de información o demostración, proveer y dar soporte a la plataforma RUNLY, gestionar tu cuenta y cumplir obligaciones legales y contractuales.",
-            "Finalidades secundarias, no indispensables: enviarte comunicaciones comerciales sobre nuevos módulos o funcionalidades. Puedes negar el tratamiento para estas finalidades secundarias en cualquier momento escribiendo a hola@runly.mx, sin que esto afecte los servicios que ya contrataste.",
+            "Finalidades secundarias, no indispensables: enviarte comunicaciones comerciales sobre nuevos módulos o funcionalidades. Puedes negar el tratamiento para estas finalidades secundarias en cualquier momento escribiendo a privacy@runly.mx, sin que esto afecte los servicios que ya contrataste.",
           ],
         },
         {
@@ -506,7 +506,7 @@ export const es: SiteDictionary = {
         {
           heading: "Derechos ARCO y cómo ejercerlos",
           paragraphs: [
-            "Tienes derecho a Acceder, Rectificar y Cancelar tus datos personales, así como a Oponerte a su tratamiento (derechos ARCO), y a revocar el consentimiento que en su caso nos hayas otorgado. Para ejercer cualquiera de estos derechos, escríbenos a hola@runly.mx indicando tu nombre completo y el derecho que deseas ejercer; te responderemos en un plazo máximo de 20 días hábiles.",
+            "Tienes derecho a Acceder, Rectificar y Cancelar tus datos personales, así como a Oponerte a su tratamiento (derechos ARCO), y a revocar el consentimiento que en su caso nos hayas otorgado. Para ejercer cualquiera de estos derechos, escríbenos a privacy@runly.mx indicando tu nombre completo y el derecho que deseas ejercer; te responderemos en un plazo máximo de 20 días hábiles.",
           ],
         },
         {
@@ -529,7 +529,7 @@ export const es: SiteDictionary = {
         },
         {
           heading: "Contacto",
-          paragraphs: ["Si tienes dudas sobre este aviso de privacidad o sobre el tratamiento de tus datos, contáctanos en hola@runly.mx."],
+          paragraphs: ["Si tienes dudas sobre este aviso de privacidad o sobre el tratamiento de tus datos, contáctanos en privacy@runly.mx."],
         },
       ],
     },
@@ -684,12 +684,12 @@ export const es: SiteDictionary = {
         {
           heading: "Reporte responsable de vulnerabilidades",
           paragraphs: [
-            "Si identificas una posible vulnerabilidad de seguridad en RUNLY, te pedimos reportarla de forma responsable escribiéndonos a hola@runly.mx antes de divulgarla públicamente, para que podamos investigarla y corregirla.",
+            "Si identificas una posible vulnerabilidad de seguridad en RUNLY, te pedimos reportarla de forma responsable escribiéndonos a support@runly.mx antes de divulgarla públicamente, para que podamos investigarla y corregirla.",
           ],
         },
         {
           heading: "Contacto de seguridad",
-          paragraphs: ["Para dudas o reportes relacionados con la seguridad de tus datos, contáctanos en hola@runly.mx."],
+          paragraphs: ["Para dudas o reportes relacionados con la seguridad de tus datos, contáctanos en support@runly.mx."],
         },
       ],
     },
@@ -706,7 +706,7 @@ export const es: SiteDictionary = {
           heading: "Canales de soporte",
           paragraphs: ["Puedes contactar a nuestro equipo de soporte por los siguientes medios:"],
           list: [
-            "Correo: hola@runly.mx — te respondemos ahí mismo dando seguimiento a tu caso.",
+            "Correo: support@runly.mx — te respondemos ahí mismo dando seguimiento a tu caso.",
             "WhatsApp: +52 322 135 8808 — para dudas urgentes o seguimiento rápido.",
           ],
         },

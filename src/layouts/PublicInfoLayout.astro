@@ -4,7 +4,7 @@ import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import LegalContent from "../components/sections/LegalContent.astro";
 import { getDictionary, type LegalPageDictionary } from "../i18n";
-import { CONTACT_SUPPORT_EMAIL } from "../consts";
+import { CONTACT_SALES_EMAIL, CONTACT_SUPPORT_EMAIL, CONTACT_PRIVACY_EMAIL, CONTACT_DEVELOPER_EMAIL } from "../consts";
 
 interface Props {
   page: LegalPageDictionary;
@@ -13,6 +13,10 @@ interface Props {
 
 const { page, path } = Astro.props;
 const dict = getDictionary("es");
+const contactEmail = path === "/privacy" ? CONTACT_PRIVACY_EMAIL
+  : path === "/support" ? CONTACT_SUPPORT_EMAIL
+  : path === "/runly-developer" ? CONTACT_DEVELOPER_EMAIL
+  : CONTACT_SALES_EMAIL;
 const links = [
   { href: "/runly-developer", label: "Runly Developer" },
   { href: "/support", label: "Soporte" },
@@ -27,7 +31,7 @@ const links = [
   <main id="contenido" tabindex="-1">
     <LegalContent page={page}>
       <div class="mt-12 border-t border-slate-200 pt-8 space-y-5 text-sm text-slate-600">
-        <p>Contacto: <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href={`mailto:${CONTACT_SUPPORT_EMAIL}`}>{CONTACT_SUPPORT_EMAIL}</a></p>
+        <p>Contacto: <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href={`mailto:${contactEmail}`}>{contactEmail}</a></p>
         {path === "/runly-developer" && (
           <div class="flex flex-wrap gap-x-6 gap-y-4">
             <a class="text-runly-blue underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="https://devs.runly.mx">Portal de Runly Developer</a>
