@@ -11,12 +11,19 @@ import Footer from "../components/layout/Footer.astro";
 import SectionHeading from "../components/ui/SectionHeading.astro";
 import ModulesFullCatalogSection from "../components/sections/ModulesFullCatalogSection.astro";
 import { getDictionary } from "../i18n";
+import MarketplaceDirectorySection from "../components/marketplace/MarketplaceDirectorySection.astro";
+import { loadDirectoryForBuild } from "../lib/marketplace-build";
+import { MARKETPLACE_TEXT } from "../lib/marketplace";
 
 export const prerender = true;
 
 const locale = "es" as const;
 const dict = getDictionary(locale);
 const { modulesPage } = dict;
+// Marketplace modules come from Developer Hub (source of truth); the built-in
+// list below describes what ships inside Runly and is not a distribution catalog.
+const directory = await loadDirectoryForBuild();
+const marketplace = MARKETPLACE_TEXT[locale];
 ---
 
 <BaseLayout title={modulesPage.metaTitle} description={modulesPage.metaDescription} locale={locale} path="/modulos">
@@ -27,7 +34,10 @@ const { modulesPage } = dict;
       <div class="mt-6">
         <SectionHeading eyebrow={modulesPage.eyebrow} title={modulesPage.title} description={modulesPage.description} />
       </div>
+      <h2 class="mb-2 mt-4 text-center text-xl font-bold text-slate-900">{marketplace.builtInTitle}</h2>
+      <p class="mx-auto mb-8 max-w-2xl text-center text-sm text-slate-600">{marketplace.builtInDescription}</p>
       <ModulesFullCatalogSection dict={dict} locale={locale} />
+      <MarketplaceDirectorySection locale={locale} directory={directory} />
     </div>
   </main>
   <Footer locale={locale} footer={dict.footer} />

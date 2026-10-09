@@ -1,0 +1,168 @@
+---
+// src/components/marketplace/MarketplaceDirectorySection.astro
+//
+// /modulos Marketplace directory. Strategy (runly.mx is static output):
+//   1. Build time: the Developer Hub directory is fetched and rendered as HTML
+//      (SEO, works without JavaScript). If the Hub is unreachable the build
+//      still succeeds and renders an "unavailable" state — never invented data.
+//   2. Browser: the directory is fetched again on load and replaces the build
+//      snapshot, so releases revoked/withdrawn after the build disappear and new
+//      ones appear. If that fetch fails, the build snapshot stays, labelled
+//      with its date as possibly out of date.
+// Installing happens only inside Runly (Modules > Marketplace).
+import MarketplaceCard from "./MarketplaceCard.astro";
+import MarketplaceTrustBadge from "./MarketplaceTrustBadge.astro";
+import SectionHeading from "../ui/SectionHeading.astro";
+import { MARKETPLACE_TEXT, TRUST_LEVELS, capabilityFacets, type DirectoryResult, type Locale } from "../../lib/marketplace";
+
+interface Props {
+  locale: Locale;
+  directory: DirectoryResult;
+}
+const { locale, directory } = Astro.props;
+const t = MARKETPLACE_TEXT[locale];
+const modules = directory.status === "ok" ? directory.modules : [];
+const capabilities = capabilityFacets(modules);
+const filters = ["all", "official", "community-verified", "community"] as const;
+---
+
+<section id="marketplace" class="mt-24 scroll-mt-24" data-mk-root data-locale={locale} data-snapshot-status={directory.status} data-snapshot-at={directory.status === "ok" ? directory.fetchedAt : ""}>
+  <SectionHeading eyebrow={t.eyebrow} title={t.title} description={t.description} />
+
+  <div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+    <label class="relative block w-full lg:max-w-sm">
+      <span class="sr-only">{t.search}</span>
+      <input type="search" maxlength="120" data-mk-search placeholder={t.searchPlaceholder} class="h-11 w-full rounded-full border border-slate-200 bg-white px-4 text-sm text-slate-800 placeholder:text-slate-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200" />
+    </label>
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="flex flex-wrap gap-2" role="group" aria-label={t.filters.all}>
+        {filters.map((filter, i) => (
+          <button type="button" data-mk-trust={filter} aria-pressed={i === 0 ? "true" : "false"} class={`mk-filter inline-flex items-center rounded-full px-3.5 py-2 text-xs font-semibold transition-all sm:text-sm ${i === 0 ? "runly-gradient-btn text-white shadow-sm" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{t.filters[filter]}</button>
+        ))}
+      </div>
+      <label class="block">
+        <span class="sr-only">{t.capability}</span>
+        <select data-mk-capability class="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 sm:text-sm">
+          <option value="">{t.allCapabilities}</option>
+          {capabilities.map((capability) => <option value={capability}>{capability}</option>)}
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <p data-mk-status role="status" class="mb-4 text-sm text-slate-500">{directory.status === "ok" ? "" : t.unavailable}</p>
+
+  <div class="overflow-hidden rounded-3xl border border-slate-200 bg-slate-200" data-mk-grid-wrap hidden={modules.length === 0}>
+    <div class="grid grid-cols-1 gap-px sm:grid-cols-2 lg:grid-cols-3" data-mk-grid>
+      {modules.map((module) => <MarketplaceCard module={module} locale={locale} />)}
+    </div>
+  </div>
+  <p data-mk-empty class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500" hidden={!(directory.status === "ok" && modules.length === 0)}>{t.empty}</p>
+  <p data-mk-no-results class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500" hidden>{t.noResults}</p>
+
+  <div class="mt-6 rounded-2xl border border-orange-200 bg-orange-50/60 p-4 text-sm text-slate-700">
+    <p class="font-semibold text-slate-900">{t.installFromRunly}</p>
+    <p>{t.installHint}</p>
+  </div>
+
+  <template data-mk-card-template><MarketplaceCard locale={locale} /></template>
+  {TRUST_LEVELS.map((level) => <template data-mk-badge-template={level}><MarketplaceTrustBadge trust={level} locale={locale} /></template>)}
+</section>
+
+<script>
+  // Filtering mirrors filterModules() in lib/marketplace.ts over DOM data attributes.
+  import { MARKETPLACE_TEXT, capabilityFacets, dynamicDetailPath, fetchDirectory, moduleDetailPath, type Locale, type MarketplaceModule } from "../../lib/marketplace";
+
+  const root = document.querySelector<HTMLElement>("[data-mk-root]");
+  if (root) {
+    const locale = (root.dataset.locale === "en" ? "en" : "es") as Locale;
+    const t = MARKETPLACE_TEXT[locale];
+    const grid = root.querySelector<HTMLElement>("[data-mk-grid]")!;
+    const gridWrap = root.querySelector<HTMLElement>("[data-mk-grid-wrap]")!;
+    const status = root.querySelector<HTMLElement>("[data-mk-status]")!;
+    const empty = root.querySelector<HTMLElement>("[data-mk-empty]")!;
+    const noResults = root.querySelector<HTMLElement>("[data-mk-no-results]")!;
+    const search = root.querySelector<HTMLInputElement>("[data-mk-search]")!;
+    const select = root.querySelector<HTMLSelectElement>("[data-mk-capability]")!;
+    const trustButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-mk-trust]")];
+    const template = root.querySelector<HTMLTemplateElement>("[data-mk-card-template]")!;
+    const staticPages = new Set([...grid.querySelectorAll<HTMLElement>("[data-static-page]")].map((card) => card.dataset.key));
+    const ssrIcons = new Map([...grid.querySelectorAll<HTMLElement>(".mk-card")].map((card) => [card.dataset.key, card.querySelector("[data-slot=icon]")]));
+    let trust = "all";
+
+    const applyFilters = () => {
+      const needle = search.value.trim().toLowerCase();
+      const capability = select.value;
+      let visible = 0;
+      grid.querySelectorAll<HTMLElement>(".mk-card").forEach((card) => {
+        const match = (trust === "all" || (trust === "community" ? card.dataset.trust === "community" : card.dataset.trustLevel === trust))
+          && (!capability || (card.dataset.capabilities ?? "").split("|").includes(capability))
+          && (!needle || (card.dataset.search ?? "").includes(needle));
+        card.hidden = !match;
+        if (match) visible++;
+      });
+      noResults.hidden = visible > 0 || grid.children.length === 0;
+    };
+
+    const slot = (card: Element, name: string) => card.querySelector<HTMLElement>(`[data-slot=${name}]`)!;
+    const renderCard = (module: MarketplaceModule) => {
+      const card = (template.content.firstElementChild as HTMLElement).cloneNode(true) as HTMLElement;
+      card.dataset.key = module.key;
+      card.dataset.trust = module.trust;
+      card.dataset.trustLevel = module.trustLevel;
+      card.dataset.capabilities = module.capabilities.join("|");
+      card.dataset.search = filterKey(module);
+      (slot(card, "link") as HTMLAnchorElement).href = staticPages.has(module.key) ? moduleDetailPath(locale, module.key) : dynamicDetailPath(locale, module.key);
+      const icon = slot(card, "icon");
+      const ssrIcon = ssrIcons.get(module.key);
+      if (ssrIcon) icon.replaceWith(ssrIcon.cloneNode(true));
+      else { icon.style.backgroundColor = `${module.color}1f`; icon.style.color = module.color; }
+      slot(card, "name").textContent = module.name;
+      slot(card, "version").textContent = `v${module.version}`;
+      slot(card, "publisher").textContent = module.publisher?.displayName ?? t.runly;
+      const badge = root.querySelector<HTMLTemplateElement>(`[data-mk-badge-template="${module.trustLevel}"]`);
+      if (badge) slot(card, "badge").replaceChildren(badge.content.cloneNode(true));
+      slot(card, "description").textContent = module.description;
+      slot(card, "capabilities").replaceChildren(...module.capabilities.slice(0, 3).map((capability) => {
+        const chip = document.createElement("span");
+        chip.className = "rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600";
+        chip.textContent = capability;
+        return chip;
+      }));
+      slot(card, "compatibility").textContent = module.compatibility ? t.requiresRunly(module.compatibility.runly.min, module.compatibility.runly.max) : "";
+      return card;
+    };
+    const filterKey = (m: MarketplaceModule) => [m.key, m.name, m.description, m.publisher?.displayName ?? "Runly"].join(" ").toLowerCase();
+
+    trustButtons.forEach((button) => button.addEventListener("click", () => {
+      trust = button.dataset.mkTrust ?? "all";
+      trustButtons.forEach((b) => {
+        const active = b === button;
+        b.setAttribute("aria-pressed", String(active));
+        b.classList.toggle("runly-gradient-btn", active); b.classList.toggle("text-white", active); b.classList.toggle("shadow-sm", active);
+        b.classList.toggle("bg-slate-100", !active); b.classList.toggle("text-slate-600", !active);
+      });
+      applyFilters();
+    }));
+    search.addEventListener("input", applyFilters);
+    select.addEventListener("change", applyFilters);
+
+    const snapshotAt = root.dataset.snapshotAt;
+    const hadSnapshot = root.dataset.snapshotStatus === "ok";
+    status.textContent = hadSnapshot ? "" : t.loading;
+    fetchDirectory({ hubUrl: import.meta.env.PUBLIC_RUNLY_HUB_URL }).then((result) => {
+      if (result.status !== "ok") {
+        status.textContent = hadSnapshot && snapshotAt ? t.stale(new Date(snapshotAt).toLocaleString(locale === "en" ? "en-US" : "es-MX")) : t.unavailable;
+        return;
+      }
+      grid.replaceChildren(...result.modules.map(renderCard));
+      const current = select.value;
+      select.replaceChildren(select.options[0], ...capabilityFacets(result.modules).map((capability) => { const option = document.createElement("option"); option.value = capability; option.textContent = capability; return option; }));
+      select.value = capabilityFacets(result.modules).includes(current) ? current : "";
+      gridWrap.hidden = result.modules.length === 0;
+      empty.hidden = result.modules.length > 0;
+      status.textContent = t.updated;
+      applyFilters();
+    });
+  }
+</script>

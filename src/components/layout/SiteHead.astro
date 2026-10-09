@@ -8,9 +8,11 @@ interface Props {
   locale: "es" | "en";
   path: string; // must start with "/", e.g. "/" or "/modulos" — without locale prefix
   hasEnglish?: boolean;
+  // Pages that must stay out of search results (e.g. unlisted/runtime-resolved modules).
+  noindex?: boolean;
 }
 
-const { title, description, locale, path } = Astro.props;
+const { title, description, locale, path, noindex } = Astro.props;
 
 if (!path.startsWith("/")) {
   throw new Error(`SiteHead "path" prop must start with "/", received: "${path}"`);
@@ -54,6 +56,7 @@ const jsonLd = {
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="canonical" href={canonicalUrl} />
 {hasEnglish && (
   <>

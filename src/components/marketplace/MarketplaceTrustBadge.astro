@@ -1,0 +1,28 @@
+---
+// src/components/marketplace/MarketplaceTrustBadge.astro
+//
+// Structured trust from Developer Hub, never inferred from a publisher name.
+// Only "Runly Official" uses the official mark; Community Verified is visually
+// and verbally distinct from it.
+import { BadgeCheck, ShieldCheck, Users, ShieldAlert } from "@lucide/astro";
+import { MARKETPLACE_TEXT, type Locale, type TrustLevel } from "../../lib/marketplace";
+
+interface Props {
+  trust: TrustLevel;
+  locale: Locale;
+}
+const { trust, locale } = Astro.props;
+const t = MARKETPLACE_TEXT[locale];
+const styles: Record<TrustLevel, string> = {
+  official: "bg-sky-50 text-sky-700 ring-sky-200",
+  "community-verified": "bg-emerald-50 text-emerald-700 ring-emerald-200",
+  community: "bg-slate-100 text-slate-600 ring-slate-200",
+  revoked: "bg-red-50 text-red-700 ring-red-200",
+};
+const Icon = { official: BadgeCheck, "community-verified": ShieldCheck, community: Users, revoked: ShieldAlert }[trust];
+---
+
+<span class={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset ${styles[trust]}`} data-trust={trust} title={t.trustHint[trust]}>
+  <Icon class="h-3.5 w-3.5" aria-hidden="true" />
+  <span data-slot="trust-label">{t.trust[trust]}</span>
+</span>

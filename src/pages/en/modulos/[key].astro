@@ -1,0 +1,33 @@
+---
+// Static Marketplace module page, generated at build time from the Developer
+// Hub directory for listed, available (indexable) releases only. Unlisted,
+// withdrawn, revoked and private releases never get an indexable page.
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/layout/Header.astro";
+import Footer from "../../../components/layout/Footer.astro";
+import MarketplaceModuleDetail from "../../../components/marketplace/MarketplaceModuleDetail.astro";
+import { getDictionary } from "../../../i18n";
+import { loadDirectoryForBuild } from "../../../lib/marketplace-build";
+import { MARKETPLACE_TEXT, type MarketplaceModule } from "../../../lib/marketplace";
+
+export async function getStaticPaths() {
+  const directory = await loadDirectoryForBuild();
+  return directory.status === "ok" ? directory.modules.filter((module) => module.indexable).map((module) => ({ params: { key: module.key }, props: { module } })) : [];
+}
+
+const locale = "en" as const;
+const dict = getDictionary(locale);
+const { module } = Astro.props as { module: MarketplaceModule };
+const t = MARKETPLACE_TEXT[locale];
+const description = (module.description || module.name).slice(0, 155);
+---
+
+<BaseLayout title={`${module.name} — ${t.detailMetaSuffix}`} description={description} locale={locale} path={`/modulos/${module.key}`}>
+  <Header locale={locale} nav={dict.nav} />
+  <main class="bg-white py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <MarketplaceModuleDetail locale={locale} module={module} />
+    </div>
+  </main>
+  <Footer locale={locale} footer={dict.footer} />
+</BaseLayout>

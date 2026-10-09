@@ -20,6 +20,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // Runtime-resolved Marketplace pages (unlisted/new releases) are noindex.
+      filter: (page) => !page.includes("/modulos/detalle/"),
       i18n: {
         defaultLocale: "es",
         locales: { es: "es-MX", en: "en-US" },

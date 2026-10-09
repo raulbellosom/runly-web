@@ -15,15 +15,16 @@ interface Props {
   locale: "es" | "en";
   path: string;
   hasEnglish?: boolean;
+  noindex?: boolean;
 }
 
-const { title, description, locale, path, hasEnglish } = Astro.props;
+const { title, description, locale, path, hasEnglish, noindex } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={locale} class="scroll-smooth">
   <head>
-    <SiteHead title={title} description={description} locale={locale} path={path} hasEnglish={hasEnglish} />
+    <SiteHead title={title} description={description} locale={locale} path={path} hasEnglish={hasEnglish} noindex={noindex} />
   </head>
   <body class="bg-[#FCFDFF] text-slate-800 font-sans antialiased selection:bg-orange-500 selection:text-white overflow-x-hidden">
     <slot />

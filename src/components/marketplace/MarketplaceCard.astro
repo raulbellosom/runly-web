@@ -1,0 +1,48 @@
+---
+// src/components/marketplace/MarketplaceCard.astro
+//
+// One Marketplace card. Rendered on the server for the build snapshot and once
+// inside a <template> that the browser clones for fresh data, filling the
+// data-slot elements with textContent only.
+import { resolveIcon } from "../../lib/icons";
+import MarketplaceTrustBadge from "./MarketplaceTrustBadge.astro";
+import { MARKETPLACE_TEXT, moduleDetailPath, type Locale, type MarketplaceModule } from "../../lib/marketplace";
+
+interface Props {
+  module?: MarketplaceModule;
+  locale: Locale;
+}
+const { module, locale } = Astro.props;
+const t = MARKETPLACE_TEXT[locale];
+const Icon = resolveIcon(module?.icon ?? "Boxes");
+const color = module?.color ?? "#2563EB";
+const search = module ? [module.key, module.name, module.description, module.publisher?.displayName ?? "Runly"].join(" ").toLowerCase() : "";
+---
+
+<article
+  class="mk-card flex h-full flex-col gap-3 bg-white p-5 transition-colors hover:bg-slate-50"
+  data-key={module?.key ?? ""}
+  data-trust={module?.trust ?? ""}
+  data-trust-level={module?.trustLevel ?? ""}
+  data-capabilities={module?.capabilities.join("|") ?? ""}
+  data-search={search}
+  data-static-page={module?.indexable ? "1" : undefined}
+>
+  <a href={module ? moduleDetailPath(locale, module.key) : "#"} class="group flex items-start gap-3" data-slot="link">
+    <span class="mk-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl" style={`background-color:${color}1f;color:${color}`} data-slot="icon">
+      <Icon class="h-5 w-5" aria-hidden="true" />
+    </span>
+    <span class="min-w-0">
+      <span class="block truncate font-bold text-slate-900 group-hover:text-orange-600" data-slot="name">{module?.name}</span>
+      <span class="block text-xs text-slate-500">
+        <span data-slot="version">{module ? `v${module.version}` : ""}</span> · <span data-slot="publisher">{module ? (module.publisher?.displayName ?? t.runly) : ""}</span>
+      </span>
+    </span>
+  </a>
+  <div data-slot="badge">{module && <MarketplaceTrustBadge trust={module.trustLevel} locale={locale} />}</div>
+  <p class="line-clamp-3 flex-1 text-sm text-slate-600" data-slot="description">{module?.description}</p>
+  <div class="flex flex-wrap gap-1" data-slot="capabilities">
+    {module?.capabilities.slice(0, 3).map((capability) => <span class="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">{capability}</span>)}
+  </div>
+  <p class="text-[11px] text-slate-400" data-slot="compatibility">{module?.compatibility ? t.requiresRunly(module.compatibility.runly.min, module.compatibility.runly.max) : ""}</p>
+</article>

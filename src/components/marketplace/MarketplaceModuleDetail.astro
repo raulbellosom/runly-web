@@ -1,0 +1,127 @@
+---
+// src/components/marketplace/MarketplaceModuleDetail.astro
+//
+// Marketplace module page. Static mode (module given): rendered at build time
+// for listed, available releases (indexable). Dynamic mode (no module): an
+// empty shell filled in the browser from ?key= — used for unlisted links and
+// releases newer than the build; that page is noindex. In both modes the
+// browser re-checks Developer Hub and flags a release that stopped being
+// available. There is no install button: installation happens inside Runly.
+import { resolveIcon } from "../../lib/icons";
+import MarketplaceTrustBadge from "./MarketplaceTrustBadge.astro";
+import { MARKETPLACE_TEXT, TRUST_LEVELS, hubModuleUrl, hubBaseUrl, type Locale, type MarketplaceModule } from "../../lib/marketplace";
+
+interface Props {
+  locale: Locale;
+  module?: MarketplaceModule;
+}
+const { locale, module } = Astro.props;
+const t = MARKETPLACE_TEXT[locale];
+const hub = import.meta.env.PUBLIC_RUNLY_HUB_URL;
+const Icon = resolveIcon(module?.icon ?? "Boxes");
+const color = module?.color ?? "#2563EB";
+const backHref = `${locale === "en" ? "/en" : ""}/modulos/#marketplace`;
+const date = (value: string | null) => (value ? new Date(value).toLocaleDateString(locale === "en" ? "en-US" : "es-MX", { year: "numeric", month: "long", day: "numeric" }) : "");
+---
+
+<article data-mk-detail data-locale={locale} data-key={module?.key ?? ""} data-dynamic={module ? undefined : "1"} class="mx-auto max-w-4xl">
+  <a href={backHref} class="text-sm font-semibold text-orange-600 hover:underline">&larr; {t.back}</a>
+  <p data-slot="notice" role="status" class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800" hidden={Boolean(module)}>{module ? "" : t.loading}</p>
+
+  <div data-slot="content" class="mt-6 rounded-3xl border border-slate-200 bg-white p-6 sm:p-10" hidden={!module}>
+    <header class="flex flex-col gap-4 sm:flex-row sm:items-start">
+      <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl" style={`background-color:${color}1f;color:${color}`} data-slot="icon"><Icon class="h-7 w-7" aria-hidden="true" /></span>
+      <div class="min-w-0 flex-1">
+        <h1 class="break-words text-3xl font-extrabold text-slate-900" data-slot="name">{module?.name}</h1>
+        <p class="mt-1 break-all font-mono text-xs text-slate-400" data-slot="key">{module?.key}</p>
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+          <span data-slot="badge">{module && <MarketplaceTrustBadge trust={module.trustLevel} locale={locale} />}</span>
+          <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600" data-slot="availability">{module ? t.availability[module.availability] : ""}</span>
+        </div>
+        <p class="mt-2 text-xs text-slate-500" data-slot="trust-hint">{module ? t.trustHint[module.trustLevel] : ""}</p>
+      </div>
+    </header>
+
+    <dl class="mt-8 grid gap-4 text-sm sm:grid-cols-3">
+      <div><dt class="font-semibold text-slate-900">{t.version}</dt><dd class="text-slate-600" data-slot="version">{module ? `v${module.version}` : ""}</dd></div>
+      <div><dt class="font-semibold text-slate-900">{t.publisher}</dt><dd class="text-slate-600" data-slot="publisher">{module ? (module.publisher ? `${module.publisher.displayName} (@${module.publisher.handle})` : t.runly) : ""}</dd></div>
+      <div><dt class="font-semibold text-slate-900">{t.compatibility}</dt><dd class="text-slate-600" data-slot="compatibility">{module?.compatibility ? t.requiresRunly(module.compatibility.runly.min, module.compatibility.runly.max) : "—"}</dd></div>
+    </dl>
+
+    <p class="mt-8 whitespace-pre-line text-slate-700" data-slot="description">{module?.description}</p>
+
+    <section class="mt-8" data-slot="capabilities-section" hidden={!module?.capabilities.length}>
+      <h2 class="text-sm font-bold text-slate-900">{t.capabilities}</h2>
+      <ul class="mt-2 flex flex-wrap gap-1.5" data-slot="capabilities">{module?.capabilities.map((c) => <li class="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">{c}</li>)}</ul>
+    </section>
+    <section class="mt-6" data-slot="dependencies-section" hidden={!module?.dependencies.length}>
+      <h2 class="text-sm font-bold text-slate-900">{t.dependencies}</h2>
+      <ul class="mt-2 flex flex-wrap gap-1.5" data-slot="dependencies">{module?.dependencies.map((d) => <li class="rounded-md bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-600">{d}</li>)}</ul>
+    </section>
+    <section class="mt-6" data-slot="changelog-section" hidden={!module?.changelog}>
+      <h2 class="text-sm font-bold text-slate-900">{t.changelog}</h2>
+      <p class="mt-2 whitespace-pre-line text-sm text-slate-600" data-slot="changelog">{module?.changelog}</p>
+    </section>
+
+    <div class="mt-8 rounded-2xl border border-orange-200 bg-orange-50/60 p-4 text-sm text-slate-700">
+      <p class="font-semibold text-slate-900">{t.installFromRunly}</p>
+      <p>{t.installHint}</p>
+    </div>
+    <p class="mt-6 text-xs text-slate-400"><span data-slot="published">{module?.publishedAt ? `${t.published}: ${date(module.publishedAt)}` : ""}</span></p>
+    <p class="mt-1 break-all text-xs text-slate-400" data-slot="sha">{module?.sha256 ? `SHA-256: ${module.sha256}` : ""}</p>
+    <a data-slot="hub-link" href={module ? hubModuleUrl(hub, module.key) : hubBaseUrl(hub)} class="mt-4 inline-block text-sm font-semibold text-orange-600 hover:underline" rel="noopener">{t.viewInHub}</a>
+  </div>
+  {TRUST_LEVELS.map((level) => <template data-mk-badge-template={level}><MarketplaceTrustBadge trust={level} locale={locale} /></template>)}
+</article>
+
+<script>
+  import { MARKETPLACE_TEXT, fetchModule, hubModuleUrl, validModuleKey, type Locale, type MarketplaceModule } from "../../lib/marketplace";
+
+  const root = document.querySelector<HTMLElement>("[data-mk-detail]");
+  if (root) {
+    const locale = (root.dataset.locale === "en" ? "en" : "es") as Locale;
+    const t = MARKETPLACE_TEXT[locale];
+    const dynamic = root.dataset.dynamic === "1";
+    const key = dynamic ? new URLSearchParams(location.search).get("key") ?? "" : root.dataset.key ?? "";
+    const slot = (name: string) => root.querySelector<HTMLElement>(`[data-slot="${name}"]`)!;
+    const notice = slot("notice");
+    const show = (message: string) => { notice.textContent = message; notice.hidden = false; };
+    const items = (name: string, values: string[], mono = false) => {
+      slot(`${name}-section`).hidden = values.length === 0;
+      slot(name).replaceChildren(...values.map((value) => { const li = document.createElement("li"); li.className = `rounded-md bg-slate-100 px-2 py-0.5 text-xs ${mono ? "font-mono" : "font-medium"} text-slate-600`; li.textContent = value; return li; }));
+    };
+    const fill = (m: MarketplaceModule) => {
+      document.title = `${m.name} — ${t.detailMetaSuffix}`;
+      slot("icon").style.backgroundColor = `${m.color}1f`; slot("icon").style.color = m.color;
+      slot("name").textContent = m.name;
+      slot("key").textContent = m.key;
+      const badge = root.querySelector<HTMLTemplateElement>(`[data-mk-badge-template="${m.trustLevel}"]`);
+      if (badge) slot("badge").replaceChildren(badge.content.cloneNode(true));
+      slot("availability").textContent = t.availability[m.availability];
+      slot("trust-hint").textContent = t.trustHint[m.trustLevel];
+      slot("version").textContent = `v${m.version}`;
+      slot("publisher").textContent = m.publisher ? `${m.publisher.displayName} (@${m.publisher.handle})` : t.runly;
+      slot("compatibility").textContent = m.compatibility ? t.requiresRunly(m.compatibility.runly.min, m.compatibility.runly.max) : "—";
+      slot("description").textContent = m.description;
+      items("capabilities", m.capabilities);
+      items("dependencies", m.dependencies, true);
+      slot("changelog-section").hidden = !m.changelog;
+      slot("changelog").textContent = m.changelog;
+      slot("published").textContent = m.publishedAt ? `${t.published}: ${new Date(m.publishedAt).toLocaleDateString(locale === "en" ? "en-US" : "es-MX")}` : "";
+      slot("sha").textContent = m.sha256 ? `SHA-256: ${m.sha256}` : "";
+      (slot("hub-link") as HTMLAnchorElement).href = hubModuleUrl(import.meta.env.PUBLIC_RUNLY_HUB_URL, m.key);
+      slot("content").hidden = false;
+    };
+    if (!validModuleKey(key)) show(t.notFound);
+    else fetchModule(key, { hubUrl: import.meta.env.PUBLIC_RUNLY_HUB_URL }).then((result) => {
+      if (result.status === "ok") {
+        if (dynamic) { fill(result.module); notice.hidden = true; }
+        if (result.module.availability !== "available") show(result.module.availability === "revoked" ? `${t.availability.revoked}. ${t.noLongerAvailable}` : t.noLongerAvailable);
+      } else if (result.status === "not_found") {
+        show(t.notFound);
+        if (!dynamic) slot("content").hidden = true;
+      } else if (dynamic) show(t.unavailable);
+      // Static page + Hub unreachable: keep the build content, nothing to add.
+    });
+  }
+</script>
