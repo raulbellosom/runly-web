@@ -59,6 +59,20 @@ See `.env.example`.
 
 All of these are `PUBLIC_`-prefixed and non-secret by design (same category as a Supabase anon key) — they get inlined into the static build and shipped to the browser. **No SMTP credentials or server secrets exist in this repository or build.** Delivery is owned entirely by the Growth module on the ERP side; see [Contact form](#contact-form) below.
 
+## Marketplace on /modulos
+
+Runly Developer Hub is the single source of truth for Marketplace modules. `/modulos` and `/en/modulos` read its public directory (`GET /api/v1/marketplace/directory`); this repository never keeps its own list of Marketplace modules. `src/data/modules.ts` still describes the modules **included in Runly** (`runly.*`, shipped with the platform and used by the documentation) and is shown as "Incluidos en Runly", not as a distribution catalog.
+
+Strategy for a static site (no SSR): the directory is fetched **at build time** (SEO HTML and static pages `/modulos/<key>/` for listed, available releases) and **again in the browser** on every visit, replacing the build snapshot so releases revoked or withdrawn after the build disappear and new ones appear. If the browser refresh fails, the build snapshot stays, labelled with its date as possibly out of date. If the Hub was unreachable at build time, the build still succeeds and renders an honest "unavailable" state — modules are never invented. Unlisted links and releases newer than the build resolve at `/modulos/detalle/?key=custom.x` in the browser; that page is `noindex` and excluded from the sitemap. There is no install button: modules are installed from Runly (Modules > Marketplace), which verifies the signed feeds itself.
+
+| Variable | Purpose |
+|---|---|
+| `PUBLIC_RUNLY_HUB_URL` | Developer Hub origin (default `https://devs.runly.mx`). Only HTTPS, or `http://localhost`/`127.0.0.1` for development |
+| `RUNLY_CATALOG_BUILD_FETCH` | `0` skips the build-time fetch (offline builds) |
+| `RUNLY_CATALOG_REQUIRED` | `1` fails the build when the Hub directory is unavailable |
+
+SEO limitation: releases published after the last build have no indexable page until the next build (they are visible through the browser refresh and the `noindex` dynamic page). Rebuild/deploy after publications when indexing matters. If Nginx ever adds a Content-Security-Policy, `connect-src` must allow the Hub origin.
+
 ## Module documentation (help content)
 
 `src/content/help/**/*.md` and the pages/endpoints under `/documentacion/modulos/` and `/api/modules/` are **not edited here**. The `runly` ERP monorepo (`../runly` in this dev layout) is the single source of truth — each module's help articles live at `apps/api/src/manifests/official/help/<moduleKey>/{overview.md,views/*.md}`, right next to that module's manifest (navigation, permissions), and are also what powers the in-app help panel inside a live Runly instance.

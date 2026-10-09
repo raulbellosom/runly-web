@@ -56,14 +56,45 @@ Runly rechaza y conserva la última copia verificada cuando recibe:
 
 Antes de instalar, Runly comprueba la versión de Runly declarada, los contratos de compilador/runtime, que los servicios, eventos y Connections existan en la instancia y que las dependencias `custom.*` estén instaladas. Si algo no se cumple, el módulo se muestra como no compatible y no se instala. La metadata de seguridad firmada (capacidades, servicios, eventos, Connections, dependencias) debe coincidir con el ZIP inspeccionado.
 
+## Snapshot oficial firmado
+
+Además de la firma `key@version:sha256` de cada módulo, Developer Hub exporta un **snapshot oficial** firmado con la clave oficial: secuencia, huella del snapshot anterior, módulos, compatibilidad firmada por versión y **revocaciones oficiales**. Runly lo verifica igual que el catálogo v2: una firma que no es de la clave oficial fijada, un dominio de confianza distinto de `OFFICIAL`, una secuencia menor o dos snapshots distintos con la misma secuencia se rechazan y se conserva la última copia verificada. Un rollback legítimo de Runly llega como un snapshot **nuevo** con secuencia mayor.
+
 ## Instalar y actualizar en Runly
 
-**Módulos > Catálogo v2** muestra la etiqueta de confianza, el publicador, la versión, las capacidades, los permisos solicitados y el estado de revocación. Para un módulo no oficial, la administración debe aceptar explícitamente la versión exacta antes de instalar. Las actualizaciones se detectan y se muestran con su confianza y cambios, pero **siempre requieren confirmación**: no hay actualizaciones automáticas.
+**Módulos > Marketplace** muestra la etiqueta de confianza, el publicador, la versión, la compatibilidad (con el motivo cuando no se cumple), las dependencias declaradas, los cambios, las capacidades y los permisos solicitados. El flujo es explorar → detalle → **Verificar** → instalar:
+
+1. **Descargando**: el ZIP se resuelve solo desde el catálogo verificado, en una ruta direccionada por su huella.
+2. **Verificando**: tamaño y SHA-256 deben coincidir con la entrada firmada; la clave y la versión del ZIP, y su superficie de seguridad, deben coincidir con lo firmado.
+3. **Comprobaciones previas**: compatibilidad, revocaciones y dependencias. Después, el flujo oficial de paquetes aplica sus propias comprobaciones de estructura (y pide decisiones si un cambio puede perder datos).
+4. **Instalando** y **Habilitado**: se usa el mismo instalador de módulos de Runly; no existe un instalador paralelo.
+
+Si algo falla, se indica la fase y el código del diagnóstico. Para un módulo no oficial, la administración debe aceptar explícitamente la versión exacta. Las actualizaciones muestran la versión actual y la disponible, pero **siempre requieren confirmación**: no hay actualizaciones automáticas.
+
+- Los módulos **incluidos en Runly** (`runly.*`) llegan con la plataforma y nunca se descargan del Marketplace.
+- Las dependencias se muestran antes de instalar. No se instala ninguna dependencia oculta: si falta una, se bloquea con la explicación y, si está en el Marketplace, se indica que debe instalarse primero.
+- El módulo se instala **una vez para toda la instancia** y queda habilitado para todas las empresas; cada empresa puede deshabilitarlo después.
+- Solo la administración de la instancia (administración del sistema o de la empresa activa) puede instalar, actualizar o configurar el catálogo. Ver el Marketplace no da permiso de instalar, y la API lo valida en el servidor.
+
+## Versión revocada o retirada en una instancia
+
+- **Revocada**: aparece la alerta «Esta versión fue revocada» con el motivo y la versión recomendada. Se bloquean nuevas instalaciones, reinstalaciones de esa versión y actualizaciones hacia una versión revocada. El módulo instalado no se desinstala ni se borran datos.
+- **Retirada por el publicador**: no es un incidente de seguridad. La instalación existente sigue registrada y funcionando; esa versión ya no se ofrece para instalaciones nuevas.
+
+## Origen del catálogo y claves de confianza
+
+La administración configura en **Módulos > Marketplace > Origen del catálogo** las URLs del snapshot oficial y del catálogo de comunidad (o de un catálogo administrado). Solo se admiten HTTPS o un archivo local explícito (`file://`). El botón «Usar catálogo de Runly» rellena las URLs de Developer Hub.
+
+El trust store separa claves **oficiales**, de **comunidad** y **administradas**. Las oficiales y de comunidad llegan con las versiones de Runly y cada una tiene un estado: **activa**, **en retiro** (solo valida contenido fechado hasta su fecha límite) o **revocada**. La administración puede agregar claves de catálogos administrados (nunca se vuelven «Oficial Runly») y revocar una clave localmente, pero no puede volver a confiar en ella ni promoverla. Runly nunca guarda claves privadas.
 
 ## Sin conexión
 
-Sin conexión o con información vencida, Runly muestra la **última sincronización** y no instala módulos del catálogo v2: no puede confirmar revocaciones recientes. Los módulos instalados siguen funcionando. Una instancia offline no recibe revocaciones hasta volver a sincronizar.
+Sin conexión o con información vencida, Runly muestra la **última copia verificada** (si la política de la instancia lo permite y no supera la antigüedad configurada), indica que puede estar desactualizada y **no instala**: instalar siempre vuelve a descargar y verificar. Sin una copia verificada previa, se muestra el error en lugar de una lista vacía. Los módulos instalados siguen funcionando. Una instancia offline no recibe revocaciones hasta volver a sincronizar.
+
+## runly.mx/modulos
+
+La página pública de módulos lee el mismo catálogo de Developer Hub (no mantiene una lista propia). Solo muestra módulos listados y disponibles, con su confianza, publicador, versión, capacidades y compatibilidad, y no instala nada: indica que el módulo está disponible desde Runly. Los módulos no listados se abren solo por enlace y no se indexan.
 
 ## Estado actual
 
-Developer Hub implementa Marketplace, publicadores, moderación, firma comunitaria y exportación del catálogo v2 en desarrollo local. La clave comunitaria de producción todavía no existe ni está fijada en Runly; hasta entonces el catálogo v2 solo se prueba con claves de prueba y no hay despliegue público. La preparación estática verifica firmas, secuencia y bytes con `pnpm catalog:prepare:v2 --from <export>`.
+Developer Hub implementa Marketplace, publicadores, moderación, firma comunitaria, snapshot oficial y exportación del catálogo v2 en desarrollo local. **La publicación productiva sigue desactivada** y no existen claves de producción: la clave comunitaria todavía no está fijada en Runly. Hasta que se activen, el Marketplace solo se prueba con catálogos firmados con claves efímeras de prueba y no hay despliegue público del catálogo. La preparación estática verifica firmas, secuencia y bytes con `pnpm catalog:prepare:v2 --from <export>`.
