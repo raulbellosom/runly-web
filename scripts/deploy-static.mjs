@@ -111,8 +111,7 @@ export function adopt({ target, confirm, fsOps }) {
   if (confirm !== 'ADOPT RUNLY.MX TARGET') fail('ADOPT_CONFIRMATION_REQUIRED');
   if (!fsOps.existsSync(dir) || fsOps.lstatSync(dir).isSymbolicLink() || !fsOps.lstatSync(dir).isDirectory()) fail('TARGET_NOT_A_DIRECTORY');
   if (!['index.html', 'sitemap-index.xml', 'robots.txt'].every((file) => fsOps.existsSync(`${dir}/${file}`))) fail('TARGET_NOT_RECOGNISED');
-  fsOps.writeFileSync(`${dir}/${MARKER}`, 'runly-web static deploy target
-');
+  fsOps.writeFileSync(`${dir}/${MARKER}`, 'runly-web static deploy target\n');
   return { adopted: dir };
 }
 
