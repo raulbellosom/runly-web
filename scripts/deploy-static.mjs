@@ -12,13 +12,16 @@
 //   node scripts/deploy-static.mjs --target /var/www/runly.mx --rollback
 //   node scripts/deploy-static.mjs --target /var/www/runly.mx --adopt --confirm "ADOPT RUNLY.MX TARGET"   (once, existing tree)
 import { spawnSync } from 'node:child_process';
-import { existsSync, lstatSync, readdirSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { existsSync, lstatSync, readdirSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { posix, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const MARKER = '.runly-web-target';
+// Catalog v1 compatibility mirror (Runly 'Disponibles' default URL). Never deleted
+// by the sync; a non-empty production index is never silently replaced.
+export const CATALOG_V1_INDEX = 'catalog/v1/index.json';
 const FORBIDDEN = new Set(['/', '/bin', '/boot', '/dev', '/etc', '/home', '/lib', '/opt', '/proc', '/root', '/run', '/sbin', '/srv', '/sys', '/tmp', '/usr', '/var', '/var/www', '/var/lib', '/var/log']);
-const REQUIRED_BUILD = ['index.html', 'modulos/index.html', 'en/modulos/index.html', 'sitemap-index.xml', 'robots.txt'];
+const REQUIRED_BUILD = ['index.html', 'modulos/index.html', 'en/modulos/index.html', 'sitemap-index.xml', 'robots.txt', 'catalog/v1/index.json'];
 const fail = (code) => { throw Object.assign(new Error(code), { code }); };
 
 // Pure validation of the requested paths (POSIX production paths).
@@ -37,7 +40,7 @@ export function deployPlan({ target, source = 'dist', owner = null, stamp = new 
   const dir = validateTarget(target, source);
   if (owner !== null && !/^[a-z_][a-z0-9_-]{0,31}:[a-z_][a-z0-9_-]{0,31}$/.test(owner)) fail('OWNER_INVALID');
   const releases = `${dir}.releases`;
-  const sync = (from, to, extra = []) => ['rsync', ['-a', '--delete-after', '--filter', `P ${MARKER}`, ...(owner ? [`--chown=${owner}`] : []), ...extra, `${from.replace(/\/+$/, '')}/`, `${to}/`]];
+  const sync = (from, to, extra = []) => ['rsync', ['-a', '--delete-after', '--filter', `P ${MARKER}`, '--filter', 'P /catalog/**', ...(owner ? [`--chown=${owner}`] : []), ...extra, `${from.replace(/\/+$/, '')}/`, `${to}/`]];
   return {
     target: dir, releases, release: `${releases}/${stamp}`, keep,
     build: ['pnpm', ['build']],
@@ -53,6 +56,17 @@ export function checkBuild(source, exists = existsSync) {
   if (missing.length) throw Object.assign(new Error('BUILD_INCOMPLETE'), { code: 'BUILD_INCOMPLETE', missing });
 }
 
+// Refuse to overwrite a production v1 index that lists modules with a different one.
+export function checkCatalogV1(source, target, fs = { existsSync, readFileSync }, { replace = false } = {}) {
+  const live = `${target}/${CATALOG_V1_INDEX}`;
+  if (!fs.existsSync(live)) return { live: false };
+  let current;
+  try { current = JSON.parse(fs.readFileSync(live, 'utf8')); } catch { fail('CATALOG_V1_UNREADABLE'); }
+  const next = fs.readFileSync(resolve(source, CATALOG_V1_INDEX), 'utf8');
+  if (Array.isArray(current?.modules) && current.modules.length > 0 && JSON.stringify(current) !== JSON.stringify(JSON.parse(next)) && !replace) fail('CATALOG_V1_WOULD_BE_REPLACED');
+  return { live: true, modules: current?.modules?.length ?? 0 };
+}
+
 export function checkTargetState(target, fs = { existsSync, lstatSync, readdirSync }) {
   if (!fs.existsSync(target)) fail('TARGET_MISSING');
   if (fs.lstatSync(target).isSymbolicLink() || !fs.lstatSync(target).isDirectory()) fail('TARGET_NOT_A_DIRECTORY');
@@ -62,16 +76,17 @@ export function checkTargetState(target, fs = { existsSync, lstatSync, readdirSy
 }
 
 // Orchestration with injectable effects; returns the step log (no secrets).
-export async function deploy({ target, source = 'dist', owner = null, dryRun = false, healthUrl = null, run, fsOps, fetchImpl = fetch, keep = 5, stamp }) {
+export async function deploy({ target, source = 'dist', owner = null, dryRun = false, healthUrl = null, run, fsOps, fetchImpl = fetch, keep = 5, stamp, replaceCatalogV1 = false }) {
   const plan = deployPlan({ target, source, owner, stamp, keep });
   const log = [];
   const exec = (step, [command, args]) => { log.push(step); const result = run(command, args); if (result.status !== 0) fail(`${step.toUpperCase()}_FAILED`); return result; };
   exec('build', plan.build);
   checkBuild(source, fsOps.existsSync); log.push('build_checked');
   const state = checkTargetState(plan.target, fsOps);
+  const catalogV1 = checkCatalogV1(source, plan.target, fsOps, { replace: replaceCatalogV1 }); log.push('catalog_v1_checked');
   const preview = exec('dry_run', plan.dryRun);
   const deletions = String(preview.stdout ?? '').split('\n').filter((line) => line.startsWith('*deleting')).length;
-  if (dryRun) return { log, dryRun: true, deletions, firstDeploy: state.firstDeploy };
+  if (dryRun) return { log, dryRun: true, deletions, firstDeploy: state.firstDeploy, catalogV1 };
   if (!state.firstDeploy) { fsOps.mkdirSync(plan.releases, { recursive: true }); exec('backup', plan.backup); }
   exec('apply', plan.apply);
   if (state.firstDeploy) fsOps.writeFileSync(`${plan.target}/${MARKER}`, 'runly-web static deploy target\n');
@@ -128,13 +143,13 @@ export function rollback({ target, run, fsOps }) {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const arg = (name) => { const i = process.argv.indexOf(`--${name}`); return i > 0 ? process.argv[i + 1] : null; };
   const run = (command, args) => spawnSync(command, args, { stdio: ['ignore', 'pipe', 'inherit'], encoding: 'utf8' });
-  const fsOps = { existsSync, lstatSync, readdirSync, mkdirSync, writeFileSync, rmSync };
+  const fsOps = { existsSync, lstatSync, readdirSync, mkdirSync, writeFileSync, rmSync, readFileSync };
   try {
     const result = process.argv.includes('--adopt')
       ? adopt({ target: arg('target'), confirm: arg('confirm'), fsOps })
       : process.argv.includes('--rollback')
       ? rollback({ target: arg('target'), run, fsOps })
-      : await deploy({ target: arg('target'), owner: arg('owner'), dryRun: process.argv.includes('--dry-run'), healthUrl: arg('health-url'), run, fsOps });
+      : await deploy({ target: arg('target'), owner: arg('owner'), dryRun: process.argv.includes('--dry-run'), healthUrl: arg('health-url'), replaceCatalogV1: process.argv.includes('--replace-catalog-v1'), run, fsOps });
     console.log(JSON.stringify(result));
   } catch (error) { console.error(JSON.stringify({ error: error.code ?? 'DEPLOY_FAILED', missing: error.missing, log: error.log })); process.exitCode = 1; }
 }

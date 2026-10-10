@@ -1,19 +1,25 @@
 import { test, expect } from 'vitest';
-import { validateTarget, deployPlan, deploy, rollback, adopt, MARKER, checkTargetState, pruneReleases } from './deploy-static.mjs';
+import { resolve } from 'node:path';
+import { validateTarget, deployPlan, deploy, rollback, adopt, MARKER, checkTargetState, checkCatalogV1, pruneReleases } from './deploy-static.mjs';
 
-const BUILD = ['dist/index.html', 'dist/modulos/index.html', 'dist/en/modulos/index.html', 'dist/sitemap-index.xml', 'dist/robots.txt'].map((p) => p.replace(/\//g, '\\'));
-// In-memory filesystem keyed by POSIX path; build files are checked with resolve() (OS path).
-function fakeFs({ target = '/var/www/runly.mx', entries = [MARKER, 'index.html'], releases = [], built = true } = {}) {
-  const dirs = new Map([[target, [...entries]], [`${target}.releases`, [...releases]]]);
-  const files = new Set();
+const TARGET = '/var/www/runly.mx';
+const PAGES = ['index.html', 'modulos/index.html', 'en/modulos/index.html', 'sitemap-index.xml', 'robots.txt', 'catalog/v1/index.json'];
+const EMPTY_V1 = JSON.stringify({ schemaVersion: 1, generatedAt: '2026-10-04T00:00:00.000Z', modules: [] });
+
+// Explicit in-memory filesystem: build files (OS paths via resolve) + POSIX target tree.
+function fakeFs({ entries = [MARKER, 'index.html'], releases = [], built = true, live = EMPTY_V1, targetFiles = PAGES } = {}) {
+  const dirs = new Map([[TARGET, [...entries]], [`${TARGET}.releases`, [...releases]]]);
+  const files = new Map(targetFiles.map((p) => [`${TARGET}/${p}`, p === 'catalog/v1/index.json' ? live : 'x']));
+  if (built) for (const p of PAGES) files.set(resolve('dist', p), p === 'catalog/v1/index.json' ? EMPTY_V1 : 'x');
   return {
     dirs, files,
-    existsSync: (path) => dirs.has(path) || files.has(path) || (built && (BUILD.some((b) => String(path).endsWith(b)) || /dist[\\/]/.test(String(path)) && BUILD.some((b) => String(path).replace(/\//g, '\\').endsWith(b)))) || (/\/(index\.html|modulos\/index\.html|en\/modulos\/index\.html|sitemap-index\.xml|robots\.txt)$/.test(path) && String(path).startsWith(target)),
+    existsSync: (path) => dirs.has(path) || files.has(path),
     lstatSync: (path) => ({ isSymbolicLink: () => false, isDirectory: () => dirs.has(path) }),
     readdirSync: (path) => dirs.get(path) ?? [],
+    readFileSync: (path) => files.get(path),
     mkdirSync: (path) => { if (!dirs.has(path)) dirs.set(path, []); },
-    writeFileSync: (path) => files.add(path),
-    rmSync: (path) => { const [parent, name] = [path.slice(0, path.lastIndexOf('/')), path.slice(path.lastIndexOf('/') + 1)]; dirs.set(parent, (dirs.get(parent) ?? []).filter((n) => n !== name)); },
+    writeFileSync: (path, content) => files.set(path, content),
+    rmSync: (path) => { const parent = path.slice(0, path.lastIndexOf('/')), name = path.slice(path.lastIndexOf('/') + 1); dirs.set(parent, (dirs.get(parent) ?? []).filter((n) => n !== name)); },
   };
 }
 const runner = (failOn = null, stdout = '') => { const calls = []; return { calls, run: (command, args) => { calls.push([command, ...args]); return { status: failOn && args.includes(failOn) ? 1 : 0, stdout: args.includes('--dry-run') ? stdout : '' }; } }; };
@@ -21,54 +27,62 @@ const runner = (failOn = null, stdout = '') => { const calls = []; return { call
 test('target guardrails: explicit, absolute, normalized, not broad, not overlapping the build', () => {
   for (const [target, code] of [[undefined, 'TARGET_REQUIRED'], ['', 'TARGET_REQUIRED'], ['/', 'TARGET_TOO_BROAD'], ['var/www/runly.mx', 'TARGET_MUST_BE_ABSOLUTE'], ['/var/www', 'TARGET_TOO_BROAD'], ['/srv', 'TARGET_TOO_BROAD'], ['/var/www/../../etc/x', 'TARGET_NOT_NORMALIZED'], ['/var/www/runly mx', 'TARGET_MUST_BE_ABSOLUTE'], ['/opt/runly-web/dist', 'TARGET_OVERLAPS_SOURCE']])
     expect(() => validateTarget(target, '/opt/runly-web/dist'), String(target)).toThrow(code);
-  expect(validateTarget('/var/www/runly.mx/')).toBe('/var/www/runly.mx');
+  expect(validateTarget('/var/www/runly.mx/')).toBe(TARGET);
 });
 
-test('rsync never deletes outside the target and protects the marker; releases live outside the target', () => {
-  const plan = deployPlan({ target: '/var/www/runly.mx', owner: 'www-data:www-data', stamp: 's1' });
-  expect(plan.apply).toEqual(['rsync', ['-a', '--delete-after', '--filter', `P ${MARKER}`, '--chown=www-data:www-data', 'dist/', '/var/www/runly.mx/']]);
+test('rsync never deletes outside the target, protects the marker and the catalog mirror; releases live outside', () => {
+  const plan = deployPlan({ target: TARGET, owner: 'www-data:www-data', stamp: 's1' });
+  expect(plan.apply).toEqual(['rsync', ['-a', '--delete-after', '--filter', `P ${MARKER}`, '--filter', 'P /catalog/**', '--chown=www-data:www-data', 'dist/', `${TARGET}/`]]);
   expect(plan.dryRun[1]).toContain('--dry-run');
-  expect(plan.release).toBe('/var/www/runly.mx.releases/s1');
-  expect(plan.release.startsWith('/var/www/runly.mx/')).toBe(false);
-  expect(() => deployPlan({ target: '/var/www/runly.mx', owner: 'root;rm -rf /' })).toThrow('OWNER_INVALID');
+  expect(plan.release).toBe(`${TARGET}.releases/s1`);
+  expect(plan.release.startsWith(`${TARGET}/`)).toBe(false);
+  expect(() => deployPlan({ target: TARGET, owner: 'root;rm -rf /' })).toThrow('OWNER_INVALID');
 });
 
 test('unmanaged non-empty targets are refused; an empty target is a first deploy', () => {
-  expect(() => checkTargetState('/var/www/runly.mx', fakeFs({ entries: ['something-else'] }))).toThrow('TARGET_NOT_MANAGED');
-  expect(checkTargetState('/var/www/runly.mx', fakeFs({ entries: [] })).firstDeploy).toBe(true);
+  expect(() => checkTargetState(TARGET, fakeFs({ entries: ['something-else'] }))).toThrow('TARGET_NOT_MANAGED');
+  expect(checkTargetState(TARGET, fakeFs({ entries: [] })).firstDeploy).toBe(true);
 });
 
-test('deploy order: build, check, dry-run, backup, apply, health; --dry-run stops before changes', async () => {
+test('deploy order: build, checks, dry-run, backup, apply, health; --dry-run stops before changes', async () => {
   const fs = fakeFs(), r = runner(null, '*deleting   modulos/custom.old/index.html\n>f+++++++++ index.html\n');
-  const preview = await deploy({ target: '/var/www/runly.mx', dryRun: true, run: r.run, fsOps: fs, stamp: 's1' });
+  const preview = await deploy({ target: TARGET, dryRun: true, run: r.run, fsOps: fs, stamp: 's1' });
   expect([preview.dryRun, preview.deletions, r.calls.map((c) => c[0])]).toEqual([true, 1, ['pnpm', 'rsync']]);
-  const done = await deploy({ target: '/var/www/runly.mx', run: r.run, fsOps: fs, stamp: 's2' });
-  expect(done.log).toEqual(['build', 'build_checked', 'dry_run', 'backup', 'apply', 'marker', 'healthy']);
-  expect(done.release).toBe('/var/www/runly.mx.releases/s2');
+  const done = await deploy({ target: TARGET, run: r.run, fsOps: fs, stamp: 's2' });
+  expect(done.log).toEqual(['build', 'build_checked', 'catalog_v1_checked', 'dry_run', 'backup', 'apply', 'marker', 'healthy']);
+  expect(done.release).toBe(`${TARGET}.releases/s2`);
 });
 
 test('a failed build or a failed health check never leaves a broken site', async () => {
-  await expect(deploy({ target: '/var/www/runly.mx', run: runner('build').run, fsOps: fakeFs(), stamp: 's1' })).rejects.toThrow('BUILD_FAILED');
+  await expect(deploy({ target: TARGET, run: runner('build').run, fsOps: fakeFs(), stamp: 's1' })).rejects.toThrow('BUILD_FAILED');
+  await expect(deploy({ target: TARGET, run: runner().run, fsOps: fakeFs({ built: false }), stamp: 's1' })).rejects.toThrow('BUILD_INCOMPLETE');
   const r = runner();
-  const error = await deploy({ target: '/var/www/runly.mx', run: r.run, fsOps: fakeFs(), stamp: 's3', healthUrl: 'https://runly.mx', fetchImpl: async () => ({ status: 502 }) }).catch((e) => e);
+  const error = await deploy({ target: TARGET, run: r.run, fsOps: fakeFs(), stamp: 's3', healthUrl: 'https://runly.mx', fetchImpl: async () => ({ status: 502 }) }).catch((e) => e);
   expect(error.code).toBe('HEALTH_CHECK_FAILED');
   expect(error.log).toContain('restored_previous_release');
-  expect(r.calls.at(-1).slice(-2)).toEqual(['/var/www/runly.mx.releases/s3/', '/var/www/runly.mx/']);
+  expect(r.calls.at(-1).slice(-2)).toEqual([`${TARGET}.releases/s3/`, `${TARGET}/`]);
+});
+
+test('catalog v1 compatibility mirror is never silently replaced', async () => {
+  const live = JSON.stringify({ schemaVersion: 1, generatedAt: '2026-10-08T00:00:00.000Z', modules: [{ key: 'custom.x' }] });
+  expect(checkCatalogV1('dist', TARGET, fakeFs())).toEqual({ live: true, modules: 0 });
+  expect(() => checkCatalogV1('dist', TARGET, fakeFs({ live }))).toThrow('CATALOG_V1_WOULD_BE_REPLACED');
+  expect(checkCatalogV1('dist', TARGET, fakeFs({ live }), { replace: true }).modules).toBe(1);
+  await expect(deploy({ target: TARGET, run: runner().run, fsOps: fakeFs({ live }), stamp: 's4' })).rejects.toThrow('CATALOG_V1_WOULD_BE_REPLACED');
 });
 
 test('rollback restores the newest release; old releases are pruned', () => {
   const fs = fakeFs({ releases: ['2026-10-01', '2026-10-09', '2026-10-05'] }), r = runner();
-  expect(rollback({ target: '/var/www/runly.mx', run: r.run, fsOps: fs }).restored).toBe('/var/www/runly.mx.releases/2026-10-09');
-  expect(() => rollback({ target: '/var/www/runly.mx', run: r.run, fsOps: fakeFs() })).toThrow('NO_RELEASE_TO_RESTORE');
-  expect(pruneReleases('/var/www/runly.mx.releases', 1, fs)).toEqual(['2026-10-05', '2026-10-01']);
+  expect(rollback({ target: TARGET, run: r.run, fsOps: fs }).restored).toBe(`${TARGET}.releases/2026-10-09`);
+  expect(() => rollback({ target: TARGET, run: r.run, fsOps: fakeFs() })).toThrow('NO_RELEASE_TO_RESTORE');
+  expect(pruneReleases(`${TARGET}.releases`, 1, fs)).toEqual(['2026-10-05', '2026-10-01']);
 });
 
 test('existing unmarked tree: explicit one-time adoption only for a recognised runly.mx tree', () => {
   const fs = fakeFs({ entries: ['index.html', 'sitemap-index.xml', 'robots.txt'] });
-  expect(() => adopt({ target: '/var/www/runly.mx', fsOps: fs })).toThrow('ADOPT_CONFIRMATION_REQUIRED');
-  expect(adopt({ target: '/var/www/runly.mx', confirm: 'ADOPT RUNLY.MX TARGET', fsOps: fs }).adopted).toBe('/var/www/runly.mx');
-  expect(fs.files.has(`/var/www/runly.mx/${MARKER}`)).toBe(true);
-  const other = fakeFs({ target: '/var/www/other.site', entries: ['x'] });
-  other.existsSync = (path) => path === '/var/www/other.site';
-  expect(() => adopt({ target: '/var/www/other.site', confirm: 'ADOPT RUNLY.MX TARGET', fsOps: other })).toThrow('TARGET_NOT_RECOGNISED');
+  expect(() => adopt({ target: TARGET, fsOps: fs })).toThrow('ADOPT_CONFIRMATION_REQUIRED');
+  expect(adopt({ target: TARGET, confirm: 'ADOPT RUNLY.MX TARGET', fsOps: fs }).adopted).toBe(TARGET);
+  expect(fs.files.has(`${TARGET}/${MARKER}`)).toBe(true);
+  const other = fakeFs({ targetFiles: [] });
+  expect(() => adopt({ target: TARGET, confirm: 'ADOPT RUNLY.MX TARGET', fsOps: other })).toThrow('TARGET_NOT_RECOGNISED');
 });
