@@ -83,13 +83,13 @@ Si algo falla, se indica la fase y el código del diagnóstico. Para un módulo 
 
 ## Origen del catálogo y claves de confianza
 
-La administración configura en **Módulos > Marketplace > Origen del catálogo** las URLs del snapshot oficial y del catálogo de comunidad (o de un catálogo administrado). Solo se admiten HTTPS o un archivo local explícito (`file://`). El botón «Usar catálogo de Runly» rellena las URLs de Developer Hub.
+Las instalaciones nuevas de Runly usan el **catálogo de Runly** por defecto; las instancias que ya existían conservan su configuración. En **Módulos > Marketplace > Origen del catálogo** la administración elige «Catálogo de Runly», «Personalizado» (URLs propias, solo HTTPS o `file://`) o «Desactivado». Cualquier catálogo cuya firma no corresponde a una clave de confianza se rechaza.
 
 El trust store separa claves **oficiales**, de **comunidad** y **administradas**. Las oficiales y de comunidad llegan con las versiones de Runly y cada una tiene un estado: **activa**, **en retiro** (solo valida contenido fechado hasta su fecha límite) o **revocada**. La administración puede agregar claves de catálogos administrados (nunca se vuelven «Oficial Runly») y revocar una clave localmente, pero no puede volver a confiar en ella ni promoverla. Runly nunca guarda claves privadas.
 
 ## Sin conexión
 
-Sin conexión o con información vencida, Runly muestra la **última copia verificada** (si la política de la instancia lo permite y no supera la antigüedad configurada), indica que puede estar desactualizada y **no instala**: instalar siempre vuelve a descargar y verificar. Sin una copia verificada previa, se muestra el error en lugar de una lista vacía. Los módulos instalados siguen funcionando. Una instancia offline no recibe revocaciones hasta volver a sincronizar.
+Sin conexión, Runly muestra la **última copia verificada** e indica cuándo se verificó. Con esa copia se puede instalar o actualizar durante 24 horas; entre 24 y 72 horas hace falta confirmar que puede estar desactualizada, y después solo se puede consultar (valores configurables por la administración). Los paquetes siempre se descargan y se verifican, y un catálogo comunitario vencido (7 días) nunca permite instalar. Sin una copia verificada previa, se muestra el error en lugar de una lista vacía. Los módulos instalados siguen funcionando. Una instancia offline no recibe revocaciones hasta volver a sincronizar.
 
 ## runly.mx/modulos
 

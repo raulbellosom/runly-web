@@ -113,12 +113,12 @@ pnpm install --frozen-lockfile
 
 pnpm build
 
-cp -a dist/. /var/www/runly.mx/
+rsync -a --delete-after dist/ /var/www/runly.mx/
 
 chown -R www-data:www-data /var/www/runly.mx
 ```
 
-`dist/` is a self-contained static tree (both locales, sitemap, robots.txt, assets). Nothing needs to run afterwards — no process to keep alive, no port to expose. `cp -a dist/.` overlays the build output onto the existing tree (unlike `rm -rf` + `cp -r`, it doesn't leave a brief window with no files served); the `chown` after keeps ownership matching Nginx's `www-data` user.
+`dist/` is a self-contained static tree (both locales, sitemap, robots.txt, assets). Nothing needs to run afterwards — no process to keep alive, no port to expose. `rsync -a --delete-after` replaces the tree without a window with no files served **and removes pages that no longer exist**: a plain `cp -a` overlay would keep serving (and letting search engines index) the static page of a Marketplace module that was revoked or withdrawn after an earlier build. The `chown` after keeps ownership matching Nginx's `www-data` user. Rebuild and redeploy after Marketplace publications or revocations (target: within 24 h) so static module pages match the catalog; the browser refresh already flags changes in the meantime.
 
 ### Nginx
 
