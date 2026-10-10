@@ -10,6 +10,7 @@
 // Usage (on the VPS):
 //   node scripts/deploy-static.mjs --target /var/www/runly.mx [--dry-run] [--owner www-data:www-data] [--health-url https://runly.mx]
 //   node scripts/deploy-static.mjs --target /var/www/runly.mx --rollback
+//   node scripts/deploy-static.mjs --target /var/www/runly.mx --adopt --confirm "ADOPT RUNLY.MX TARGET"   (once, existing tree)
 import { spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, readdirSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { posix, resolve } from 'node:path';
@@ -103,6 +104,18 @@ export function pruneReleases(releases, keep, fsOps) {
   return old;
 }
 
+// One-time adoption of an existing, unmarked runly.mx tree (previous cp -a deploys).
+// Only a tree that already looks like this site is marked; nothing is deleted.
+export function adopt({ target, confirm, fsOps }) {
+  const dir = validateTarget(target);
+  if (confirm !== 'ADOPT RUNLY.MX TARGET') fail('ADOPT_CONFIRMATION_REQUIRED');
+  if (!fsOps.existsSync(dir) || fsOps.lstatSync(dir).isSymbolicLink() || !fsOps.lstatSync(dir).isDirectory()) fail('TARGET_NOT_A_DIRECTORY');
+  if (!['index.html', 'sitemap-index.xml', 'robots.txt'].every((file) => fsOps.existsSync(`${dir}/${file}`))) fail('TARGET_NOT_RECOGNISED');
+  fsOps.writeFileSync(`${dir}/${MARKER}`, 'runly-web static deploy target
+');
+  return { adopted: dir };
+}
+
 export function rollback({ target, run, fsOps }) {
   const plan = deployPlan({ target });
   const latest = fsOps.existsSync(plan.releases) ? fsOps.readdirSync(plan.releases).sort().at(-1) : null;
@@ -118,7 +131,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const run = (command, args) => spawnSync(command, args, { stdio: ['ignore', 'pipe', 'inherit'], encoding: 'utf8' });
   const fsOps = { existsSync, lstatSync, readdirSync, mkdirSync, writeFileSync, rmSync };
   try {
-    const result = process.argv.includes('--rollback')
+    const result = process.argv.includes('--adopt')
+      ? adopt({ target: arg('target'), confirm: arg('confirm'), fsOps })
+      : process.argv.includes('--rollback')
       ? rollback({ target: arg('target'), run, fsOps })
       : await deploy({ target: arg('target'), owner: arg('owner'), dryRun: process.argv.includes('--dry-run'), healthUrl: arg('health-url'), run, fsOps });
     console.log(JSON.stringify(result));

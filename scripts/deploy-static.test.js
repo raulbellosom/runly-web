@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { validateTarget, deployPlan, deploy, rollback, MARKER, checkTargetState, pruneReleases } from './deploy-static.mjs';
+import { validateTarget, deployPlan, deploy, rollback, adopt, MARKER, checkTargetState, pruneReleases } from './deploy-static.mjs';
 
 const BUILD = ['dist/index.html', 'dist/modulos/index.html', 'dist/en/modulos/index.html', 'dist/sitemap-index.xml', 'dist/robots.txt'].map((p) => p.replace(/\//g, '\\'));
 // In-memory filesystem keyed by POSIX path; build files are checked with resolve() (OS path).
@@ -61,4 +61,14 @@ test('rollback restores the newest release; old releases are pruned', () => {
   expect(rollback({ target: '/var/www/runly.mx', run: r.run, fsOps: fs }).restored).toBe('/var/www/runly.mx.releases/2026-10-09');
   expect(() => rollback({ target: '/var/www/runly.mx', run: r.run, fsOps: fakeFs() })).toThrow('NO_RELEASE_TO_RESTORE');
   expect(pruneReleases('/var/www/runly.mx.releases', 1, fs)).toEqual(['2026-10-05', '2026-10-01']);
+});
+
+test('existing unmarked tree: explicit one-time adoption only for a recognised runly.mx tree', () => {
+  const fs = fakeFs({ entries: ['index.html', 'sitemap-index.xml', 'robots.txt'] });
+  expect(() => adopt({ target: '/var/www/runly.mx', fsOps: fs })).toThrow('ADOPT_CONFIRMATION_REQUIRED');
+  expect(adopt({ target: '/var/www/runly.mx', confirm: 'ADOPT RUNLY.MX TARGET', fsOps: fs }).adopted).toBe('/var/www/runly.mx');
+  expect(fs.files.has(`/var/www/runly.mx/${MARKER}`)).toBe(true);
+  const other = fakeFs({ target: '/var/www/other.site', entries: ['x'] });
+  other.existsSync = (path) => path === '/var/www/other.site';
+  expect(() => adopt({ target: '/var/www/other.site', confirm: 'ADOPT RUNLY.MX TARGET', fsOps: other })).toThrow('TARGET_NOT_RECOGNISED');
 });

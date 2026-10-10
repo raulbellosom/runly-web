@@ -111,6 +111,9 @@ git pull --ff-only
 
 pnpm install --frozen-lockfile
 
+# Once, on the existing tree deployed with cp -a (marks it as the managed target; deletes nothing):
+node scripts/deploy-static.mjs --target /var/www/runly.mx --adopt --confirm "ADOPT RUNLY.MX TARGET"
+
 # Preview first (builds, checks the build, shows the rsync plan and deletions):
 node scripts/deploy-static.mjs --target /var/www/runly.mx --owner www-data:www-data --dry-run
 
