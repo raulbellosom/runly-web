@@ -111,14 +111,17 @@ git pull --ff-only
 
 pnpm install --frozen-lockfile
 
-pnpm build
+# Preview first (builds, checks the build, shows the rsync plan and deletions):
+node scripts/deploy-static.mjs --target /var/www/runly.mx --owner www-data:www-data --dry-run
 
-rsync -a --delete-after dist/ /var/www/runly.mx/
+# Deploy (backup → apply → health; restores the previous release if health fails):
+node scripts/deploy-static.mjs --target /var/www/runly.mx --owner www-data:www-data --health-url https://runly.mx
 
-chown -R www-data:www-data /var/www/runly.mx
+# Manual rollback to the newest saved release:
+node scripts/deploy-static.mjs --target /var/www/runly.mx --rollback
 ```
 
-`dist/` is a self-contained static tree (both locales, sitemap, robots.txt, assets). Nothing needs to run afterwards — no process to keep alive, no port to expose. `rsync -a --delete-after` replaces the tree without a window with no files served **and removes pages that no longer exist**: a plain `cp -a` overlay would keep serving (and letting search engines index) the static page of a Marketplace module that was revoked or withdrawn after an earlier build. The `chown` after keeps ownership matching Nginx's `www-data` user. Rebuild and redeploy after Marketplace publications or revocations (target: within 24 h) so static module pages match the catalog; the browser refresh already flags changes in the meantime.
+`dist/` is a self-contained static tree (both locales, sitemap, robots.txt, assets). Nothing needs to run afterwards — no process to keep alive, no port to expose. `scripts/deploy-static.mjs` wraps `rsync -a --delete-after` with guardrails: explicit absolute target (never `/`, shallow or system paths, never a symlink), the target must be empty on the first deploy or carry the `.runly-web-target` marker, the build must succeed and contain the expected pages, the previous tree is saved under `/var/www/runly.mx.releases/<stamp>` (outside the target, last 5 kept), a dry run is always shown, and a health check runs after the swap. It replaces the tree without a window with no files served **and removes pages that no longer exist**: a plain `cp -a` overlay would keep serving (and letting search engines index) the static page of a Marketplace module that was revoked or withdrawn after an earlier build. The `chown` after keeps ownership matching Nginx's `www-data` user. Rebuild and redeploy after Marketplace publications or revocations (target: within 24 h) so static module pages match the catalog; the browser refresh already flags changes in the meantime.
 
 ### Nginx
 
